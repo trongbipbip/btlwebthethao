@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tin tức</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="./assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./assets/css/news.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <a href="./index.html"
+          ><img src="./assets/img/header-logo.png" alt=""
+        /></a>
+      </div>
+      <div class="header-content">
+        <div class="category">
+          <div class="category-item">
+            <img src="./assets/img/home.svg" alt="" />
+            <h2><a href="./index.html">TRANG CHỦ</a></h2>
+          </div>
+
+          <div class="category-item news-dropdown">
+            <img src="./assets/img/news.svg" alt="" />
+            <h2><a href="./category-news.html">TIN TỨC</a></h2>
+            <ul class="news-dropdown-menu">
+              <li><a href="./category-news.html?category=1">Đời sống</a></li>
+              <li>
+                <a href="./category-news.html?category=2"
+                  >Khoảnh khắc đáng nhớ</a
+                >
+              </li>
+              <li>
+                <a href="./category-news.html?category=3">Người nổi tiếng</a>
+              </li>
+              <li><a href="./category-news.html?category=4">Hồi ức</a></li>
+            </ul>
+          </div>
+
+          <div class="category-item">
+            <img src="./assets/img/tournament.svg" alt="" />
+            <h2><a href="./category-tournament.html">GIẢI ĐẤU</a></h2>
+          </div>
+
+          <div class="bar"></div>
+
+          <form class="search-box" onsubmit="searchGoogle(event)">
+            <input type="text" id="search-input" placeholder="Tìm kiếm" />
+            <button type="submit">
+              <img src="./assets/img/search.svg" alt="Search" />
+            </button>
+          </form>
+
+          <div class="bar"></div>
+
+          <div class="category-item">
+            <div id="header"></div>
+          </div>
+        </div>
+        <div class="sub-logo">
+          <img src="./assets/img/emirate.png" alt="" />
+        </div>
+      </div>
+    </header>
+    <!-- Popup -->
+    <div id="login-popup"></div>
+    <main>
+      <div class="slider"></div>
+      <div class="news-category">
+        <div class="main-content">
+          <h1 class="news-category__title" id="category-title">
+            TIN TỨC MỚI NHẤT
+          </h1>
+          <div class="category-content">
+            <div class="category-block">
+              <div class="news-container" id="news-list"></div>
+              <!-- Phân trang -->
+              <div class="pagination">
+                <button id="prevBtn" onclick="changePage(-1)" disabled>
+                  « Trước
+                </button>
+                <span id="page-info"></span>
+                <button id="nextBtn" onclick="changePage(1)">Tiếp »</button>
+              </div>
+            </div>
+            <div class="ads-content">
+              <div class="ads-bg">
+                <img src="./assets/img/ads-doc.png" alt="" class="ads" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- category news -->
+        <div id="news-section-container">
+          <div class="main-content">
+            <div id="section-1" class="news-section">
+              <h2 class="section-title">Đời sống</h2>
+              <div class="subnews-list"></div>
+            </div>
+
+            <div id="section-2" class="news-section">
+              <h2 class="section-title">Khoảng khắc đáng nhớ</h2>
+              <div class="subnews-list"></div>
+            </div>
+
+            <div id="section-3" class="news-section">
+              <h2 class="section-title">Người nổi tiếng</h2>
+              <div class="subnews-list"></div>
+            </div>
+
+            <div id="section-4" class="news-section">
+              <h2 class="section-title">Hồi ức</h2>
+              <div class="subnews-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ads -->
+      <div class="ads-hori">
+        <a href=""
+          ><img
+            src="./assets/img/ads-horizontal.png"
+            alt=""
+            class="ads-hori__img"
+        /></a>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="main-content">
+        <div class="left-footer">
+          <img src="./assets/img/footer-logo.png" alt="" class="logo" />
+          <div class="media">
+            <a href=""><img src="./assets/img/facebook.svg" alt="" /></a>
+            <a href=""><img src="./assets/img/youtube.svg" alt="" /></a>
+            <a href=""><img src="./assets/img/email.svg" alt="" /></a>
+            <a href=""><img src="./assets/img/twitter.svg" alt="" /></a>
+            <a href=""><img src="./assets/img/linkedin.svg" alt="" /></a>
+          </div>
+          <div class="hotline">
+            <div class="hotline-number">
+              <img src="./assets/img/phone.svg" alt="" />
+              <div class="hotline-content">
+                <p>Đường dây nóng :</p>
+                <p>+84 38 290 51 69</p>
+              </div>
+            </div>
+            <div class="hotline-email">
+              <img src="./assets/img/email-hotline.png" alt="" />
+              <div class="hotline-content">
+                <p>Email :</p>
+                <p>nguyenskt2004@gmail.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right-footer">
+          <div class="newsletter">
+            <h3 class="newsletter-title">Đăng ký nhận bản tin TENNIS TOUR</h3>
+            <p class="newsletter-comment">
+              Nhận thông tin tiếp thị chính thức từ TENNIS TOUR! Chúng tôi sẽ
+              gửi cho bạn các bản tin để thông báo cho bạn về tin tức, giải đấu,
+              cuộc thi, bán vé, ưu đãi của đối tác và hơn thế nữa.
+            </p>
+            <div class="subscribe-container">
+              <div class="subscribe-container__input">
+                <label for="email">Địa chỉ email</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Nhập email của bạn"
+                />
+              </div>
+              <button>SUBCRIBE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>ALL RIGHTS RESERVED.© 2025</p>
+      </div>
+    </footer>
+    <script src="./assets/js/headerLogined.js"></script>
+    <script src="./assets/js/headerNotLogin.js"></script>
+    <script src="./assets/js/header.js"></script>
+    <script src="./assets/js/category-news.js"></script>
+    <!-- Lặp qua từng danh mục -->
+    <script type="module">
+      // import { newsData } from "./data/newsData.js";
+
+      function renderNewsBySection() {
+        const sections = {};
+
+        newsData.forEach((news) => {
+          if (!sections[news.categoryId]) {
+            sections[news.categoryId] = [];
+          }
+          sections[news.categoryId].push(news);
+        });
+
+        Object.keys(sections).forEach((categoryId) => {
+          const sectionContainer = document.querySelector(
+            `#section-${categoryId} .subnews-list`
+          );
+
+          if (sectionContainer) {
+            sectionContainer.innerHTML = ""; // Xóa nội dung cũ
+
+            const topNews = sections[categoryId]
+              .sort((a, b) => b.id - a.id)
+              .slice(0, 4);
+
+            if (topNews.length > 0) {
+              // Tin có ID cao nhất (hiển thị lớn)
+              const mainNews = document.createElement("a");
+              mainNews.href = `news-detail.html?id=${topNews[0].id}`;
+              mainNews.classList.add("category-news-item", "main-news");
+              mainNews.innerHTML = `
+                <img src="${topNews[0].image}" alt="News Image" class="news-img">
+                <div class="news-content">
+                  <h3 class="news-title">${topNews[0].title}</h3>
+                  <p class="news-description">${topNews[0].description}</p>
+                </div>
+              `;
+              sectionContainer.appendChild(mainNews);
+
+              // 3 tin còn lại (hiển thị dưới dạng danh sách, không có ảnh)
+              const subNewsContainer = document.createElement("div");
+              subNewsContainer.classList.add("sub-news");
+
+              topNews.slice(1).forEach((news) => {
+                const subNews = document.createElement("a");
+                subNews.href = `news-detail.html?id=${news.id}`;
+                subNews.classList.add("category-news-item", "sub-news-item");
+                subNews.innerHTML = `
+                  <div class="news-content">
+                    <h3 class="news-title">${news.title}</h3>
+                  </div>
+                `;
+                subNewsContainer.appendChild(subNews);
+              });
+
+              sectionContainer.appendChild(subNewsContainer);
+            }
+          }
+        });
+      }
+      document.addEventListener("DOMContentLoaded", renderNewsBySection);
+    </script>
+    <script type="module">
+      // import { newsData } from "./data/newsData.js";
+      import { categoryData } from "./data/categoryData.js";
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Lấy categoryId từ URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryId = urlParams.get("category");
+
+        const titleElement = document.getElementById("category-title");
+
+        if (categoryId) {
+          const category = categoryData.find((cat) => cat.id == categoryId);
+
+          if (category) {
+            titleElement.textContent = category.name;
+          } else {
+            titleElement.textContent = "Danh mục không tồn tại";
+          }
+        } else {
+          titleElement.textContent = "Tin tức mới nhất";
+        }
+
+        if (categoryId && categoryData.some((cat) => cat.id == categoryId)) {
+          renderNewsByCategory(categoryId);
+        }
+      });
+
+      // Hàm hiển thị danh sách tin tức theo categoryId
+      function renderNewsByCategory(categoryId) {
+        const newsList = document.getElementById("news-list");
+
+        // Lọc tin tức theo categoryId
+        const filteredNews = newsData.filter(
+          (news) => news.categoryId == categoryId
+        );
+
+        // Kiểm tra nếu có tin tức thuộc danh mục đó
+        if (filteredNews.length > 0) {
+          newsList.innerHTML = filteredNews
+            .map(
+              (news) => `
+              <a href="#" onclick="viewDetail(${news.id})"><img src="${
+                news.image
+              }" alt="News Image"></a>
+                              <div class="news-content">
+                                <div class="news-detail">
+                                  <div class="news-title"><a href="#" onclick="viewDetail(${
+                                    news.id
+                                  })">${news.title}</a></div>
+                                  <div class="news-description">${
+                                    news.description
+                                  }</div>
+                                </div>
+                                <div class="saved-btn ${
+                                  isSaved ? "saved" : ""
+                                }" onclick="saveNews(${news.id}, this)">
+                                    ${isSaved ? "Đã lưu" : "Lưu bài"}
+                                </div>
+                              </div>
+            `
+            )
+            .join("");
+        } else {
+          newsList.innerHTML = `<p>Không có tin tức nào cho danh mục này.</p>`;
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông tin tài khoản</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="./assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./assets/css/account-detail.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <a href="./index.html"
+          ><img src="./assets/img/header-logo.png" alt=""
+        /></a>
+      </div>
+      <div class="header-content">
+        <div class="category">
+          <div class="category-item">
+            <img src="./assets/img/home.svg" alt="" />
+            <h2><a href="./index.html">TRANG CHỦ</a></h2>
+          </div>
+
+          <div class="category-item news-dropdown">
+            <img src="./assets/img/news.svg" alt="" />
+            <h2><a href="./category-news.html">TIN TỨC</a></h2>
+            <ul class="news-dropdown-menu">
+              <li><a href="./category-news.html?category=1">Đời sống</a></li>
+              <li>
+                <a href="./category-news.html?category=2"
+                  >Khoảnh khắc đáng nhớ</a
+                >
+              </li>
+              <li>
+                <a href="./category-news.html?category=3">Người nổi tiếng</a>
+              </li>
+              <li><a href="./category-news.html?category=4">Hồi ức</a></li>
+            </ul>
+          </div>
+
+          <div class="category-item">
+            <img src="./assets/img/tournament.svg" alt="" />
+            <h2><a href="./category-tournament.html">GIẢI ĐẤU</a></h2>
+          </div>
+
+          <div class="bar"></div>
+
+          <form class="search-box" onsubmit="searchGoogle(event)">
+            <input type="text" id="search-input" placeholder="Tìm kiếm" />
+            <button type="submit">
+              <img src="./assets/img/search.svg" alt="Search" />
+            </button>
+          </form>
+
+          <div class="bar"></div>
+
+          <div id="header"></div>
+        </div>
+        <div class="sub-logo">
+          <img src="./assets/img/emirate.png" alt="" />
+        </div>
+      </div>
+    </header>
+    <!-- Popup -->
+    <div id="login-popup"></div>
+    <main>
+      <div class="main-content">
+        <!-- sub-menu-container -->
+        <div class="sub-menu-container">
+          <div class="sub-menu-item">
+            <img src="" alt="" class="avatar" id="submenuAvatar" />
+            <div class="username"><p id="submenuUsername">Họ và tên</p></div>
+          </div>
+          <div class="sub-menu-item">
+            <a href="./account-detail.html"
+              ><img src="./assets/img/user.svg" alt="" />
+              <p>Thông tin tài khoản</p></a
+            >
+          </div>
+          <div class="sub-menu-item">
+            <a href="./saved-news.html"
+              ><img src="./assets/img/save.svg" alt="" />
+              <div class="saved-news">
+                <p>Tin tức đã lưu</p>
+                <span class="badge" id="savedCount">0</span>
+              </div></a
+            >
+          </div>
+          <div class="sub-menu-item">
+            <a href="./index.html"
+              ><img src="./assets/img/logout.svg" alt="" />
+              <p>Thoát tài khoản</p></a
+            >
+          </div>
+        </div>
+        <!-- user-container -->
+        <div class="user-container">
+          <h2>Thông tin tài khoản</h2>
+          <p class="avatar-title">Ảnh đại diện</p>
+          <div class="avatar-block">
+            <img
+              id="avatarPreview"
+              src="./assets/img/avatar.jpg"
+              alt="Avatar"
+              class="avatar"
+            />
+            <div class="btn-block">
+              <button
+                class="btn btn-upload"
+                onclick="document.getElementById('avatarInput').click()"
+              >
+                Đổi ảnh
+              </button>
+              <input
+                type="file"
+                id="avatarInput"
+                accept="image/png, image/jpeg"
+                style="display: none"
+              />
+              <span>Định dạng PNG, JPG | Dung lượng tối đa 5MB</span>
+            </div>
+          </div>
+
+          <span class="error" id="errorAvatar"></span>
+          <div class="form-group">
+            <label for="fullName">Họ và tên <span>*</span></label>
+            <input type="text" id="fullName" />
+            <span class="error" id="errorFullName"></span>
+          </div>
+          <div class="form-group">
+            <label for="email">Email <span>*</span></label>
+            <input type="email" id="email" />
+            <span class="error" id="errorEmail"></span>
+          </div>
+          <div class="form-group">
+            <label for="phone">Số điện thoại</label>
+            <input type="text" id="phone" placeholder="+849xxxxxxxx" />
+            <span class="error" id="errorPhone"></span>
+          </div>
+          <div class="form-group">
+            <label for="dob">Ngày sinh</label>
+            <input type="date" id="dob" />
+            <span class="error" id="errorDob"></span>
+          </div>
+          <div class="form-group">
+            <label for="address">Địa chỉ</label>
+            <textarea id="address" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Giới tính</label>
+            <div class="gender">
+              <input type="radio" name="gender" value="Nam" /> Nam
+              <input type="radio" name="gender" value="Nữ" /> Nữ
+            </div>
+          </div>
+          <div class="btn-container">
+            <button class="btn btn-cancel">Hủy bỏ</button>
+            <button class="btn btn-save" onclick="saveData()">
+              Lưu thay đổi
+            </button>
+          </div>
+        </div>
+        <!-- news-container -->
+        <div class="news-container">
+          <div class="news-header">
+            <h2>TIN TỨC</h2>
+            <a href="./category-news.html">Xem thêm</a>
+          </div>
+          <div class="news-block">
+            <div class="featured-news">
+              <a href="">
+                <img src="./assets/img/featured-new.png" alt="" />
+                <p>
+                  Người Mỹ gốc Séc được khen thưởng 15 danh hiệu trong mùa giải
+                </p>
+              </a>
+            </div>
+            <div class="news-list">
+              <div class="news-item">
+                <a href="">
+                  <img src="./assets/img/more-news1.png" alt="" />
+                  <p>
+                    Ngôi sao trẻ của Na Uy “Budkov Kjaer” tham gia cùng Ruud
+                  </p>
+                </a>
+              </div>
+
+              <div class="news-item">
+                <a href="">
+                  <img src="./assets/img/more-news2.png" alt="" />
+                  <p>
+                    Alexander Zverev đứng thứ hai tại Tennis Tour về số trận
+                    thắng giao bóng
+                  </p>
+                </a>
+              </div>
+
+              <div class="news-item">
+                <a href="">
+                  <img src="./assets/img/more-news3.png" alt="" />
+                  <p>Bí mật về trò chơi của Zverev ẩn giấu</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ads -->
+      <div class="ads-hori">
+        <a href=""
+          ><img
+            src="./assets/img/ads-horizontal.png"
+            alt=""
+            class="ads-hori__img"
+        /></a>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="main-content">
+        <div class="left-footer">
+          <img src="./assets/img/footer-logo.png" alt="" class="logo" />
+          <div class="media">
+            <a href=""><img src="./assets/img/facebook.svg" alt="" /></a>
+            <a href=""><img src="./assets/img/youtube.svg" alt="" /></a>
+            <a href=""><img src="./assets/img/email.svg" alt="" /></a>
+            <a href=""><img src="./assets/img/twitter.svg" alt="" /></a>
+            <a href=""><img src="./assets/img/linkedin.svg" alt="" /></a>
+          </div>
+          <div class="hotline">
+            <div class="hotline-number">
+              <img src="./assets/img/phone.svg" alt="" />
+              <div class="hotline-content">
+                <p>Đường dây nóng :</p>
+                <p>+84 38 290 51 69</p>
+              </div>
+            </div>
+            <div class="hotline-email">
+              <img src="./assets/img/email-hotline.png" alt="" />
+              <div class="hotline-content">
+                <p>Email :</p>
+                <p>nguyenskt2004@gmail.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right-footer">
+          <div class="newsletter">
+            <h3 class="newsletter-title">Đăng ký nhận bản tin TENNIS TOUR</h3>
+            <p class="newsletter-comment">
+              Nhận thông tin tiếp thị chính thức từ TENNIS TOUR! Chúng tôi sẽ
+              gửi cho bạn các bản tin để thông báo cho bạn về tin tức, giải đấu,
+              cuộc thi, bán vé, ưu đãi của đối tác và hơn thế nữa.
+            </p>
+            <div class="subscribe-container">
+              <div class="subscribe-container__input">
+                <label for="email">Địa chỉ email</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Nhập email của bạn"
+                />
+              </div>
+              <button>SUBCRIBE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>ALL RIGHTS RESERVED.© 2025</p>
+      </div>
+    </footer>
+
+    <script src="./assets/js/headerLogined.js"></script>
+    <script src="./assets/js/headerNotLogin.js"></script>
+    <script src="./assets/js/header.js"></script>
+    <script src="./assets/js/accountDetail.js"></script>
+  </body>
+</html>

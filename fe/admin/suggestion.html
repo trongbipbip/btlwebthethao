@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý góp ý</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./css/suggestion.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="./img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="./admin.html">BẢNG ĐIỀU KHIỂN</a>
+            </div>
+            <div class="menu-item">
+              <a href="./news-management.html">QUẢN LÝ BÀI BÁO</a>
+            </div>
+            <div class="menu-item">
+              <a href="./category-management.html">QUẢN LÝ DANH MỤC</a>
+            </div>
+            <div class="menu-item">
+              <a href="./tournament-management.html">QUẢN LÝ GIẢI ĐẤU</a>
+            </div>
+            <div class="menu-item">
+              <a href="./user-management.html">QUẢN LÝ NGƯỜI DÙNG</a>
+            </div>
+            <div class="menu-item">
+              <a href="./suggestion.html">QUẢN LÝ GÓP Ý</a>
+            </div>
+            <div class="menu-item">
+              <a href="./profile.html">HỒ SƠ CÁ NHÂN</a>
+            </div>
+            <div class="menu-item">
+              <a id="logout-btn">ĐĂNG XUẤT</a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="" /></div>
+            </div>
+          </div>
+
+          <div class="suggestion-container">
+            <h1>BỘ LỌC HÒM THƯ GÓP Ý</h1>
+            <div class="filter">
+              <label for="title">Tiêu đề:</label>
+              <input type="text" id="title" placeholder="Nhập tiêu đề..." />
+
+              <label for="from-date">Từ ngày:</label>
+              <input type="date" id="from-date" />
+
+              <label for="to-date">Đến ngày:</label>
+              <input type="date" id="to-date" />
+
+              <button onclick="filter()">Lọc</button>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Tiêu đề</th>
+                  <th>Chi tiết</th>
+                  <th>Họ tên người góp ý</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="suggestion-list">
+                <!-- Các gợi ý sẽ hiển thị ở đây -->
+              </tbody>
+            </table>
+            <div class="pagination">
+              <button id="prev-page" onclick="changePage(-1)">
+                Trang trước
+              </button>
+              <span id="page-number">1</span>
+              <button id="next-page" onclick="changePage(1)">Trang sau</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup xem chi tiết góp ý -->
+
+    <div id="popup-overlay" class="overlay">
+      <div class="popup">
+        <h3>GÓP Ý TIN TỨC</h3>
+        <label><strong id="popup-title"></strong></label>
+        <p id="popup-detail"></p>
+        <div class="popup-buttons">
+          <button onclick="closePopup()" class="cancel">ĐÓNG</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { suggestions } from "../data/suggestionData.js";
+
+      let currentPage = 1;
+      let itemsPerPage = 10;
+
+      function displaySuggestions(filteredSuggestions) {
+        const suggestionList = document.getElementById("suggestion-list");
+        suggestionList.innerHTML = "";
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        const pageSuggestions = filteredSuggestions.slice(startIndex, endIndex);
+        pageSuggestions.forEach((suggestion, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                  <td>${suggestion.title}</td>
+                  <td>${suggestion.detail}</td>
+                  <td>${suggestion.name}</td>
+                  <td>
+                    <img src="./img/view.svg" onclick="viewDetail(${suggestion.id})" title="Sửa">
+                  </td>
+              `;
+          suggestionList.appendChild(row);
+        });
+
+        document.getElementById("page-number").textContent = currentPage;
+
+        document.getElementById("prev-page").disabled = currentPage === 1;
+        document.getElementById("next-page").disabled =
+          currentPage * itemsPerPage >= filteredSuggestions.length;
+      }
+
+      function changePage(direction) {
+        const filteredSuggestions = suggestions.filter((suggestion) => {
+          const title = document.getElementById("title").value.toLowerCase();
+          const titleMatch = suggestion.title.toLowerCase().includes(title);
+
+          const fromDate = document.getElementById("from-date").value;
+          const toDate = document.getElementById("to-date").value;
+          let dateMatch = true;
+
+          if (fromDate && toDate) {
+            const suggestionDate = new Date(
+              suggestion.date.split("/").reverse().join("-")
+            );
+            const startDate = new Date(fromDate);
+            const endDate = new Date(toDate);
+            dateMatch =
+              suggestionDate >= startDate && suggestionDate <= endDate;
+          }
+
+          return titleMatch && dateMatch;
+        });
+
+        currentPage += direction;
+
+        displaySuggestions(filteredSuggestions);
+      }
+
+      function filter() {
+        const title = document
+          .getElementById("title")
+          .value.trim()
+          .toLowerCase();
+        const fromDate = document.getElementById("from-date").value;
+        const toDate = document.getElementById("to-date").value;
+
+        let filteredSuggestions = suggestions.filter((suggestion) => {
+          let titleMatch = suggestion.title.toLowerCase().includes(title);
+          let dateMatch = true; // Mặc định true để nếu không chọn ngày thì vẫn hiển thị tất cả
+
+          if (fromDate && toDate) {
+            // Chỉ lọc theo ngày nếu cả hai đều được chọn
+            const suggestionDate = new Date(
+              suggestion.date.split("/").reverse().join("-")
+            );
+            const startDate = new Date(fromDate);
+            const endDate = new Date(toDate);
+            dateMatch =
+              suggestionDate >= startDate && suggestionDate <= endDate;
+          }
+
+          return titleMatch && dateMatch; // Chỉ lọc khi cả hai điều kiện đúng
+        });
+
+        currentPage = 1; // Reset trang
+        displaySuggestions(filteredSuggestions);
+      }
+      window.filter = filter;
+
+      function viewDetail(id) {
+        const suggestion = suggestions.find((s) => s.id === id);
+        if (suggestion) {
+          document.getElementById("popup-title").textContent = suggestion.title;
+          document.getElementById("popup-detail").textContent =
+            suggestion.detail;
+          document.getElementById("popup-overlay").style.display = "flex";
+        }
+      }
+
+      function closePopup() {
+        document.getElementById("popup-overlay").style.display = "none";
+      }
+
+      window.viewDetail = viewDetail;
+      window.closePopup = closePopup;
+
+      window.onload = () => {
+        displaySuggestions(suggestions);
+      };
+    </script>
+    <script type="module">
+      import { userAdmin } from "../data/adminData.js";
+
+      // Hàm khởi tạo dữ liệu từ adminData.js nếu localStorage chưa có
+      function initializeUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (!storedUserData) {
+          localStorage.setItem("user", JSON.stringify(users));
+        }
+      }
+
+      // Hàm hiển thị dữ liệu lên UI
+      function loadUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (storedUserData) {
+          const user = JSON.parse(storedUserData)[0]; // Lấy người dùng đầu tiên
+
+          if (user) {
+            // Cập nhật tên Admin
+            const adminNameElement = document.querySelector(".admin-name");
+            if (adminNameElement) {
+              adminNameElement.textContent = user.name;
+            }
+
+            // Cập nhật Avatar
+            const avatarElement = document.querySelector("#avatar-img");
+            if (avatarElement) {
+              if (user.avatar.startsWith("/")) {
+                user.avatar = ".." + user.avatar;
+              }
+              avatarElement.src = user.avatar;
+            }
+          }
+        }
+      }
+
+      // Hàm xử lý đăng xuất
+      function logout() {
+        localStorage.clear();
+        window.location.href = "../login/login_admin.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-btn");
+        if (logoutButton) {
+          logoutButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+          });
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeUserData(); // Đảm bảo dữ liệu đã có trong localStorage
+        loadUserData(); // Hiển thị dữ liệu lên UI
+      });
+    </script>
+  </body>
+</html>

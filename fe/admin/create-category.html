@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tạo danh mục mới</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./css/edit-category..css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="./img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="./admin.html">BẢNG ĐIỀU KHIỂN</a>
+            </div>
+            <div class="menu-item">
+              <a href="./news-management.html">QUẢN LÝ BÀI BÁO</a>
+            </div>
+            <div class="menu-item">
+              <a href="./category-management.html">QUẢN LÝ DANH MỤC</a>
+            </div>
+            <div class="menu-item">
+              <a href="./tournament-management.html">QUẢN LÝ GIẢI ĐẤU</a>
+            </div>
+            <div class="menu-item">
+              <a href="./user-management.html">QUẢN LÝ NGƯỜI DÙNG</a>
+            </div>
+            <div class="menu-item">
+              <a href="./suggestion.html">QUẢN LÝ GÓP Ý</a>
+            </div>
+
+            <div class="menu-item">
+              <a href="./profile.html">HỒ SƠ CÁ NHÂN</a>
+            </div>
+            <div class="menu-item">
+              <a id="logout-btn">ĐĂNG XUẤT</a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="" /></div>
+            </div>
+          </div>
+
+          <!-- Form tạo danh mục -->
+          <div class="edit-container">
+            <div class="button-group">
+              <button type="button" id="backBtn">Quay lại</button>
+              <button type="submit" id="saveBtn" disabled>Lưu danh mục</button>
+            </div>
+
+            <div class="main-container">
+              <div class="edit-content">
+                <h1>Tạo danh mục mới</h1>
+                <form id="createCategoryForm">
+                  <div class="form-group">
+                    <label for="categoryName">Tên danh mục:</label>
+                    <input type="text" id="categoryName" required />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { categoryData } from "../data/categoryData.js";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const saveBtn = document.getElementById("saveBtn");
+        const categoryNameInput = document.getElementById("categoryName");
+
+        // Kiểm tra đầu vào và kích hoạt nút Lưu
+        categoryNameInput.addEventListener("input", () => {
+          saveBtn.disabled = !categoryNameInput.value.trim();
+        });
+
+        // Xử lý lưu danh mục
+        saveBtn.addEventListener("click", (event) => {
+          event.preventDefault();
+
+          const newCategory = {
+            id: categoryData.length + 1,
+            name: categoryNameInput.value.trim(),
+          };
+
+          categoryData.push(newCategory);
+          let storedCategories =
+            JSON.parse(localStorage.getItem("categories")) || [];
+          storedCategories.push(newCategory);
+          localStorage.setItem("categories", JSON.stringify(storedCategories));
+
+          alert("Danh mục đã được lưu!");
+          window.location.href = "category-management.html";
+        });
+      });
+
+      document.getElementById("backBtn").addEventListener("click", () => {
+        window.history.back();
+      });
+    </script>
+
+    <script type="module">
+      import { userAdmin } from "../data/adminData.js";
+
+      // Hàm khởi tạo dữ liệu từ adminData.js nếu localStorage chưa có
+      function initializeUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (!storedUserData) {
+          localStorage.setItem("user", JSON.stringify(users));
+        }
+      }
+
+      // Hàm hiển thị dữ liệu lên UI
+      function loadUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (storedUserData) {
+          const user = JSON.parse(storedUserData)[0]; // Lấy người dùng đầu tiên
+
+          if (user) {
+            // Cập nhật tên Admin
+            const adminNameElement = document.querySelector(".admin-name");
+            if (adminNameElement) {
+              adminNameElement.textContent = user.name;
+            }
+
+            // Cập nhật Avatar
+            const avatarElement = document.querySelector("#avatar-img");
+            if (avatarElement) {
+              if (user.avatar.startsWith("/")) {
+                user.avatar = ".." + user.avatar;
+              }
+              avatarElement.src = user.avatar;
+            }
+          }
+        }
+      }
+
+      // Hàm xử lý đăng xuất
+      function logout() {
+        localStorage.clear();
+        window.location.href = "../login/login_admin.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-btn");
+        if (logoutButton) {
+          logoutButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+          });
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeUserData(); // Đảm bảo dữ liệu đã có trong localStorage
+        loadUserData(); // Hiển thị dữ liệu lên UI
+      });
+    </script>
+  </body>
+</html>

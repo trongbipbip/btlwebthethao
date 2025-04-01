@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chỉnh sửa tin tức</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./css/edit-news.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="./img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="./admin.html">BẢNG ĐIỀU KHIỂN</a>
+            </div>
+            <div class="menu-item">
+              <a href="./news-management.html">QUẢN LÝ BÀI BÁO</a>
+            </div>
+            <div class="menu-item">
+              <a href="./category-management.html">QUẢN LÝ DANH MỤC</a>
+            </div>
+            <div class="menu-item">
+              <a href="./tournament-management.html">QUẢN LÝ GIẢI ĐẤU</a>
+            </div>
+            <div class="menu-item">
+              <a href="./user-management.html">QUẢN LÝ NGƯỜI DÙNG</a>
+            </div>
+            <div class="menu-item">
+              <a href="./suggestion.html">QUẢN LÝ GÓP Ý</a>
+            </div>
+
+            <div class="menu-item">
+              <a href="./profile.html">HỒ SƠ CÁ NHÂN</a>
+            </div>
+            <div class="menu-item">
+              <a id="logout-btn">ĐĂNG XUẤT</a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="" /></div>
+            </div>
+          </div>
+
+          <!-- Form tạo tin tức -->
+          <div class="edit-container">
+            <div class="button-group">
+              <button type="button" id="backBtn">Quay lại</button>
+              <button type="submit" id="saveBtn" disabled>Lưu tin tức</button>
+            </div>
+
+            <div class="main-container">
+              <!-- Nội dung chính bên trái -->
+              <div class="edit-content">
+                <h1>Tạo tin tức mới</h1>
+                <form id="editProductForm">
+                  <div class="form-group">
+                    <label for="newsTitle">Tiêu đề tin tức:</label>
+                    <input type="text" id="newsTitle" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="newsDescription">Mô tả:</label>
+                    <textarea id="newsDescription" rows="4"></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="newsContent">Nội dung:</label>
+                    <textarea id="newsContent" rows="4"></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="newsImage">Hình ảnh:</label>
+                    <input type="file" id="newsImage" />
+                    <img id="previewImage" />
+                  </div>
+                </form>
+              </div>
+
+              <!-- Sidebar bên phải -->
+              <aside class="sidebar">
+                <div class="form-group">
+                  <label>Trạng thái:</label>
+                  <label class="switch">
+                    <input type="checkbox" id="statusToggle" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="form-group">
+                  <label>Danh mục:</label>
+                  <select id="newsCategory"></select>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { newsData } from "../data/newsData.js";
+      import { categoryData } from "../data/categoryData.js";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const newsId = params.get("id");
+
+        if (!newsId) {
+          alert("Không tìm thấy ID bài báo!");
+          window.location.href = "news-management.html";
+          return;
+        }
+
+        const storedNews = JSON.parse(localStorage.getItem("news")) || [];
+        let newsItem = storedNews.find((news) => news.id == newsId);
+
+        if (!newsItem) {
+          alert("Không tìm thấy bài báo trong dữ liệu!");
+          window.location.href = "news-management.html";
+          return;
+        }
+
+        const newsTitle = document.getElementById("newsTitle");
+        const newsDescription = document.getElementById("newsDescription");
+        const newsContent = document.getElementById("newsContent");
+        const imageInput = document.getElementById("newsImage");
+        const previewImage = document.getElementById("previewImage");
+        const statusToggle = document.getElementById("statusToggle");
+        const categorySelect = document.getElementById("newsCategory");
+        const saveBtn = document.getElementById("saveBtn");
+
+        function loadCategories() {
+          categorySelect.innerHTML = "";
+          categoryData.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category.id;
+            option.textContent = category.name;
+            categorySelect.appendChild(option);
+          });
+        }
+
+        loadCategories();
+
+        newsTitle.value = newsItem.title;
+        newsDescription.value = newsItem.description;
+        newsContent.value = newsItem.content;
+        previewImage.src = newsItem.image || "";
+        categorySelect.value = newsItem.categoryId;
+        statusToggle.checked = newsItem.status === "Đang hoạt động";
+        checkForm();
+
+        imageInput.addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              previewImage.src = e.target.result;
+              checkForm();
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+        function checkForm() {
+          if (
+            newsTitle.value.trim() &&
+            newsDescription.value.trim() &&
+            newsContent.value.trim() &&
+            categorySelect.value &&
+            previewImage.src &&
+            previewImage.src !== window.location.href
+          ) {
+            saveBtn.disabled = false;
+          } else {
+            saveBtn.disabled = true;
+          }
+        }
+
+        [
+          newsTitle,
+          newsDescription,
+          newsContent,
+          categorySelect,
+          imageInput,
+        ].forEach((input) => input.addEventListener("input", checkForm));
+
+        saveBtn.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          if (saveBtn.disabled) {
+            alert("Vui lòng nhập đầy đủ thông tin!");
+            return;
+          }
+
+          const updatedNews = {
+            id: newsItem.id,
+            title: newsTitle.value,
+            description: newsDescription.value,
+            content: newsContent.value,
+            image: previewImage.src,
+            categoryId: categorySelect.value,
+            categoryName: categoryData.find(
+              (cat) => cat.id == categorySelect.value
+            ).name,
+            status: statusToggle.checked ? "Đang hoạt động" : "Dừng hoạt động",
+            date: newsItem.date,
+          };
+
+          let updatedNewsList = storedNews.map((news) =>
+            news.id == newsId ? updatedNews : news
+          );
+
+          localStorage.setItem("news", JSON.stringify(updatedNewsList));
+          alert("Tin tức đã được cập nhật!");
+          window.location.href = "news-management.html";
+        });
+
+        document
+          .getElementById("backBtn")
+          .addEventListener("click", function () {
+            window.history.back();
+          });
+      });
+    </script>
+
+    <script type="module">
+      import { userAdmin } from "../data/adminData.js";
+
+      // Hàm khởi tạo dữ liệu từ adminData.js nếu localStorage chưa có
+      function initializeUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (!storedUserData) {
+          localStorage.setItem("user", JSON.stringify(users));
+        }
+      }
+
+      // Hàm hiển thị dữ liệu lên UI
+      function loadUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (storedUserData) {
+          const user = JSON.parse(storedUserData)[0]; // Lấy người dùng đầu tiên
+
+          if (user) {
+            // Cập nhật tên Admin
+            const adminNameElement = document.querySelector(".admin-name");
+            if (adminNameElement) {
+              adminNameElement.textContent = user.name;
+            }
+
+            // Cập nhật Avatar
+            const avatarElement = document.querySelector("#avatar-img");
+            if (avatarElement) {
+              if (user.avatar.startsWith("/")) {
+                user.avatar = ".." + user.avatar;
+              }
+              avatarElement.src = user.avatar;
+            }
+          }
+        }
+      }
+
+      // Hàm xử lý đăng xuất
+      function logout() {
+        localStorage.clear();
+        window.location.href = "../login/login_admin.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-btn");
+        if (logoutButton) {
+          logoutButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+          });
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeUserData();
+        loadUserData();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý danh mục</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./css/category-management.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="./img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="./admin.html">BẢNG ĐIỀU KHIỂN</a>
+            </div>
+            <div class="menu-item">
+              <a href="./news-management.html">QUẢN LÝ BÀI BÁO</a>
+            </div>
+            <div class="menu-item">
+              <a href="./category-management.html">QUẢN LÝ DANH MỤC</a>
+            </div>
+            <div class="menu-item">
+              <a href="./tournament-management.html">QUẢN LÝ GIẢI ĐẤU</a>
+            </div>
+            <div class="menu-item">
+              <a href="./user-management.html">QUẢN LÝ NGƯỜI DÙNG</a>
+            </div>
+            <div class="menu-item">
+              <a href="./suggestion.html">QUẢN LÝ GÓP Ý</a>
+            </div>
+            <div class="menu-item">
+              <a href="./profile.html">HỒ SƠ CÁ NHÂN</a>
+            </div>
+            <div class="menu-item">
+              <a id="logout-btn">ĐĂNG XUẤT</a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="" /></div>
+            </div>
+          </div>
+
+          <!-- Bảng tin tức -->
+          <div class="category-container">
+            <div class="category-title">
+              <div class="category-header">
+                <h3>Danh Mục</h3>
+                <button class="btn-create-category">Tạo danh mục mới</button>
+              </div>
+
+              <!-- Phần tìm kiếm và select -->
+              <div class="search-section">
+                <input
+                  type="text"
+                  id="search-input"
+                  class="input-field"
+                  placeholder="Tìm kiếm danh mục"
+                />
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tên danh mục</th>
+                  <th>Số lượng tin tức</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="category-list">
+                <!-- Dữ liệu sẽ được load bằng JavaScript -->
+              </tbody>
+            </table>
+
+            <div class="pagination">
+              <button id="prevPage" onclick="changePage(-1)">Trước</button>
+              <span id="pageInfo">1 / 1</span>
+              <button id="nextPage" onclick="changePage(1)">Sau</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { categoryData } from "../data/categoryData.js";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Kiểm tra nếu chưa có dữ liệu thì khởi tạo
+        if (!localStorage.getItem("categories")) {
+          console.log("LocalStorage trống, khởi tạo danh mục mặc định...");
+          localStorage.setItem("categories", JSON.stringify(categoryData));
+        } else {
+          console.log(
+            "Dữ liệu LocalStorage hiện có:",
+            JSON.parse(localStorage.getItem("categories"))
+          );
+        }
+      });
+
+      let currentPage = 1;
+      const itemsPerPage = 10;
+
+      let searchKeyword = "";
+
+      // Hàm cắt chuỗi theo số từ
+      function truncateByWords(text, wordLimit) {
+        const words = text.split(" ");
+        if (words.length > wordLimit) {
+          return words.slice(0, wordLimit).join(" ") + "...";
+        }
+        return text;
+      }
+
+      function loadCategories() {
+        let filteredCategories = [...categoryData];
+
+        // Lọc theo từ khóa tìm kiếm
+        if (searchKeyword) {
+          filteredCategories = filteredCategories.filter((category) =>
+            category.name.toLowerCase().includes(searchKeyword.toLowerCase())
+          );
+        }
+
+        // Sắp xếp theo ID giảm dần
+        filteredCategories.sort((a, b) => b.id - a.id);
+        let start = (currentPage - 1) * itemsPerPage;
+        let end = start + itemsPerPage;
+        let categoryList = "";
+
+        filteredCategories.slice(start, end).forEach((category) => {
+          categoryList += `
+        <tr>
+            <td>${truncateByWords(category.name, 8)}</td>
+            <td>${category.count}</td>
+            <td class="actions">
+                <img src="./img/view.svg" onclick="editCategory(${
+                  category.id
+                })" title="Sửa">
+                <img src="./img/delete.svg" onclick="deleteCategory(${
+                  category.id
+                })" title="Xóa">
+            </td>
+        </tr>
+    `;
+        });
+
+        document.getElementById("category-list").innerHTML = categoryList;
+        document.getElementById(
+          "pageInfo"
+        ).innerText = `${currentPage} / ${Math.ceil(
+          filteredCategories.length / itemsPerPage
+        )}`;
+        document.getElementById("prevPage").disabled = currentPage === 1;
+        document.getElementById("nextPage").disabled =
+          currentPage === Math.ceil(filteredCategories.length / itemsPerPage);
+      }
+
+      function changePage(step) {
+        currentPage += step;
+        loadCategories();
+      }
+
+      function editCategory(id) {
+        window.location.href = `edit-category.html?id=${id}`;
+      }
+
+      async function deleteCategory(id) {
+        // Xác nhận hành động xóa
+        const confirmDelete = confirm(
+          "Bạn có chắc chắn muốn xóa danh mục có ID: " + id + "?"
+        );
+        if (!confirmDelete) return; // Nếu không xác nhận thì không thực hiện xóa
+
+        try {
+          const response = await fetch(`/api/deleteCategory/${id}`, {
+            method: "DELETE",
+          });
+
+          if (!response.ok) {
+            throw new Error("Xóa danh mục thất bại");
+          }
+
+          loadCategories();
+        } catch (error) {
+          alert("Đã xảy ra lỗi khi xóa danh mục: " + error.message);
+        }
+      }
+
+      // Hàm xử lý sự kiện tìm kiếm danh mục theo tên
+      function handleSearch() {
+        searchKeyword = document.getElementById("search-input").value;
+        loadCategories();
+      }
+
+      // Gán các sự kiện
+      document
+        .getElementById("search-input")
+        .addEventListener("input", handleSearch);
+
+      window.changePage = changePage;
+      window.editCategory = editCategory;
+      window.deleteCategory = deleteCategory;
+
+      document.addEventListener("DOMContentLoaded", loadCategories);
+
+      document
+        .querySelector(".btn-create-category")
+        .addEventListener("click", () => {
+          window.location.href = "./create-category.html";
+        });
+    </script>
+    <script type="module">
+      import { userAdmin } from "../data/adminData.js";
+
+      // Hàm khởi tạo dữ liệu từ adminData.js nếu localStorage chưa có
+      function initializeUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (!storedUserData) {
+          localStorage.setItem("user", JSON.stringify(users));
+        }
+      }
+
+      // Hàm hiển thị dữ liệu lên UI
+      function loadUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (storedUserData) {
+          const user = JSON.parse(storedUserData)[0]; // Lấy người dùng đầu tiên
+
+          if (user) {
+            // Cập nhật tên Admin
+            const adminNameElement = document.querySelector(".admin-name");
+            if (adminNameElement) {
+              adminNameElement.textContent = user.name;
+            }
+
+            // Cập nhật Avatar
+            const avatarElement = document.querySelector("#avatar-img");
+            if (avatarElement) {
+              if (user.avatar.startsWith("/")) {
+                user.avatar = ".." + user.avatar;
+              }
+              avatarElement.src = user.avatar;
+            }
+          }
+        }
+      }
+
+      // Hàm xử lý đăng xuất
+      function logout() {
+        localStorage.clear();
+        window.location.href = "../login/login_admin.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-btn");
+        if (logoutButton) {
+          logoutButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+          });
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeUserData(); // Đảm bảo dữ liệu đã có trong localStorage
+        loadUserData(); // Hiển thị dữ liệu lên UI
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chỉnh sửa giải đấu</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./css/edit-tournament.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="./img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="./admin.html">BẢNG ĐIỀU KHIỂN</a>
+            </div>
+            <div class="menu-item">
+              <a href="./news-management.html">QUẢN LÝ BÀI BÁO</a>
+            </div>
+            <div class="menu-item">
+              <a href="./category-management.html">QUẢN LÝ DANH MỤC</a>
+            </div>
+            <div class="menu-item">
+              <a href="./tournament-management.html">QUẢN LÝ GIẢI ĐẤU</a>
+            </div>
+            <div class="menu-item">
+              <a href="./user-management.html">QUẢN LÝ NGƯỜI DÙNG</a>
+            </div>
+            <div class="menu-item">
+              <a href="./suggestion.html">QUẢN LÝ GÓP Ý</a>
+            </div>
+
+            <div class="menu-item">
+              <a href="./profile.html">HỒ SƠ CÁ NHÂN</a>
+            </div>
+            <div class="menu-item">
+              <a id="logout-btn">ĐĂNG XUẤT</a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="" /></div>
+            </div>
+          </div>
+
+          <!-- Form tạo  -->
+          <div class="edit-container">
+            <div class="button-group">
+              <button type="button" id="backBtn">Quay lại</button>
+              <button type="submit" id="saveBtn" disabled>Lưu giải đấu</button>
+            </div>
+
+            <div class="main-container">
+              <div class="edit-content">
+                <div class="edit-header">
+                  <h1>Tạo giải đấu mới</h1>
+                  <div class="status-container">
+                    <label>Trạng thái:</label>
+                    <label class="switch">
+                      <input type="checkbox" id="statusToggle" />
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+                <form id="editTournamentForm">
+                  <div class="form-group">
+                    <label for="tournamentName">Tên giải đấu:</label>
+                    <input
+                      type="text"
+                      id="tournamentName"
+                      required
+                      placeholder="Tên giải đấu"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="tournamentImage">Ảnh giải đấu:</label>
+                    <input type="file" id="tournamentImage" />
+                    <img id="previewImage" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="prize">Giải thưởng:</label>
+                    <input type="text" id="prize" placeholder="$0" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="total">Tổng cam kết tài chính:</label>
+                    <input type="text" id="total" placeholder="$0" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="location">Địa điểm:</label>
+                    <input
+                      type="text"
+                      id="location"
+                      required
+                      placeholder="Địa điểm"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="website">Website chính thức:</label>
+                    <input
+                      type="url"
+                      id="website"
+                      required
+                      placeholder="Website chính thức"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="surface">Mặt sân:</label>
+                    <input
+                      type="text"
+                      id="surface"
+                      required
+                      placeholder="Mặt sân"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="more">Tóm tắt:</label>
+                    <textarea
+                      id="more"
+                      rows="4"
+                      placeholder="Tóm tắt"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="tournamentContent">Nội dung:</label>
+                    <textarea
+                      id="tournamentContent"
+                      rows="4"
+                      placeholder="Nội dung"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="backgroundImage">Bìa giải đấu:</label>
+                    <input type="file" id="backgroundImage" />
+                    <img id="previewBackground" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { tournamentsData } from "../data/tournamentsData.js";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const saveBtn = document.getElementById("saveBtn");
+        const tournamentName = document.getElementById("tournamentName");
+        const tournamentContent = document.getElementById("tournamentContent");
+        const prize = document.getElementById("prize");
+        const location = document.getElementById("location");
+        const website = document.getElementById("website");
+        const surface = document.getElementById("surface");
+        const total = document.getElementById("total");
+        const more = document.getElementById("more");
+        const imageInput = document.getElementById("tournamentImage");
+        const previewImage = document.getElementById("previewImage");
+        const backgroundInput = document.getElementById("backgroundImage");
+        const previewBackground = document.getElementById("previewBackground");
+
+        //  Lấy ID từ URL
+        const params = new URLSearchParams(window.location.search);
+        const tournamentId = params.get("id");
+
+        if (!tournamentId) {
+          alert("Không tìm thấy ID giải đấu!");
+          window.location.href = "tournaments-management.html"; // Chuyển về trang danh sách
+          return;
+        }
+
+        // Lấy dữ liệu giải đấu từ localStorage
+        let tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
+        let tournament = tournaments.find((t) => t.id == tournamentId);
+
+        if (!tournament) {
+          alert("Không tìm thấy giải đấu!");
+          window.location.href = "tournaments-management.html";
+          return;
+        }
+
+        //  Hiển thị dữ liệu lên form
+        tournamentName.value = tournament.name;
+        tournamentContent.value = tournament.content;
+        prize.value = tournament.prize
+          ? `$${Number(tournament.prize.replace(/[$,]/g, "")).toLocaleString(
+              "en-US"
+            )}`
+          : "$0";
+        location.value = tournament.location;
+        website.value = tournament.website;
+        surface.value = tournament.surface;
+        total.value = tournament.total
+          ? `$${Number(tournament.total.replace(/[$,]/g, "")).toLocaleString(
+              "en-US"
+            )}`
+          : "$0";
+        more.value = tournament.more;
+        previewImage.src = tournament.image || "";
+        previewBackground.src = tournament.background || "";
+
+        let tournamentImageBase64 = tournament.image;
+        let backgroundImageBase64 = tournament.background;
+        checkForm();
+
+        function checkForm() {
+          if (
+            tournamentName.value.trim() &&
+            tournamentContent.value.trim() &&
+            prize.value.trim() &&
+            location.value.trim() &&
+            website.value.trim() &&
+            surface.value.trim() &&
+            total.value.trim() &&
+            more.value.trim() &&
+            previewImage.src &&
+            previewBackground.src &&
+            previewImage.src !== window.location.href &&
+            previewBackground.src !== window.location.href
+          ) {
+            saveBtn.disabled = false;
+          } else {
+            saveBtn.disabled = true;
+          }
+        }
+
+        function formatCurrencyInput(input) {
+          let value = input.value.replace(/\D/g, "");
+          if (value) {
+            input.value = `$${parseInt(value, 10).toLocaleString("en-US")}`;
+          } else {
+            input.value = "";
+          }
+        }
+
+        prize.addEventListener("input", function () {
+          formatCurrencyInput(this);
+        });
+
+        total.addEventListener("input", function () {
+          formatCurrencyInput(this);
+        });
+
+        function readImageFile(input, previewElement, callback) {
+          const file = input.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              previewElement.src = e.target.result;
+              if (callback) callback(e.target.result);
+              checkForm();
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+
+        imageInput.addEventListener("change", function (event) {
+          readImageFile(event.target, previewImage, (result) => {
+            tournamentImageBase64 = result;
+          });
+        });
+
+        backgroundInput.addEventListener("change", function (event) {
+          readImageFile(event.target, previewBackground, (result) => {
+            backgroundImageBase64 = result;
+          });
+        });
+
+        [
+          tournamentName,
+          tournamentContent,
+          prize,
+          location,
+          website,
+          surface,
+          total,
+          more,
+          imageInput,
+          backgroundInput,
+        ].forEach((input) => input.addEventListener("input", checkForm));
+
+        // Cập nhật dữ liệu khi nhấn Lưu
+        saveBtn.addEventListener("click", function () {
+          tournament.name = tournamentName.value.trim();
+          tournament.content = tournamentContent.value.trim();
+          tournament.prize = prize.value.replace(/[$,]/g, "") || "0";
+          tournament.total = total.value.replace(/[$,]/g, "") || "0";
+          tournament.location = location.value.trim();
+          tournament.website = website.value.trim();
+          tournament.surface = surface.value.trim();
+          tournament.more = more.value.trim();
+          tournament.image = tournamentImageBase64;
+          tournament.background = backgroundImageBase64;
+
+          //  Lưu lại danh sách vào localStorage
+          localStorage.setItem("tournaments", JSON.stringify(tournaments));
+          alert("Giải đấu đã được cập nhật!");
+          window.location.href = "tournament-management.html";
+        });
+
+        document.getElementById("backBtn").addEventListener("click", () => {
+          window.history.back();
+        });
+      });
+    </script>
+
+    <script type="module">
+      import { userAdmin } from "../data/adminData.js";
+
+      // Hàm khởi tạo dữ liệu từ adminData.js nếu localStorage chưa có
+      function initializeUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (!storedUserData) {
+          localStorage.setItem("user", JSON.stringify(users));
+        }
+      }
+
+      // Hàm hiển thị dữ liệu lên UI
+      function loadUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (storedUserData) {
+          const user = JSON.parse(storedUserData)[0]; // Lấy người dùng đầu tiên
+
+          if (user) {
+            // Cập nhật tên Admin
+            const adminNameElement = document.querySelector(".admin-name");
+            if (adminNameElement) {
+              adminNameElement.textContent = user.name;
+            }
+
+            // Cập nhật Avatar
+            const avatarElement = document.querySelector("#avatar-img");
+            if (avatarElement) {
+              if (user.avatar.startsWith("/")) {
+                user.avatar = ".." + user.avatar;
+              }
+              avatarElement.src = user.avatar;
+            }
+          }
+        }
+      }
+
+      // Hàm xử lý đăng xuất
+      function logout() {
+        localStorage.clear();
+        window.location.href = "../login/login_admin.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-btn");
+        if (logoutButton) {
+          logoutButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+          });
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeUserData();
+        loadUserData();
+      });
+    </script>
+  </body>
+</html>

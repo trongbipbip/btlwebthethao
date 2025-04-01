@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng điều khiển</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./css/admin.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="./img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="./admin.html">BẢNG ĐIỀU KHIỂN</a>
+            </div>
+            <div class="menu-item">
+              <a href="./news-management.html">QUẢN LÝ BÀI BÁO</a>
+            </div>
+            <div class="menu-item">
+              <a href="./category-management.html">QUẢN LÝ DANH MỤC</a>
+            </div>
+            <div class="menu-item">
+              <a href="./tournament-management.html">QUẢN LÝ GIẢI ĐẤU</a>
+            </div>
+            <div class="menu-item">
+              <a href="./user-management.html">QUẢN LÝ NGƯỜI DÙNG</a>
+            </div>
+            <div class="menu-item">
+              <a href="./suggestion.html">QUẢN LÝ GÓP Ý</a>
+            </div>
+
+            <div class="menu-item">
+              <a href="./profile.html">HỒ SƠ CÁ NHÂN</a>
+            </div>
+            <div class="menu-item">
+              <a id="logout-btn">ĐĂNG XUẤT</a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="" /></div>
+            </div>
+          </div>
+          <!-- Bảng thống kê -->
+          <div class="stats-container">
+            <div class="stat-box">
+              <h3>21</h3>
+              <p>Tổng số tin tức</p>
+            </div>
+            <div class="stat-box">
+              <h3>0</h3>
+              <p>Tin tức đang chờ duyệt</p>
+            </div>
+            <div class="stat-box">
+              <h3>21</h3>
+              <p>Tin tức đang hoạt động</p>
+            </div>
+            <div class="stat-box">
+              <h3>0</h3>
+              <p>Tin tức dừng hoạt động</p>
+            </div>
+            <div class="stat-box">
+              <h3>6</h3>
+              <p>Tác giả</p>
+            </div>
+          </div>
+
+          <!-- Bảng tin tức -->
+          <div class="news-container">
+            <h2>TIN TỨC GẦN ĐÂY</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tiêu đề</th>
+                  <th>Ảnh</th>
+                  <th>Mô tả</th>
+                  <th>Ngày</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="news-list">
+                <!-- Dữ liệu sẽ được load bằng JavaScript -->
+              </tbody>
+            </table>
+
+            <div class="pagination">
+              <button id="prevPage" onclick="changePage(-1)">Trước</button>
+              <span id="pageInfo">1 / 1</span>
+              <button id="nextPage" onclick="changePage(1)">Sau</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { newsData } from "../data/newsData.js";
+      let currentPage = 1;
+      const itemsPerPage = 10;
+
+      // Hàm cắt chuỗi theo số từ
+      function truncateByWords(text, wordLimit) {
+        const words = text.split(" ");
+        if (words.length > wordLimit) {
+          return words.slice(0, wordLimit).join(" ") + "...";
+        }
+        return text;
+      }
+
+      function loadNews() {
+        let start = (currentPage - 1) * itemsPerPage;
+        let end = start + itemsPerPage;
+        let newsList = "";
+        newsData.slice(start, end).forEach((news) => {
+          // Giới hạn số từ của tiêu đề và mô tả
+          const maxTitleWords = 8; // Giới hạn tối đa số từ cho title
+          const maxDescriptionWords = 13; // Giới hạn tối đa số từ cho description
+
+          // Cắt title và description theo số từ
+          const truncatedTitle = truncateByWords(news.title, maxTitleWords);
+          const truncatedDescription = truncateByWords(
+            news.description,
+            maxDescriptionWords
+          );
+          const statusClass =
+            news.status === "Đang hoạt động"
+              ? "status-active"
+              : "status-inactive";
+          newsList += `
+                        <tr>
+                            <td>${truncatedTitle}</td>
+                            <td><img src="${news.image}" class="news-image"></td>
+                            <td>${truncatedDescription}</td>
+                            <td>${news.date}</td>
+                            <td>
+                              <button class="${statusClass}" onclick="toggleStatus(${news.id})">${news.status}</button>
+        </td>
+
+                        </tr>
+                    `;
+        });
+        document.getElementById("news-list").innerHTML = newsList;
+        document.getElementById(
+          "pageInfo"
+        ).innerText = `${currentPage} / ${Math.ceil(
+          newsData.length / itemsPerPage
+        )}`;
+        document.getElementById("prevPage").disabled = currentPage === 1;
+        document.getElementById("nextPage").disabled =
+          currentPage === Math.ceil(newsData.length / itemsPerPage);
+      }
+
+      function changePage(step) {
+        currentPage += step;
+        loadNews();
+      }
+
+      function viewNews(id) {
+        const selectedNews = newsData.find((news) => news.id === id);
+        alert(
+          `Tiêu đề: ${selectedNews.title}\n\nNội dung:\n${selectedNews.content}`
+        );
+      }
+
+      function deleteNews(id) {
+        alert(`Bạn có chắc chắn muốn xóa tin tức có ID: ${id}?`);
+      }
+
+      // Hàm để thay đổi status
+      function toggleStatus(id) {
+        const newsItem = newsData.find((news) => news.id === id);
+        if (newsItem) {
+          newsItem.status =
+            newsItem.status === "Đang hoạt động"
+              ? "Dừng hoạt động"
+              : "Đang hoạt động";
+          loadNews(); // Reload lại danh sách tin tức
+        }
+      }
+
+      window.changePage = changePage;
+      window.viewNews = viewNews;
+      window.deleteNews = deleteNews;
+      window.toggleStatus = toggleStatus;
+
+      document.addEventListener("DOMContentLoaded", loadNews);
+    </script>
+    <script type="module">
+      import { userAdmin } from "../data/adminData.js";
+
+      // Hàm khởi tạo dữ liệu từ adminData.js nếu localStorage chưa có
+      function initializeUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (!storedUserData) {
+          localStorage.setItem("user", JSON.stringify(users));
+        }
+      }
+
+      // Hàm hiển thị dữ liệu lên UI
+      function loadUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (storedUserData) {
+          const user = JSON.parse(storedUserData)[0]; // Lấy người dùng đầu tiên
+
+          if (user) {
+            // Cập nhật tên Admin
+            const adminNameElement = document.querySelector(".admin-name");
+            if (adminNameElement) {
+              adminNameElement.textContent = user.name;
+            }
+
+            // Cập nhật Avatar
+            const avatarElement = document.querySelector("#avatar-img");
+            if (avatarElement) {
+              if (user.avatar.startsWith("/")) {
+                user.avatar = ".." + user.avatar;
+              }
+              avatarElement.src = user.avatar;
+            }
+          }
+        }
+      }
+
+      // Hàm xử lý đăng xuất
+      function logout() {
+        localStorage.clear();
+        window.location.href = "../login/login_admin.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-btn");
+        if (logoutButton) {
+          logoutButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+          });
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeUserData(); // Đảm bảo dữ liệu đã có trong localStorage
+        loadUserData(); // Hiển thị dữ liệu lên UI
+      });
+    </script>
+  </body>
+</html>

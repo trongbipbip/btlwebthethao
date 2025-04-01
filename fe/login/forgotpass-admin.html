@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quên mật khẩu</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./css/forgotpass.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <a href="../index.html"
+      ><img src="./img/logo.png" alt="Logo" class="logo"
+    /></a>
+
+    <div class="login-container">
+      <!-- Logo -->
+
+      <!-- Tiêu đề -->
+      <h1 class="login-title">Khôi Phục Mật Khẩu</h1>
+
+      <form id="forgotPasswordForm" onsubmit="validateEmail(event)">
+        <div class="input-group">
+          <label>Email Đã Đăng Ký <span class="badge">*</span></label>
+          <input type="email" id="email" placeholder="Email Đã Đăng Ký" />
+          <small id="emailError" class="error-message"></small>
+        </div>
+
+        <div class="link-container">
+          <div class="return-login">
+            <a href="./login_admin.html">Quay lại Đăng Nhập?</a>
+          </div>
+
+          <button type="submit" class="btn-login">Đặt lại</button>
+        </div>
+      </form>
+    </div>
+
+    <script type="module">
+      import { userAdmin } from "../data/adminData.js";
+
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("forgotPasswordForm")
+          .addEventListener("submit", validateEmail);
+      });
+
+      function showNotification(message, type = "error") {
+        let notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+        notification.innerText = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+      }
+
+      function validateEmail(event) {
+        event.preventDefault();
+
+        let emailInput = document.getElementById("email");
+        let email = emailInput.value.trim();
+        let emailError = document.getElementById("emailError");
+
+        emailError.innerText = "";
+
+        if (email === "") {
+          emailError.innerText = "Vui lòng nhập email!";
+          return;
+        }
+
+        let user = userAdmin.find((user) => user.email === email);
+
+        if (!user) {
+          showNotification("Email chưa được đăng ký!", "error");
+          return;
+        }
+
+        setTimeout(() => {
+          window.location.href = `resetpass-admin.html?email=${encodeURIComponent(
+            email
+          )}`;
+        }, 500);
+      }
+      window.validateEmail = validateEmail;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,299 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --font-hero__heading: Inter, sans-serif;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: "Inter", sans-serif;
+}
+
+/*================= Common =================*/
+.main-content {
+  width: 1440px;
+  max-width: calc(100% - 80px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #60b004;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 17px;
+  gap: 12px;
+  min-width: 166px;
+  border-radius: 999px;
+  border: 1px solid #c31414;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2.7rem;
+  text-align: center;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.break-all {
+  word-break: break-all;
+}
+/*================= admin =================*/
+.admin .main-content {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin-top: 40px;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+/*================= sidebar =================*/
+body {
+  background-color: white;
+}
+
+.left-admin {
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-admin .logo {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.sidebar {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0.2, 0.2, 0.2, 0.2);
+}
+
+.menu-item {
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu-item a {
+  display: block;
+  padding: 25px 15px;
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  background: #efefef;
+  border-radius: 5px;
+}
+/*================= header =================*/
+.header {
+  background: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0.2, 0.2, 0.2, 0.2);
+  margin-bottom: 20px;
+}
+
+.admin-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-name {
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+
+.admin-avatar img {
+  width: 60px;
+  height: 60px;
+  background: #ddd;
+  border-radius: 50%;
+}
+/*================= profile =================*/
+.profile-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  width: 1105px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0.2, 0.2, 0.2, 0.2);
+}
+
+.profile-info {
+  border-right: 2px solid #ddd;
+  padding-right: 40px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.avatar {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ddd;
+}
+
+.select-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.file-input {
+  display: none;
+}
+
+.personal-details {
+  gap: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.personal-details strong {
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+
+.personal-details p {
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+  margin: 5px 0;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.change-password {
+  flex: 1;
+  padding-left: 40px;
+}
+
+.change-password h2 {
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+  margin-bottom: 20px;
+}
+
+#toggleCurrentPassword {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#toggleCurrentPassword img {
+  width: 20px;
+}
+
+#toggleNewPassword {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#toggleNewPassword img {
+  width: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+
+.change-password-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+  cursor: pointer;
+}
+
+.change-password-btn:hover {
+  background-color: #45a049;
+}

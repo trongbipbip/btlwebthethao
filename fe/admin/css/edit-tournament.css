@@ -1,0 +1,314 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --font-hero__heading: Inter, sans-serif;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: "Inter", sans-serif;
+}
+
+/*================= Common =================*/
+.main-content {
+  width: 1440px;
+  max-width: calc(100% - 80px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #60b004;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 17px;
+  gap: 12px;
+  min-width: 166px;
+  border-radius: 999px;
+  border: 1px solid #c31414;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2.7rem;
+  text-align: center;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.break-all {
+  word-break: break-all;
+}
+/*================= admin =================*/
+.admin .main-content {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin-top: 40px;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+/*================= sidebar =================*/
+body {
+  background-color: white;
+}
+
+.left-admin {
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-admin .logo {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.sidebar {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0.2, 0.2, 0.2, 0.2);
+}
+
+.menu-item {
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu-item a {
+  display: block;
+  padding: 25px 15px;
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  background: #efefef;
+  border-radius: 5px;
+}
+/*================= header =================*/
+.header {
+  background: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0.2, 0.2, 0.2, 0.2);
+  margin-bottom: 20px;
+}
+
+.admin-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-name {
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+
+.admin-avatar img {
+  width: 60px;
+  height: 60px;
+  background: #ddd;
+  border-radius: 50%;
+}
+/*================= stats-container =================*/
+.edit-container {
+  width: 1100px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0.2, 0.2, 0.2, 0.2);
+}
+.main-container {
+  display: flex;
+  margin: auto;
+  gap: 30px;
+  padding: 20px 0;
+}
+
+/* Main content (trái) */
+.main-container .edit-content {
+  flex: 2;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0.2, 0.2, 0.2, 0.2);
+}
+
+/* Sidebar (phải) */
+.sidebar {
+  flex: 1;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0.2, 0.2, 0.2, 0.2);
+}
+
+.main-container h1 {
+  margin-bottom: 30px;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 1.6rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 15px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border 0.3s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #28a745;
+  outline: none;
+}
+
+/* Nút Lưu và Quay lại */
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+#saveBtn {
+  background: #28a745;
+  color: white;
+}
+
+#saveBtn:hover {
+  background: #218838;
+}
+
+#backBtn {
+  background: #dc3545;
+  color: white;
+}
+
+#backBtn:hover {
+  background: #c82333;
+}
+
+.main-container img {
+  max-width: 100px;
+  margin-top: 10px;
+  display: block;
+}
+/* Switch Container */
+.edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.edit-header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #333;
+}
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #28a745;
+}
+
+input:checked + .slider::before {
+  transform: translateX(26px);
+}
