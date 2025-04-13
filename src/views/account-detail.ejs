@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE ejs>
+<ejs lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thông tin tài khoản</title>
     <!-- Reset CSS -->
-    <link rel="stylesheet" href="./assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
 
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="./assets/css/account-detail.css" />
+    <link rel="stylesheet" href="/assets/css/account-detail.css" />
 
     <!-- Embed Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,56 +20,56 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="./assets/favicon/apple-touch-icon.png"
+      href="/assets/favicon/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="./assets/favicon/favicon-32x32.png"
+      href="/assets/favicon/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="./assets/favicon/favicon-16x16.png"
+      href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
     <header>
       <div class="logo">
-        <a href="./index.html"
-          ><img src="./assets/img/header-logo.png" alt=""
+        <a href="./index.ejs"
+          ><img src="/assets/img/header-logo.png" alt=""
         /></a>
       </div>
       <div class="header-content">
         <div class="category">
           <div class="category-item">
-            <img src="./assets/img/home.svg" alt="" />
-            <h2><a href="./index.html">TRANG CHỦ</a></h2>
+            <img src="/assets/img/home.svg" alt="" />
+            <h2><a href="./index.ejs">TRANG CHỦ</a></h2>
           </div>
 
           <div class="category-item news-dropdown">
-            <img src="./assets/img/news.svg" alt="" />
-            <h2><a href="./category-news.html">TIN TỨC</a></h2>
+            <img src="/assets/img/news.svg" alt="" />
+            <h2><a href="./category-news.ejs">TIN TỨC</a></h2>
             <ul class="news-dropdown-menu">
-              <li><a href="./category-news.html?category=1">Đời sống</a></li>
+              <li><a href="./category-news.ejs?category=1">Đời sống</a></li>
               <li>
-                <a href="./category-news.html?category=2"
+                <a href="./category-news.ejs?category=2"
                   >Khoảnh khắc đáng nhớ</a
                 >
               </li>
               <li>
-                <a href="./category-news.html?category=3">Người nổi tiếng</a>
+                <a href="./category-news.ejs?category=3">Người nổi tiếng</a>
               </li>
-              <li><a href="./category-news.html?category=4">Hồi ức</a></li>
+              <li><a href="./category-news.ejs?category=4">Hồi ức</a></li>
             </ul>
           </div>
 
           <div class="category-item">
-            <img src="./assets/img/tournament.svg" alt="" />
-            <h2><a href="./category-tournament.html">GIẢI ĐẤU</a></h2>
+            <img src="/assets/img/tournament.svg" alt="" />
+            <h2><a href="./category-tournament.ejs">GIẢI ĐẤU</a></h2>
           </div>
 
           <div class="bar"></div>
@@ -77,7 +77,7 @@
           <form class="search-box" onsubmit="searchGoogle(event)">
             <input type="text" id="search-input" placeholder="Tìm kiếm" />
             <button type="submit">
-              <img src="./assets/img/search.svg" alt="Search" />
+              <img src="/assets/img/search.svg" alt="Search" />
             </button>
           </form>
 
@@ -86,7 +86,7 @@
           <div id="header"></div>
         </div>
         <div class="sub-logo">
-          <img src="./assets/img/emirate.png" alt="" />
+          <img src="/assets/img/emirate.png" alt="" />
         </div>
       </div>
     </header>
@@ -101,14 +101,14 @@
             <div class="username"><p id="submenuUsername">Họ và tên</p></div>
           </div>
           <div class="sub-menu-item">
-            <a href="./account-detail.html"
-              ><img src="./assets/img/user.svg" alt="" />
+            <a href="./account-detail.ejs"
+              ><img src="/assets/img/user.svg" alt="" />
               <p>Thông tin tài khoản</p></a
             >
           </div>
           <div class="sub-menu-item">
-            <a href="./saved-news.html"
-              ><img src="./assets/img/save.svg" alt="" />
+            <a href="./saved-news.ejs"
+              ><img src="/assets/img/save.svg" alt="" />
               <div class="saved-news">
                 <p>Tin tức đã lưu</p>
                 <span class="badge" id="savedCount">0</span>
@@ -116,8 +116,8 @@
             >
           </div>
           <div class="sub-menu-item">
-            <a href="./index.html"
-              ><img src="./assets/img/logout.svg" alt="" />
+            <a href="./index.ejs"
+              ><img src="/assets/img/logout.svg" alt="" />
               <p>Thoát tài khoản</p></a
             >
           </div>
@@ -129,7 +129,7 @@
           <div class="avatar-block">
             <img
               id="avatarPreview"
-              src="./assets/img/avatar.jpg"
+              src="/assets/img/avatar.jpg"
               alt="Avatar"
               class="avatar"
             />
@@ -193,12 +193,12 @@
         <div class="news-container">
           <div class="news-header">
             <h2>TIN TỨC</h2>
-            <a href="./category-news.html">Xem thêm</a>
+            <a href="./category-news.ejs">Xem thêm</a>
           </div>
           <div class="news-block">
             <div class="featured-news">
               <a href="">
-                <img src="./assets/img/featured-new.png" alt="" />
+                <img src="/assets/img/featured-new.png" alt="" />
                 <p>
                   Người Mỹ gốc Séc được khen thưởng 15 danh hiệu trong mùa giải
                 </p>
@@ -207,7 +207,7 @@
             <div class="news-list">
               <div class="news-item">
                 <a href="">
-                  <img src="./assets/img/more-news1.png" alt="" />
+                  <img src="/assets/img/more-news1.png" alt="" />
                   <p>
                     Ngôi sao trẻ của Na Uy “Budkov Kjaer” tham gia cùng Ruud
                   </p>
@@ -216,7 +216,7 @@
 
               <div class="news-item">
                 <a href="">
-                  <img src="./assets/img/more-news2.png" alt="" />
+                  <img src="/assets/img/more-news2.png" alt="" />
                   <p>
                     Alexander Zverev đứng thứ hai tại Tennis Tour về số trận
                     thắng giao bóng
@@ -226,7 +226,7 @@
 
               <div class="news-item">
                 <a href="">
-                  <img src="./assets/img/more-news3.png" alt="" />
+                  <img src="/assets/img/more-news3.png" alt="" />
                   <p>Bí mật về trò chơi của Zverev ẩn giấu</p>
                 </a>
               </div>
@@ -239,7 +239,7 @@
       <div class="ads-hori">
         <a href=""
           ><img
-            src="./assets/img/ads-horizontal.png"
+            src="/assets/img/ads-horizontal.png"
             alt=""
             class="ads-hori__img"
         /></a>
@@ -248,24 +248,24 @@
     <footer class="footer">
       <div class="main-content">
         <div class="left-footer">
-          <img src="./assets/img/footer-logo.png" alt="" class="logo" />
+          <img src="/assets/img/footer-logo.png" alt="" class="logo" />
           <div class="media">
-            <a href=""><img src="./assets/img/facebook.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/youtube.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/email.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/twitter.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/linkedin.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/facebook.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/youtube.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/email.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/twitter.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/linkedin.svg" alt="" /></a>
           </div>
           <div class="hotline">
             <div class="hotline-number">
-              <img src="./assets/img/phone.svg" alt="" />
+              <img src="/assets/img/phone.svg" alt="" />
               <div class="hotline-content">
                 <p>Đường dây nóng :</p>
                 <p>+84 38 290 51 69</p>
               </div>
             </div>
             <div class="hotline-email">
-              <img src="./assets/img/email-hotline.png" alt="" />
+              <img src="/assets/img/email-hotline.png" alt="" />
               <div class="hotline-content">
                 <p>Email :</p>
                 <p>nguyenskt2004@gmail.com</p>
@@ -300,9 +300,9 @@
       </div>
     </footer>
 
-    <script src="./assets/js/headerLogined.js"></script>
-    <script src="./assets/js/headerNotLogin.js"></script>
-    <script src="./assets/js/header.js"></script>
-    <script src="./assets/js/accountDetail.js"></script>
+    <script src="/assets/js/headerLogined.js"></script>
+    <script src="/assets/js/headerNotLogin.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/accountDetail.js"></script>
   </body>
-</html>
+</ejs>

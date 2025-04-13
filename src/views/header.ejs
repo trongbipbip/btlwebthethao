@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE ejs>
+<ejs lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="./header.css" />
+    <link rel="stylesheet" href="/header.css" />
 
     <!-- Embed Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,56 +16,56 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="./assets/favicon/apple-touch-icon.png"
+      href="/assets/favicon/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="./assets/favicon/favicon-32x32.png"
+      href="/assets/favicon/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="./assets/favicon/favicon-16x16.png"
+      href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
     <header>
       <div class="logo">
-        <a href="./index.html"
-          ><img src="./assets/img/header-logo.png" alt=""
+        <a href="./index.ejs"
+          ><img src="/assets/img/header-logo.png" alt=""
         /></a>
       </div>
       <div class="header-content">
         <div class="category">
           <div class="category-item">
-            <img src="./assets/img/home.svg" alt="" />
-            <h2><a href="./index.html">TRANG CHỦ</a></h2>
+            <img src="/assets/img/home.svg" alt="" />
+            <h2><a href="./index.ejs">TRANG CHỦ</a></h2>
           </div>
 
           <div class="category-item news-dropdown">
-            <img src="./assets/img/news.svg" alt="" />
-            <h2><a href="./category-news.html">TIN TỨC</a></h2>
+            <img src="/assets/img/news.svg" alt="" />
+            <h2><a href="./category-news.ejs">TIN TỨC</a></h2>
             <ul class="news-dropdown-menu">
-              <li><a href="./category-news.html?category=1">Đời sống</a></li>
+              <li><a href="./category-news.ejs?category=1">Đời sống</a></li>
               <li>
-                <a href="./category-news.html?category=2"
+                <a href="./category-news.ejs?category=2"
                   >Khoảnh khắc đáng nhớ</a
                 >
               </li>
               <li>
-                <a href="./category-news.html?category=3">Người nổi tiếng</a>
+                <a href="./category-news.ejs?category=3">Người nổi tiếng</a>
               </li>
-              <li><a href="./category-news.html?category=4">Hồi ức</a></li>
+              <li><a href="./category-news.ejs?category=4">Hồi ức</a></li>
             </ul>
           </div>
 
           <div class="category-item">
             <img src="./assets/img/tournament.svg" alt="" />
-            <h2><a href="./category-tournament.html">GIẢI ĐẤU</a></h2>
+            <h2><a href="./category-tournament.ejs">GIẢI ĐẤU</a></h2>
           </div>
 
           <div class="bar"></div>
@@ -84,7 +84,7 @@
             <div class="dropdown-menu" id="dropdownMenu">
               <div class="menu-title"><strong>Minh Quân Đỗ</strong></div>
               <div class="menu-item">
-                <a href="./account-detail.html">👤 Thông tin tài khoản</a>
+                <a href="./account-detail.ejs">👤 Thông tin tài khoản</a>
               </div>
               <div class="menu-item"><a href="">🔖 Tin bài đã lưu</a></div>
               <div class="menu-item"><a href="">↩️ Thoát tài khoản</a></div>
@@ -99,4 +99,4 @@
 
     <script src="./assets/js/header.js"></script>
   </body>
-</html>
+</ejs>

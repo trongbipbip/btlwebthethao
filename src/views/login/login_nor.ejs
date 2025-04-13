@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE ejs>
+<ejs lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../assets/css/reset.css" />
 
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="./css/login.css" />
+    <link rel="stylesheet" href="/css/login.css" />
 
     <!-- Embed Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,28 +37,28 @@
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
-    <a href="../index.html"
-      ><img src="./img/logo.png" alt="Logo" class="logo"
+    <a href="../index.ejs"
+      ><img src="/img/logo.png" alt="Logo" class="logo"
     /></a>
-
+      
     <div class="login-container">
       <!-- Logo -->
-
+      
       <!-- Tiêu đề -->
       <h1 class="login-title">ĐĂNG NHẬP</h1>
 
       <!-- Form đăng nhập -->
-      <form onsubmit="validateLogin(event)">
+      <form method="POST" action="/login" onsubmit="validateLogin(event)">
         <div class="input-group">
-          <label>Tên đăng nhập <span class="badge">*</span></label>
-          <input type="username" id="username" placeholder="Username" />
-          <small id="usernameError" class="error-message"></small>
+          <label>Tên đăng nhập </label>
+          <input type="text" name="username" id="username" placeholder="Tên đăng nhập" />
+          <span id="usernameError"   class="error-message"></span>
         </div>
 
         <div class="input-group">
-          <label>Mật khẩu <span class="badge">*</span></label>
+          <label>Mật khẩu </label>
           <div class="password-wrapper">
-            <input type="password" id="password" placeholder="Mật khẩu" />
+            <input type="password" name="password" id="password" placeholder="Mật khẩu" />
             <span id="togglePassword" onclick="togglePassword()"
               ><img src="./img/show.svg" alt=""
             /></span>
@@ -68,27 +68,34 @@
 
         <!-- Quên mật khẩu -->
         <div class="forgot-password">
-          <a href="./forgotpass-admin.html">Quên mật khẩu?</a>
+          <a href="./forgotpass-nor.ejs">Quên mật khẩu?</a>
         </div>
 
         <button type="submit" class="btn-login">Đăng nhập</button>
       </form>
-    </div>
 
+      <!-- Đăng ký -->
+      <div class="register">
+        Người dùng mới? <a href="./signin_nor.ejs">Tạo tài khoản</a>
+      </div>
+    </div>
+    <!-- <p>
     <script type="module">
-      import { userAdmin } from "../data/adminData.js";
+      import { users } from "../data/userData.js";
 
       document.addEventListener("DOMContentLoaded", function () {
-        let storedUsers = localStorage.getItem("userAdmin");
+        let storedUsers = localStorage.getItem("users");
 
-        // Nếu localStorage chưa có danh sách admin, lưu danh sách mặc định vào
+        // Nếu localStorage chưa có danh sách user, lưu danh sách user mặc định vào
         if (!storedUsers) {
-          localStorage.setItem("userAdmin", JSON.stringify(userAdmin));
+          import("../data/userData.js").then((module) => {
+            localStorage.setItem("users", JSON.stringify(module.users));
+          });
         }
       });
 
+      // Ẩn lỗi khi nhập vào input
       document.addEventListener("DOMContentLoaded", function () {
-        // Gán sự kiện input để ẩn lỗi khi nhập
         document.querySelectorAll("input").forEach((input) => {
           input.addEventListener("input", function () {
             let errorElement = document.getElementById(this.id + "Error");
@@ -99,6 +106,7 @@
         });
       });
 
+      // Hiển thị thông báo
       function showNotification(message, type = "error") {
         let notification = document.createElement("div");
         notification.className = `notification ${type}`;
@@ -111,11 +119,13 @@
         }, 3000);
       }
 
+      // Xử lý đăng nhập
       function validateLogin(event) {
         event.preventDefault();
+
         let username = document.getElementById("username").value.trim();
-        let usernameError = document.getElementById("usernameError");
         let password = document.getElementById("password").value.trim();
+        let usernameError = document.getElementById("usernameError");
         let passwordError = document.getElementById("passwordError");
 
         usernameError.innerText = "";
@@ -131,7 +141,7 @@
           return;
         }
 
-        let storedUsers = JSON.parse(localStorage.getItem("userAdmin")) || [];
+        let storedUsers = JSON.parse(localStorage.getItem("users")) || [];
         let user = storedUsers.find(
           (user) => user.username === username && user.password === password
         );
@@ -141,18 +151,14 @@
           return;
         }
 
-        // Lưu thông tin admin hiện tại vào localStorage
+        // Lưu thông tin người dùng hiện tại vào localStorage
         localStorage.setItem("currentUser", JSON.stringify(user));
 
         showNotification("Đăng nhập thành công!", "success");
-
-        setTimeout(() => {
-          window.location.href = "../admin/admin.html";
-        }, 1000);
+        window.location.href = "../index.ejs";
       }
 
-      window.validateLogin = validateLogin;
-
+      // Hiển thị / ẩn mật khẩu
       function togglePassword() {
         let passwordInput = document.getElementById("password");
         let toggleIcon = document.querySelector("#togglePassword img");
@@ -165,8 +171,9 @@
           toggleIcon.src = "./img/show.svg";
         }
       }
-
       window.togglePassword = togglePassword;
+      window.validateLogin = validateLogin;
     </script>
+    </p> -->
   </body>
-</html>
+</ejs>

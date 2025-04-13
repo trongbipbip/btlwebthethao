@@ -43,9 +43,9 @@ function togglePassword() {
 
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
-    toggleIcon.src = "./assets/img/hide-password.svg";
+    toggleIcon.src = "/assets/img/hide-password.svg";
   } else {
     passwordInput.type = "password";
-    toggleIcon.src = "./assets/img/show-password.svg";
+    toggleIcon.src = "/assets/img/show-password.svg";
   }
 }

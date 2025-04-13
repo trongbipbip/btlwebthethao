@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE ejs>
+<ejs lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,7 +37,7 @@
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
-    <a href="../index.html"
+    <a href="../index.ejs"
       ><img src="./img/logo.png" alt="Logo" class="logo"
     /></a>
 
@@ -87,7 +87,7 @@
 
         <div class="link-container">
           <div class="return-login">
-            <a href="./login_admin.html">Quay lại Đăng Nhập?</a>
+            <a href="./login_admin.ejs">Quay lại Đăng Nhập?</a>
           </div>
 
           <button type="submit" class="btn-login">Đặt lại</button>
@@ -168,7 +168,7 @@
 
         user.password = newPassword;
         alert("Đặt lại mật khẩu thành công!");
-        window.location.href = "./login_admin.html";
+        window.location.href = "./login_admin.ejs";
       }
       window.resetPassword = resetPassword;
 
@@ -215,4 +215,4 @@
       window.toggleConfirmPassword = toggleConfirmPassword;
     </script>
   </body>
-</html>
+</ejs>

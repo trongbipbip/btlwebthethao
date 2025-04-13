@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE ejs>
+<ejs lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Giải đấu</title>
+    <title>Chi tiết giải đấu</title>
     <!-- Reset CSS -->
     <link rel="stylesheet" href="./assets/css/reset.css" />
 
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="./assets/css/category-tournament.css" />
+    <link rel="stylesheet" href="./assets/css/tournament-detail.css" />
 
     <!-- Embed Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -39,7 +39,7 @@
   <body>
     <header>
       <div class="logo">
-        <a href="./index.html"
+        <a href="./index.ejs"
           ><img src="./assets/img/header-logo.png" alt=""
         /></a>
       </div>
@@ -47,29 +47,29 @@
         <div class="category">
           <div class="category-item">
             <img src="./assets/img/home.svg" alt="" />
-            <h2><a href="./index.html">TRANG CHỦ</a></h2>
+            <h2><a href="./index.ejs">TRANG CHỦ</a></h2>
           </div>
 
           <div class="category-item news-dropdown">
             <img src="./assets/img/news.svg" alt="" />
-            <h2><a href="./category-news.html">TIN TỨC</a></h2>
+            <h2><a href="./category-news.ejs">TIN TỨC</a></h2>
             <ul class="news-dropdown-menu">
-              <li><a href="./category-news.html?category=1">Đời sống</a></li>
+              <li><a href="./category-news.ejs?category=1">Đời sống</a></li>
               <li>
-                <a href="./category-news.html?category=2"
+                <a href="./category-news.ejs?category=2"
                   >Khoảnh khắc đáng nhớ</a
                 >
               </li>
               <li>
-                <a href="./category-news.html?category=3">Người nổi tiếng</a>
+                <a href="./category-news.ejs?category=3">Người nổi tiếng</a>
               </li>
-              <li><a href="./category-news.html?category=4">Hồi ức</a></li>
+              <li><a href="./category-news.ejs?category=4">Hồi ức</a></li>
             </ul>
           </div>
 
           <div class="category-item">
             <img src="./assets/img/tournament.svg" alt="" />
-            <h2><a href="./category-tournament.html">GIẢI ĐẤU</a></h2>
+            <h2><a href="./category-tournament.ejs">GIẢI ĐẤU</a></h2>
           </div>
 
           <div class="bar"></div>
@@ -95,41 +95,49 @@
     <!-- Popup -->
     <div id="login-popup"></div>
     <main>
-      <div class="tournament-block">
+      <div id="eventBackground"></div>
+
+      <div class="tournament">
         <div class="main-content">
-          <h1>GIẢI ĐẤU | Những giải đấu trong năm</h1>
-          <div class="tournaments">
-            <div class="event-block">
-              <div class="search-box">
-                <input
-                  type="text"
-                  id="searchBar"
-                  placeholder="Tìm kiếm giải đấu"
-                />
-                <button>
-                  <img src="./assets/img/search.svg" alt="Search" />
-                </button>
+          <div class="tournament-container">
+            <div class="tour-detail">
+              <div class="event-container">
+                <h1>Chi tiết giải đấu</h1>
+                <div id="eventDetails"></div>
               </div>
-              <div class="event">
-                <div id="calendar"></div>
-                <div class="portraits">
-                  <h2 class="portraits-title">
-                    Chân dung của những nhà vô địch trước
-                  </h2>
-                  <div class="portrait-list">
-                    <div class="portrait-item">
-                      <img src="./assets/img/portrait1.png" alt="" />
-                      <p class="portrait-name">
-                        Serena Williams Saginaw, Michigan
-                      </p>
-                    </div>
-                    <div class="line"></div>
-                    <div class="portrait-item">
-                      <img src="./assets/img/portrait2.png" alt="" />
-                      <p class="portrait-name">
-                        Jannik Sinner Innichen, Northen Italy
-                      </p>
-                    </div>
+              <div id="eventContent"></div>
+              <div class="news-container__horizontal">
+                <div class="news-header__horizontal">
+                  <div class="news-title__horizontal">Tin tức mới nhất</div>
+                  <a href="#" class="more-link__horizontal">Xem thêm →</a>
+                </div>
+                <div class="news-list__horizontal">
+                  <div class="news-item__horizontal">
+                    <a href="">
+                      <img
+                        src="./assets/img/more-news1.png"
+                        alt="Humbert vô địch"
+                      />
+                      <p>Đương kim vô địch Humbert tại Dubai</p>
+                    </a>
+                  </div>
+                  <div class="news-item__horizontal">
+                    <a href=""
+                      ><img
+                        src="./assets/img/more-news2.png"
+                        alt="Garin chiến thắng"
+                      />
+                      <p>Garin tuyên bố sẽ giành chiến thắng tại Santiago</p></a
+                    >
+                  </div>
+                  <div class="news-item__horizontal">
+                    <a href=""
+                      ><img
+                        src="./assets/img/more-news3.png"
+                        alt="Budkov ghi tên vào lịch sử"
+                      />
+                      <p>Nicolai Budkov Kjaer ghi tên mình vào lịch sử</p></a
+                    >
                   </div>
                 </div>
               </div>
@@ -137,7 +145,7 @@
             <div class="news-container">
               <div class="news-header">
                 <h2>TIN TỨC</h2>
-                <a href="./category-news.html">Xem thêm</a>
+                <a href="./category-news.ejs">Xem thêm</a>
               </div>
               <div class="news-block">
                 <div class="featured-news">
@@ -179,9 +187,30 @@
               </div>
             </div>
           </div>
+          <div class="explore-tournament">
+            <div class="explore-container">
+              <h2>Khám phá các giải đấu</h2>
+              <div class="slider-wrapper">
+                <button class="slider-btn prev" onclick="prevSlide()"><</button>
+                <div class="slider-container">
+                  <div class="slider" id="slider"></div>
+                </div>
+                <button class="slider-btn next" onclick="nextSlide()">></button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- .ads-banner -->
+
+      <!-- ads -->
+      <div class="ads-hori">
+        <a href=""
+          ><img
+            src="./assets/img/ads-horizontal.png"
+            alt=""
+            class="ads-hori__img"
+        /></a>
+      </div>
     </main>
     <footer class="footer">
       <div class="main-content">
@@ -241,5 +270,7 @@
     <script src="./assets/js/headerNotLogin.js"></script>
     <script src="./assets/js/header.js"></script>
     <script src="./assets/js/tournaments.js"></script>
+    <script src="./assets/js/event.js"></script>
+    <script src="./assets/js/tournament-slider.js"></script>
   </body>
-</html>
+</ejs>
