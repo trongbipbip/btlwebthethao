@@ -23,8 +23,8 @@ function showPopup() {
 
 function selectRole(role) {
   let urls = {
-    ["Admin"]: "./login/login_admin.html",
-    "Người đọc": "./login/login_nor.html",
+    ["Admin"]: "/admin/login",
+    "Người đọc": "/login",
   };
   window.location.href = urls[role] || "#";
 }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đăng nhập</title>
     <!-- Reset CSS -->
-    <link rel="stylesheet" href="../assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
 
     <!-- Styles CSS -->
     <link rel="stylesheet" href="/css/login.css" />
@@ -20,24 +20,24 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="../assets/favicon/apple-touch-icon.png"
+      href="/assets/favicon/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="../assets/favicon/favicon-32x32.png"
+      href="/assets/favicon/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="../assets/favicon/favicon-16x16.png"
+      href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
-    <a href="../index.ejs"
+    <a href="/"
       ><img src="/img/logo.png" alt="Logo" class="logo"
     /></a>
 
@@ -48,17 +48,17 @@
       <h1 class="login-title">ĐĂNG NHẬP</h1>
 
       <!-- Form đăng nhập -->
-      <form onsubmit="validateLogin(event)">
+      <form method ="post" action="/auth-admin"">
         <div class="input-group">
           <label>Tên đăng nhập <span class="badge">*</span></label>
-          <input type="username" id="username" placeholder="Username" />
+          <input type="username" name= "username" id="username" placeholder="Username" />
           <small id="usernameError" class="error-message"></small>
         </div>
 
         <div class="input-group">
           <label>Mật khẩu <span class="badge">*</span></label>
           <div class="password-wrapper">
-            <input type="password" id="password" placeholder="Mật khẩu" />
+            <input type="password" name="password" id="password" placeholder="Mật khẩu" />
             <span id="togglePassword" onclick="togglePassword()"
               ><img src="/img/show.svg" alt=""
             /></span>
@@ -68,13 +68,12 @@
 
         <!-- Quên mật khẩu -->
         <div class="forgot-password">
-          <a href="./forgotpass-admin.ejs">Quên mật khẩu?</a>
+          <a href="/forgotpass-admin">Quên mật khẩu?</a>
         </div>
 
-        <button type="submit" class="btn-login">Đăng nhập</button>
+        <button type="submit" class="btn-login" action>Đăng nhập</button>
       </form>
     </div>
-
     <script type="module">
       import { userAdmin } from "../data/adminData.js";
 

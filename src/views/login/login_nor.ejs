@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đăng nhập</title>
     <!-- Reset CSS -->
-    <link rel="stylesheet" href="../assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
 
     <!-- Styles CSS -->
     <link rel="stylesheet" href="/css/login.css" />
@@ -20,24 +20,24 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="../assets/favicon/apple-touch-icon.png"
+      href="/assets/favicon/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="../assets/favicon/favicon-32x32.png"
+      href="/assets/favicon/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="../assets/favicon/favicon-16x16.png"
+      href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
-    <a href="../index.ejs"
+    <a href="/"
       ><img src="/img/logo.png" alt="Logo" class="logo"
     /></a>
       
@@ -47,28 +47,34 @@
       <!-- Tiêu đề -->
       <h1 class="login-title">ĐĂNG NHẬP</h1>
 
+      <% if (error) { %>
+        <div class="error-message" style="color: red; margin-bottom: 10px;">
+          <%= error %>
+        </div>
+      <% } %>
+
       <!-- Form đăng nhập -->
-      <form method="POST" action="/login" onsubmit="validateLogin(event)">
+      <form method="POST" action="/auth">
         <div class="input-group">
           <label>Tên đăng nhập </label>
-          <input type="text" name="username" id="username" placeholder="Tên đăng nhập" />
-          <span id="usernameError"   class="error-message"></span>
+          <input type="text" name="username" id="username" placeholder="Tên đăng nhập" required />
+          <span id="usernameError" class="error-message"></span>
         </div>
 
         <div class="input-group">
           <label>Mật khẩu </label>
           <div class="password-wrapper">
-            <input type="password" name="password" id="password" placeholder="Mật khẩu" />
-            <span id="togglePassword" onclick="togglePassword()"
-              ><img src="./img/show.svg" alt=""
-            /></span>
+            <input type="password" name="password" id="password" placeholder="Mật khẩu" required />
+            <span id="togglePassword" onclick="togglePassword()">
+              <img src="/img/show.svg" alt="" />
+            </span>
           </div>
           <small id="passwordError" class="error-message"></small>
         </div>
 
         <!-- Quên mật khẩu -->
         <div class="forgot-password">
-          <a href="./forgotpass-nor.ejs">Quên mật khẩu?</a>
+          <a href="/forgotpass-nor">Quên mật khẩu?</a>
         </div>
 
         <button type="submit" class="btn-login">Đăng nhập</button>
@@ -76,88 +82,11 @@
 
       <!-- Đăng ký -->
       <div class="register">
-        Người dùng mới? <a href="./signin_nor.ejs">Tạo tài khoản</a>
+        Người dùng mới? <a href="/signin">Tạo tài khoản</a>
       </div>
     </div>
-    <!-- <p>
-    <script type="module">
-      import { users } from "../data/userData.js";
 
-      document.addEventListener("DOMContentLoaded", function () {
-        let storedUsers = localStorage.getItem("users");
-
-        // Nếu localStorage chưa có danh sách user, lưu danh sách user mặc định vào
-        if (!storedUsers) {
-          import("../data/userData.js").then((module) => {
-            localStorage.setItem("users", JSON.stringify(module.users));
-          });
-        }
-      });
-
-      // Ẩn lỗi khi nhập vào input
-      document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll("input").forEach((input) => {
-          input.addEventListener("input", function () {
-            let errorElement = document.getElementById(this.id + "Error");
-            if (errorElement) {
-              errorElement.innerText = "";
-            }
-          });
-        });
-      });
-
-      // Hiển thị thông báo
-      function showNotification(message, type = "error") {
-        let notification = document.createElement("div");
-        notification.className = `notification ${type}`;
-        notification.innerText = message;
-
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-          notification.remove();
-        }, 3000);
-      }
-
-      // Xử lý đăng nhập
-      function validateLogin(event) {
-        event.preventDefault();
-
-        let username = document.getElementById("username").value.trim();
-        let password = document.getElementById("password").value.trim();
-        let usernameError = document.getElementById("usernameError");
-        let passwordError = document.getElementById("passwordError");
-
-        usernameError.innerText = "";
-        passwordError.innerText = "";
-
-        if (!username) {
-          usernameError.innerText = "Tên đăng nhập không được để trống!";
-          return;
-        }
-
-        if (password.length < 6) {
-          passwordError.innerText = "Mật khẩu phải có ít nhất 6 ký tự!";
-          return;
-        }
-
-        let storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-        let user = storedUsers.find(
-          (user) => user.username === username && user.password === password
-        );
-
-        if (!user) {
-          showNotification("Tên đăng nhập hoặc mật khẩu không đúng!", "error");
-          return;
-        }
-
-        // Lưu thông tin người dùng hiện tại vào localStorage
-        localStorage.setItem("currentUser", JSON.stringify(user));
-
-        showNotification("Đăng nhập thành công!", "success");
-        window.location.href = "../index.ejs";
-      }
-
+    <script>
       // Hiển thị / ẩn mật khẩu
       function togglePassword() {
         let passwordInput = document.getElementById("password");
@@ -165,15 +94,12 @@
 
         if (passwordInput.type === "password") {
           passwordInput.type = "text";
-          toggleIcon.src = "./img/hide.svg";
+          toggleIcon.src = "/img/hide.svg";
         } else {
           passwordInput.type = "password";
-          toggleIcon.src = "./img/show.svg";
+          toggleIcon.src = "/img/show.svg";
         }
       }
-      window.togglePassword = togglePassword;
-      window.validateLogin = validateLogin;
     </script>
-    </p> -->
   </body>
 </ejs>

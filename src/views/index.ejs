@@ -1,5 +1,5 @@
-<!DOCTYPE ejs>
-<ejs lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/assets/css/reset.css" />
 
     <!-- Styles CSS -->
-
     <link rel="stylesheet" href="/assets/css/main.css" />
 
     <!-- Embed Font -->
@@ -38,61 +37,8 @@
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
-    <header>
-      <div class="logo">
-        <a href="/"
-          ><img src="/assets/img/header-logo.png" alt=""
-        /></a>
-      </div>
-      <div class="header-content">
-        <div class="category">
-          <div class="category-item">
-            <img src="/assets/img/home.svg" alt="" />
-            <h2><a href="/">TRANG CHỦ</a></h2>
-          </div>
-
-          <div class="category-item news-dropdown">
-            <img src="/assets/img/news.svg" alt="" />
-            <h2><a href="./category-news.ejs">TIN TỨC</a></h2>
-            <ul class="news-dropdown-menu">
-              <li><a href="./category-news.ejs?category=1">Đời sống</a></li>
-              <li>
-                <a href="./category-news.ejs?category=2"
-                  >Khoảnh khắc đáng nhớ</a
-                >
-              </li>
-              <li>
-                <a href="./category-news.ejs?category=3">Người nổi tiếng</a>
-              </li>
-              <li><a href="./category-news.ejs?category=4">Hồi ức</a></li>
-            </ul>
-          </div>
-
-          <div class="category-item">
-            <img src="/assets/img/tournament.svg" alt="" />
-            <h2><a href="./category-tournament.ejs">GIẢI ĐẤU</a></h2>
-          </div>
-
-          <div class="bar"></div>
-
-          <form class="search-box" onsubmit="searchGoogle(event)">
-            <input type="text" id="search-input" placeholder="Tìm kiếm" />
-            <button type="submit">
-              <img src="/assets/img/search.svg" alt="Search" />
-            </button>
-          </form>
-
-          <div class="bar"></div>
-
-          <div class="category-item">
-            <div id="header"></div>
-          </div>
-        </div>
-        <div class="sub-logo">
-          <img src="/assets/img/emirate.png" alt="" />
-        </div>
-      </div>
-    </header>
+    <%- include('partials/header') %>
+    
     <!-- Popup -->
     <div id="login-popup"></div>
     <main>
@@ -305,7 +251,7 @@
   Nhà vô địch năm 2021, người đã đến Acapulco sau hai tuần thi đấu trên sân đất nện Nam Mỹ, đã thích nghi với điều kiện sân cứng ẩm ướt và tìm lại nhịp độ khi trận đấu diễn ra và giành chiến thắng với tỷ số 6-7(2), 6-3, 6-4.
   "Tôi mới rời sân đất nện cách đây vài ngày, không có nhiều thời gian", tay vợt số 2 trong Bảng xếp hạng ATP của PIF cho biết. "Tôi rất vui khi đánh bại một tay vợt chất lượng và lọt vào vòng tiếp theo".
   Tay vợt người Đức đã nâng cao trình độ của mình trong những thời điểm quan trọng, dựa vào cú giao bóng đầu tiên mạnh mẽ của mình và tiến lên để gây áp lực lên Arnaldi, 24 tuổi. Zverev đã ghi được 32 bàn thắng, chuyển đổi 22 trong số những điểm đó.
-  “Thời gian nghỉ ở set thứ hai đã giải phóng tôi một chút và cho tôi một chút không gian để thở, ít nhất là trong set đó. Tôi bắt đầu chơi tốt hơn từ đó, tôi nghĩ có lẽ anh ấy chơi tệ hơn một chút từ thời điểm đó trở đi", Zverev, người đã cải thiện thành tích lên 12-3 trong mùa giải và 14-4 tại giải ATP 500 Mexico, nơi anh đã thua ở vòng mở màn năm ngoái trước đồng hương Daniel Altmaier — thất bại duy nhất ở vòng đầu tiên của tay vợt 27 tuổi này kể từ đầu năm 2024, cho biết.
+  "Thời gian nghỉ ở set thứ hai đã giải phóng tôi một chút và cho tôi một chút không gian để thở, ít nhất là trong set đó. Tôi bắt đầu chơi tốt hơn từ đó, tôi nghĩ có lẽ anh ấy chơi tệ hơn một chút từ thời điểm đó trở đi", Zverev, người đã cải thiện thành tích lên 12-3 trong mùa giải và 14-4 tại giải ATP 500 Mexico, nơi anh đã thua ở vòng mở màn năm ngoái trước đồng hương Daniel Altmaier — thất bại duy nhất ở vòng đầu tiên của tay vợt 27 tuổi này kể từ đầu năm 2024, cho biết.
   Tiếp theo đối với Zverev sẽ là Learner Tien, người cực kỳ ổn định. Tay vợt người Mỹ này đã lọt vào vòng chung kết Next Gen ATP Finals năm ngoái do PIF tổ chức. Tien, 19 tuổi, đã đánh bại á quân Acapulco 2022 Cameron Norrie với tỷ số 7-6(5), 6-3 ở vòng đầu tiên.
   
   Trong nửa lượt đấu của Zverev, hạt giống số 4 Holger Rune đã tiến lên với chiến thắng 7-6(4), 6-3 trước Roberto Carballes Baena. Tay vợt 21 tuổi người Đan Mạch đã cân bằng tỷ số trong loạt trận Lexus ATP Head2Head với Carballes Baena là 2-2 và sẽ đối đầu với tay vợt người Mỹ Brandon Nakashima, người đã tiến gần hơn đến chiến thắng thứ 100 ở cấp độ giải đấu bằng cách đánh bại tay vợt người Pháp Benjamin Bonzi với tỷ số 7-6(6), 7-5.`,
@@ -322,17 +268,17 @@
           status: "Đang hoạt động",
           category: "Người nổi tiếng",
           categoryId: 3,
-          content: `Một cặp đôi nằm trong Top 20 trên Bảng xếp hạng ATP của PIF đã đến sân tennis có thể là đẹp nhất thế giới vào thứ Bảy để giúp khởi động Giải quần vợt Abierto Mexicano Telcel 2025 do HSBC trình bày .
+          content: `Một cặp đôi nằm trong Top 20 trên Bảng xếp hạng ATP của PIF đã đến sân tennis có thể là đẹp nhất thế giới vào thứ Bảy để giúp khởi động Giải quần vợt Abierto Mexicano Telcel 2025 do HSBC trình bày .
 
-  Holger Rune và Frances Tiafoe đã tham gia một cuộc triển lãm trên sân nổi ở Vịnh St. Lucia của Acapulco khi một trong những hoạt động trước giải đấu mang tính biểu tượng của ATP Tour trở lại sau 10 năm. Đó không phải là trải nghiệm mà Tiafoe sẽ quên nhanh chóng.
+  Holger Rune và Frances Tiafoe đã tham gia một cuộc triển lãm trên sân nổi ở Vịnh St. Lucia của Acapulco khi một trong những hoạt động trước giải đấu mang tính biểu tượng của ATP Tour trở lại sau 10 năm. Đó không phải là trải nghiệm mà Tiafoe sẽ quên nhanh chóng.
   
-  “Thật không thể tin được. Tôi chưa từng làm điều đó trước đây”, Tiafoe nói. “Tôi chưa từng rời khỏi khách sạn ở Acapulco trước đây, vì vậy được ngắm nhìn tất cả các vách đá và mọi thứ, được chứng kiến ​​Acapulco đẹp như thế nào thật tuyệt vời. Tôi nghĩ đó chắc chắn là bức ảnh đẹp nhất mà bạn có thể chụp được. Tôi hy vọng Holger cũng thích nó. Có lẽ đó là một trong những trải nghiệm tuyệt vời nhất của tôi khi chơi quần vợt”.
+  "Thật không thể tin được. Tôi chưa từng làm điều đó trước đây", Tiafoe nói. "Tôi chưa từng rời khỏi khách sạn ở Acapulco trước đây, vì vậy được ngắm nhìn tất cả các vách đá và mọi thứ, được chứng kiến Acapulco đẹp như thế nào thật tuyệt vời. Tôi nghĩ đó chắc chắn là bức ảnh đẹp nhất mà bạn có thể chụp được. Tôi hy vọng Holger cũng thích nó. Có lẽ đó là một trong những trải nghiệm tuyệt vời nhất của tôi khi chơi quần vợt".
   `,
         },
         {
           id: 3,
           title:
-            "Ngôi sao của Na Uy - Budkov Kjaer là vận động viên “trẻ tuổi nhất”  ",
+            "Ngôi sao của Na Uy - Budkov Kjaer là vận động viên \"trẻ tuổi nhất\"",
           description:
             "Dù còn rất trẻ, Budkov Kjaer đã cho thấy tiềm năng vượt trội và tinh thần thi đấu đầy bản lĩnh.",
           image: "./assets/img/new3.png",
@@ -342,7 +288,7 @@
           category: "Khoảng khắc đáng nhớ",
           categoryId: 2,
           content: `Lớn lên trong cả khúc côn cầu và quần vợt, Nicolai Budkov Kjaer đã chọn môn thứ hai, và ở tuổi 18, cầu thủ người Na Uy này đã nhanh chóng tạo dựng được dấu ấn của mình.
-  Budkov Kjaer vẫn tiếp tục tận hưởng cả hai môn thể thao, coi cảm giác phấn khích tột độ của khúc côn cầu là một điều thú vị mà anh thích thú. Trước khi Budkov Kjaer đến Nitto ATP Finals, nơi anh là một trong ba đối tác đánh bóng cho sự kiện cuối năm danh giá này, anh đã mua cho mình một món quà nghỉ lễ sớm: giày trượt mới. “Tôi thích trượt băng với những người bạn cũ vẫn chơi khúc côn cầu. Tôi vẫn còn tốc độ, vì vậy tôi có thể thách thức họ ở đây và ở đó,” Ngôi sao cho biết vai trò của cha anh tại Liên đoàn quần vợt Na Uy đã có ảnh hưởng đáng kể đến quyết định theo đuổi môn thể thao mà anh đã vươn lên vị trí số 1 thế giới trong năm nay. “Bố tôi đã ở Liên đoàn trong năm năm hay gì đó, vì vậy việc tôi chọn quần vợt là điều tự nhiên hơn,” Budkov Kjaer nói. “Ông ấy ở Liên đoàn khi Casper Ruud lớn lên như một cầu thủ trẻ. Vì vậy, ông ấy biết tất cả các quá trình chuyển đổi và tất cả những điều cần phải làm.”
+  Budkov Kjaer vẫn tiếp tục tận hưởng cả hai môn thể thao, coi cảm giác phấn khích tột độ của khúc côn cầu là một điều thú vị mà anh thích thú. Trước khi Budkov Kjaer đến Nitto ATP Finals, nơi anh là một trong ba đối tác đánh bóng cho sự kiện cuối năm danh giá này, anh đã mua cho mình một món quà nghỉ lễ sớm: giày trượt mới. "Tôi thích trượt băng với những người bạn cũ vẫn chơi khúc côn cầu. Tôi vẫn còn tốc độ, vì vậy tôi có thể thách thức họ ở đây và ở đó," Ngôi sao cho biết vai trò của cha anh tại Liên đoàn quần vợt Na Uy đã có ảnh hưởng đáng kể đến quyết định theo đuổi môn thể thao mà anh đã vươn lên vị trí số 1 thế giới trong năm nay. "Bố tôi đã ở Liên đoàn trong năm năm hay gì đó, vì vậy việc tôi chọn quần vợt là điều tự nhiên hơn, " Budkov Kjaer nói. "Ông ấy ở Liên đoàn khi Casper Ruud lớn lên như một cầu thủ trẻ. Vì vậy, ông ấy biết tất cả các quá trình chuyển đổi và tất cả những điều cần phải làm."
   Budkov Kjaer đã ghi tên mình vào sách kỷ lục mùa giải này khi anh chiến thắng tại sự kiện đơn nam Wimbledon, trở thành người Na Uy đầu tiên giành danh hiệu đơn nam Slam ở bất kỳ nội dung nào, trẻ em hay chuyên nghiệp. Anh cũng đã nâng cao danh hiệu đôi nam Roland Garros cùng với Joel Schwaerzler.
   Sau thời gian ở Turin, Budkov Kjaer đã tham gia một sự kiện ATP Challenger Tour tại Tây Ban Nha, nơi anh đã đánh bại tay vợt số 114 thế giới Francseco Passaro và cựu ngôi sao Top 10 Pablo Carreno Busta.
   Tiếp nối sự vươn lên của Budkov Kjaer là đồng hương Casper Ruud, tay vợt người Na Uy xếp hạng cao nhất trong lịch sử.`,
@@ -358,31 +304,30 @@
           status: "Đang hoạt động",
           category: "Hồi ức",
           categoryId: 4,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
   Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
   
-  "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-  Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+  "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+  Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
   `,
         },
         {
           id: 5,
           title: "Mục tiêu tiếp theo của được hé lộ",
-          description:
-            "Blockx-buster: Thiếu niên “thiên tài” người Bỉ nhắm đến Chung kết ATP tiếp theo",
+          description: "Blockx-buster: Thiếu niên \"thiên tài\" người Bỉ nhắm đến Chung kết ATP tiếp theo",
           image: "./assets/img/new5.png",
 
           date: "27/2/2025",
           status: "Đang hoạt động",
           category: "Người nổi tiếng",
           categoryId: 3,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
@@ -396,12 +341,12 @@
           status: "Đang hoạt động",
           category: "Người nổi tiếng",
           categoryId: 3,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
@@ -415,12 +360,12 @@
           status: "Đang hoạt động",
           category: "Người nổi tiếng",
           categoryId: 3,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
@@ -434,12 +379,12 @@
           status: "Đang hoạt động",
           category: "Người nổi tiếng",
           categoryId: 3,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
@@ -453,32 +398,24 @@
           status: "Đang hoạt động",
           category: "Người nổi tiếng",
           categoryId: 3,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
           id: 10,
-          title:
-            "Ugo Carabelli vươn lên đỉnh cao sự nghiệp sau giải Rio, Người dẫn đầu tuần",
-          description:
-            "Ugo Carabelli chạm mốc mới trong sự nghiệp sau màn trình diễn ấn tượng tại Rio, trở thành tâm điểm của tuần.",
+          title: "Mỹ nhân từng bỏ tennis vì \"vòng 1 quá khổ\"",
+          description: "Người đẹp quần vợt từng từ bỏ sự nghiệp vì \"vòng 1 quá khổ\" nay gây chú ý trở lại.",
           image: "./assets/img/new10.png",
           date: "27/2/2025",
           status: "Đang hoạt động",
-          category: "Người nổi tiếng",
-          categoryId: 3,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
-
-    Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
-    
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
-    `,
+          category: "Hồi ức",
+          categoryId: 4,
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày.`
         },
         {
           id: 11,
@@ -490,31 +427,24 @@
           status: "Đang hoạt động",
           category: "Hồi ức",
           categoryId: 4,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
           id: 12,
-          title: "Mỹ nhân từng bỏ tennis vì “vòng 1 quá khổ”",
-          description:
-            "Người đẹp quần vợt từng từ bỏ sự nghiệp vì “vòng 1 quá khổ” nay gây chú ý trở lại.",
+          title: "Mỹ nhân từng bỏ tennis vì \"vòng 1 quá khổ\"",
+          description: "Người đẹp quần vợt từng từ bỏ sự nghiệp vì \"vòng 1 quá khổ\" nay gây chú ý trở lại.",
           image: "./assets/img/new12.png",
           date: "27/2/2025",
           status: "Đang hoạt động",
           category: "Hồi ức",
           categoryId: 4,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
-
-    Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
-    
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
-    `,
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày.`
         },
         {
           id: 13,
@@ -527,12 +457,12 @@
           status: "Đang hoạt động",
           category: "Đời sống",
           categoryId: 1,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
@@ -546,12 +476,12 @@
           status: "Đang hoạt động",
           category: "Đời sống",
           categoryId: 1,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
@@ -564,12 +494,12 @@
           status: "Đang hoạt động",
           category: "Người nổi tiếng",
           categoryId: 3,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
@@ -582,12 +512,12 @@
           status: "Đang hoạt động",
           category: "Khoảng khắc đáng nhớ",
           categoryId: 2,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
@@ -600,12 +530,12 @@
           status: "Đang hoạt động",
           category: "Khoảng khắc đáng nhớ",
           categoryId: 2,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
         {
@@ -618,49 +548,48 @@
           status: "Đang hoạt động",
           category: "Người nổi tiếng",
           categoryId: 3,
-          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
+          content: `Learner Tien đã giành được chiến thắng tuyệt vời nhất trong sự nghiệp của mình theo Bảng xếp hạng PIF ATP vào thứ Tư khi anh gây sốc khi đánh bại tay vợt số 2 thế giới Alexander Zverev với tỷ số 6-3, 6-4 tại Abierto Mexicano Telcel do HSBC trình bày .
 
     Tay vợt 19 tuổi này đã sử dụng lối chơi thuận tay trái khéo léo và sự ổn định như bức tường gạch của mình để dụ hạt giống số 1 vào những lỗi không bình thường, bao gồm một cú đánh trên cao mà Zverev đã bỏ lỡ khi đang ở điểm bẻ giao bóng ở tỷ số 3-4 trong set đầu tiên. Tien vẫn giữ được sự bình tĩnh trong suốt cuộc đụng độ, ghi năm game liên tiếp từ 1-4 trong set thứ hai để ấn định chiến thắng kéo dài một giờ 28 phút.
     
-    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
-    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
+    "Tôi chỉ ra ngoài đó và cố gắng kiểm soát phần sân của mình", Tien, người đang vào tứ kết cấp độ giải đấu thứ hai của mình, cho biết. "Rõ ràng là tôi biết đó sẽ là một trận đấu khó khăn. Vượt qua được cảm giác thật tuyệt... Tôi nghĩ chỉ cần tập trung vào những gì tôi có thể kiểm soát và giữ bình tĩnh hết mức có thể đã thực sự đưa tôi đi một chặng đường dài".Cậu thiếu niên này là người Mỹ trẻ tuổi nhất giành chiến thắng trước một đối thủ nằm trong top 3 kể từ Andy Roddick năm 2001. Tay vợt thuận tay trái này đang xếp hạng 68 trên Bảng xếp hạng ATP Live của PIF.Tien đã có một vài tháng đáng nhớ khi lọt vào trận chung kết Next Gen ATP Finals do PIF tổ chức vào tháng 12. Anh đã đủ điều kiện tham dự Giải Úc mở rộng và đánh bại cựu vô địch Daniil Medvedev trên đường vào vòng 4, qua đó giúp anh đảm bảo vị trí ra mắt Top 100 của mình. 
+    Không có dấu hiệu chậm lại, Tien sẽ đối đầu với hạt giống số 8 Tomas Machac . Tay vợt người Séc, xếp hạng 25 trong Bảng xếp hạng ATP của PIF, đã vượt qua tay vợt người Đức Daniel Altmaier với tỷ số 7-6(3), 6-1. Đây sẽ là lần đầu tiên Tien gặp Machac.
     `,
         },
       ];
       function renderNewsSection() {
         const newsList = document.querySelector(".blog-part");
+        
         if (!newsData || newsData.length === 0) {
           newsList.innerHTML = "<p>Không có bài viết nào.</p>";
           return;
         }
+        
         const sortedNews = [...newsData].sort((a, b) => b.id - a.id);
         const mainBlog = sortedNews[0];
         const subBlogs = sortedNews.slice(1, 4);
 
         newsList.innerHTML = `
     <div class="blog">
-      <a href="news-detail.ejs?id=${mainBlog.id}">
-        <img src="${mainBlog.image}" alt="${mainBlog.title}" class="blog-img"/>
+      <a href="/details?id=${mainBlog.id}">
+        <img src="${mainBlog.image}" alt="${mainBlog.title}" class="blog-img" />
       </a>
       <h3 class="blog-title">
-        <a href="news-detail.ejs?id=${mainBlog.id}">${mainBlog.title}</a>
+        <a href="details?id=${mainBlog.id}">${mainBlog.title}</a>
       </h3>
       <p class="blog-comment">${mainBlog.description}</p>
     </div>
     <div class="subblog">
-      ${subBlogs
-        .map(
-          (news) => `
-          <div class="subblog-content">
-            <a href="news-detail.ejs?id=${news.id}">
-              <img src="${news.image}" alt="${news.title}" class="subblog-img"/>
-            </a>
-            <h3 class="subblog-title">
-              <a href="news-detail.ejs?id=${news.id}">${news.title}</a>
-            </h3>
-          </div>`
-        )
-        .join("")}
+      ${subBlogs.map((news) => `
+        <div class="subblog-content">
+          <a href="/details?id=${news.id}">
+            <img src="${news.image}" alt="${news.title}" class="subblog-img" />
+          </a>
+          <h3 class="subblog-title">
+            <a href="/details?id=${news.id}">${news.title}</a>
+          </h3>
+        </div>
+      `).join('')}
     </div>
   `;
       }
@@ -680,30 +609,25 @@
         }
         dailyNewsContainer.innerHTML = `
           <div class="daily">
-            <a href="news-detail.ejs?id=${latestNews.id}">
-              <img src="${latestNews.image}" alt="${
-          latestNews.title
-        }" class="daily-img">
+            <a href="/details?id=${latestNews.id}">
+              <img src="${latestNews.image}" alt="${latestNews.title}" class="daily-img" />
             </a>
             <h3 class="daily-title">
-              <a href="news-detail.ejs?id=${latestNews.id}">${
-          latestNews.title
-        }</a>
+              <a href="/details?id=${latestNews.id}">${latestNews.title}</a>
             </h3>
             <p class="daily-comment">${latestNews.description}</p>
           </div>
           <div class="daily-list">
-            ${nextNews
-              .map(
-                (news) => `
+            ${nextNews.map((news) => `
               <div class="daily-item">
-                <h3 class="daily-item__title">
-                  <a href="news-detail.ejs?id=${news.id}">${news.title}</a>
+                <a href="/details?id=${news.id}">
+                  <img src="${news.image}" alt="${news.title}" class="daily-item-img" />
+                </a>
+                <h3 class="daily-item-title">
+                  <a href="/details?id=${news.id}">${news.title}</a>
                 </h3>
               </div>
-            `
-              )
-              .join("")}
+            `).join('')}
           </div>
         `;
       }
@@ -728,30 +652,22 @@
 
         breakingNewsContainer.innerHTML = `
           <div class="breaking">
-            <a href="news-detail.ejs?id=${latestNews.id}">
-              <img src="${
-                latestNews.image
-              }" alt="Breaking News" class="breaking-img">
+            <a href="/details?id=${latestNews.id}">
+              <img src="${latestNews.image}" alt="Breaking News" class="breaking-img">
             </a>
             <h3 class="breaking-title">
-              <a href="news-detail.ejs?id=${latestNews.id}">${
-          latestNews.title
-        }</a>
+              <a href="/details?id=${latestNews.id}">${latestNews.title}</a>
             </h3>
             <p class="breaking-comment">${latestNews.description}</p>
           </div>
           <div class="breaking-list">
-            ${nextThreeNews
-              .map(
-                (news) => `
+            ${nextThreeNews.map((news) => `
               <div class="breaking-item">
                 <h3 class="breaking-item__title">
-                  <a href="news-detail.ejs?id=${news.id}">${news.title}</a>
+                  <a href="/details?id=${news.id}">${news.title}</a>
                 </h3>
               </div>
-            `
-              )
-              .join("")}
+            `).join('')}
           </div>
         `;
       }
@@ -792,4 +708,4 @@
       setInterval(() => moveSlide(1), 3000);
     </script>
   </body>
-</ejs>
+</html>

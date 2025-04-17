@@ -12,25 +12,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
-// document.getElementById("header").innerHTML = `
-// <div class="avatar-container" onclick="toggleMenu()">
-// <img src="./assets/img/avatar.jpg" alt="Avatar" class="avatar" />
-// <div class="dropdown-menu" id="dropdownMenu">
-//   <div class="menu-title">
-//     <strong id="fullNameMenu">Minh Quân Đỗ</strong>
-//   </div>
-//   <div class="menu-item">
-//     <a href="./account-detail.html">👤 Thông tin tài khoản</a>
-//   </div>
-//   <div class="menu-item">
-//     <a href="/saved-news.html">🔖 Tin bài đã lưu</a>
-//   </div>
-//   <div class="menu-item">
-//     <a id="logoutBtn">↩️ Thoát tài khoản</a>
-//   </div>
-// </div>
-// </div>
-// `;
+   document.getElementById("header").innerHTML = `
+ <div class="avatar-container" onclick="toggleMenu()">
+ <img src="./assets/img/avatar.jpg" alt="Avatar" class="avatar" />
+<div class="dropdown-menu" id="dropdownMenu">
+    <div class="menu-title">
+      <strong id="fullNameMenu">Minh Quân Đỗ</strong>
+    </div>
+    <div class="menu-item">
+      <a href="./account-detail.html">👤 Thông tin tài khoản</a>
+    </div>
+    <div class="menu-item">
+      <a href="/saved-news.html">🔖 Tin bài đã lưu</a>
+    </div>
+    <div class="menu-item">
+      <a href="/home" id="logoutBtn">↩️ Thoát tài khoản</a>
+    </div>
+  </div>
+  </div>
+  `;
 setTimeout(() => {
   let fullNameElement = document.getElementById("fullNameMenu");
   if (fullNameElement) {
@@ -63,6 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function logout() {
   localStorage.removeItem("currentUser");
-  window.location.href = "./index.html";
+  window.location.href = "/home";
 }
 document.getElementById("logoutBtn")?.addEventListener("click", logout);

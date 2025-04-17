@@ -35,7 +35,7 @@
   <body>
     <header>
       <div class="logo">
-        <a href="./index.ejs"
+        <a href="/home"
           ><img src="/assets/img/header-logo.png" alt=""
         /></a>
       </div>
@@ -43,7 +43,7 @@
         <div class="category">
           <div class="category-item">
             <img src="/assets/img/home.svg" alt="" />
-            <h2><a href="./index.ejs">TRANG CHỦ</a></h2>
+            <h2><a href="/home">TRANG CHỦ</a></h2>
           </div>
 
           <div class="category-item news-dropdown">
@@ -64,8 +64,8 @@
           </div>
 
           <div class="category-item">
-            <img src="./assets/img/tournament.svg" alt="" />
-            <h2><a href="./category-tournament.ejs">GIẢI ĐẤU</a></h2>
+            <img src="/assets/img/tournament.svg" alt="" />
+            <h2><a href="/categorytournament">GIẢI ĐẤU</a></h2>
           </div>
 
           <div class="bar"></div>
@@ -73,30 +73,39 @@
           <form class="search-box" onsubmit="searchGoogle(event)">
             <input type="text" id="search-input" placeholder="Tìm kiếm" />
             <button type="submit">
-              <img src="./assets/img/search.svg" alt="Search" />
+              <img src="/assets/img/search.svg" alt="Search" />
             </button>
           </form>
 
           <div class="bar"></div>
 
-          <div class="avatar-container" onclick="toggleMenu()">
-            <img src="./assets/img/avatar.jpg" alt="Avatar" class="avatar" />
-            <div class="dropdown-menu" id="dropdownMenu">
-              <div class="menu-title"><strong>Minh Quân Đỗ</strong></div>
-              <div class="menu-item">
-                <a href="./account-detail.ejs">👤 Thông tin tài khoản</a>
+          <% if (typeof user !== 'undefined' && user) { %>
+            <!-- Header khi đã đăng nhập -->
+            <div class="avatar-container" onclick="toggleMenu()">
+              <img src="/assets/img/avatar.jpg" alt="Avatar" class="avatar" />
+              <div class="dropdown-menu" id="dropdownMenu">
+                <div class="menu-title"><strong><%= user.username %></strong></div>
+                <div class="menu-item">
+                  <a href="/account-detail.ejs">👤 Thông tin tài khoản</a>
+                </div>
+                <div class="menu-item"><a href="">🔖 Tin bài đã lưu</a></div>
+                <div class="menu-item"><a href="/logout">↩️ Thoát tài khoản</a></div>
               </div>
-              <div class="menu-item"><a href="">🔖 Tin bài đã lưu</a></div>
-              <div class="menu-item"><a href="">↩️ Thoát tài khoản</a></div>
             </div>
-          </div>
+          <% } else { %>
+            <!-- Header khi chưa đăng nhập -->
+            <div class="login-buttons">
+              <a href="/login" class="login-btn">Đăng nhập</a>
+              <a href="/signin" class="signup-btn">Đăng ký</a>
+            </div>
+          <% } %>
         </div>
         <div class="sub-logo">
-          <img src="./assets/img/emirate.png" alt="" />
+          <img src="/assets/img/emirate.png" alt="" />
         </div>
       </div>
     </header>
 
-    <script src="./assets/js/header.js"></script>
+    <script src="/assets/js/header.js"></script>
   </body>
 </ejs>

@@ -3,30 +3,25 @@ const session = require('express-session');
 const authRoutes = require('./routes/User.js');
 const adminRoutes = require('./routes/Admin.js');
 const configViewEngine = require('./config/viewConfig.js');
+const HomeRoutes = require('./routes/Home.js');
 const app = express();
+const newroutes = require('./routes/New.js');
+const bodyParser = require('body-parser');
 
 configViewEngine(app);
 
-// Middleware
-app.use(express.json()) // for json
-app.use(express.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-// Session
 app.use(session({
-    secret: 'secret-key',
+    secret: '123456',
     resave: false,
     saveUninitialized: true
 }));
 
-// Trang chủ
-app.get('/', (req, res) => {
-    res.render('index.ejs');
-});
-
-// Các route xử lý đăng nhập
+app.use('/', HomeRoutes);
 app.use('/', authRoutes);
-
-// route admin
+app.use('/', newroutes);
 
 app.use('/admin', adminRoutes);
 // Khởi chạy server

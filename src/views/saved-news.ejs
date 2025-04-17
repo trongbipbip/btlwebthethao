@@ -39,20 +39,20 @@
   <body>
     <header>
       <div class="logo">
-        <a href="./index.ejs"
+        <a href="/home"
           ><img src="./assets/img/header-logo.png" alt=""
         /></a>
       </div>
       <div class="header-content">
         <div class="category">
           <div class="category-item">
-            <img src="./assets/img/home.svg" alt="" />
-            <h2><a href="./index.ejs">TRANG CHỦ</a></h2>
+            <img src="/assets/img/home.svg" alt="" />
+            <h2><a href="/home">TRANG CHỦ</a></h2>
           </div>
 
           <div class="category-item news-dropdown">
-            <img src="./assets/img/news.svg" alt="" />
-            <h2><a href="./category-news.ejs">TIN TỨC</a></h2>
+            <img src="/assets/img/news.svg" alt="" />
+            <h2><a href="/categorynews">TIN TỨC</a></h2>
             <ul class="news-dropdown-menu">
               <li><a href="./category-news.ejs?category=1">Đời sống</a></li>
               <li>
@@ -69,7 +69,7 @@
 
           <div class="category-item">
             <img src="./assets/img/tournament.svg" alt="" />
-            <h2><a href="./category-tournament.ejs">GIẢI ĐẤU</a></h2>
+            <h2><a href="/categorytournament">GIẢI ĐẤU</a></h2>
           </div>
 
           <div class="bar"></div>
@@ -77,7 +77,7 @@
           <form class="search-box" onsubmit="searchGoogle(event)">
             <input type="text" id="search-input" placeholder="Tìm kiếm" />
             <button type="submit">
-              <img src="./assets/img/search.svg" alt="Search" />
+              <img src="/assets/img/search.svg" alt="Search" />
             </button>
           </form>
 
@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="sub-logo">
-          <img src="./assets/img/emirate.png" alt="" />
+          <img src="/assets/img/emirate.png" alt="" />
         </div>
       </div>
     </header>
@@ -101,14 +101,14 @@
             <div class="username"><p id="submenuUsername">Họ và tên</p></div>
           </div>
           <div class="sub-menu-item">
-            <a href="./account-detail.ejs"
-              ><img src="./assets/img/user.svg" alt="" />
+            <a href="/account-detail"
+              ><img src="/assets/img/user.svg" alt="" />
               <p>Thông tin tài khoản</p></a
             >
           </div>
           <div class="sub-menu-item">
             <a href=""
-              ><img src="./assets/img/save.svg" alt="" />
+              ><img src="/assets/img/save.svg" alt="" />
               <div class="saved-news">
                 <p>Tin tức đã lưu</p>
                 <span class="badge" id="savedCount">0</span>
@@ -117,7 +117,7 @@
           </div>
           <div class="sub-menu-item">
             <a href=""
-              ><img src="./assets/img/logout.svg" alt="" />
+              ><img src="/assets/img/logout.svg" alt="" />
               <p>Thoát tài khoản</p></a
             >
           </div>
@@ -145,7 +145,7 @@
       <div class="ads-hori">
         <a href=""
           ><img
-            src="./assets/img/ads-horizontal.png"
+            src="/assets/img/ads-horizontal.png"
             alt=""
             class="ads-hori__img"
         /></a>
@@ -154,7 +154,7 @@
     <footer class="footer">
       <div class="main-content">
         <div class="left-footer">
-          <img src="./assets/img/footer-logo.png" alt="" class="logo" />
+          <img src="/assets/img/footer-logo.png" alt="" class="logo" />
           <div class="media">
             <a href=""><img src="./assets/img/facebook.svg" alt="" /></a>
             <a href=""><img src="./assets/img/youtube.svg" alt="" /></a>
@@ -206,10 +206,10 @@
       </div>
     </footer>
 
-    <script src="./assets/js/headerLogined.js"></script>
-    <script src="./assets/js/headerNotLogin.js"></script>
-    <script src="./assets/js/header.js"></script>
-    <script src="./assets/js/savedNews.js"></script>
-    <script src="./assets/js/category-news.js"></script>
+    <script src="/assets/js/headerLogined.js"></script>
+    <script src="/assets/js/headerNotLogin.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/savedNews.js"></script>
+    <script src="/assets/js/category-news.js"></script>
   </body>
 </ejs>

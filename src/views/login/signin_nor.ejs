@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đăng ký</title>
     <!-- Reset CSS -->
-    <link rel="stylesheet" href="../assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
 
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="./css/signin.css" />
+    <link rel="stylesheet" href="/css/signin.css" />
 
     <!-- Embed Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,25 +20,25 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="../assets/favicon/apple-touch-icon.png"
+      href="/assets/favicon/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="../assets/favicon/favicon-32x32.png"
+      href="/assets/favicon/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="../assets/favicon/favicon-16x16.png"
+      href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
-    <a href="../index.ejs"
-      ><img src="./img/logo.png" alt="Logo" class="logo"
+    <a href="/" "
+      ><img src="/img/logo.png" alt="Logo" class="logo"
     /></a>
 
     <div class="register-container">
@@ -47,33 +47,39 @@
       <!-- Tiêu đề -->
       <h1 class="register-title">ĐĂNG KÝ</h1>
 
-      <!-- Form đăng nhập -->
-      <form onsubmit="validateRegister(event)">
+      <% if (error) { %>
+        <div class="error-message" style="color: red; margin-bottom: 10px;">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <!-- Form đăng ký -->
+      <form method="POST" action="/register">
         <div class="input-group">
           <label>Họ và tên </label>
-          <input type="text" id="fullName" placeholder="Họ và tên" />
+          <input type="text" name="fullName" id="fullName" placeholder="Họ và tên" required />
           <span id="fullNameError" class="error-message"></span>
         </div>
 
         <div class="input-group">
           <label>Tên đăng nhập </label>
-          <input type="text" id="username" placeholder="Tên đăng nhập" />
+          <input type="text" name="username" id="username" placeholder="Tên đăng nhập" required />
           <span id="usernameError" class="error-message"></span>
         </div>
 
         <div class="input-group">
           <label>Email </label>
-          <input type="text" id="email" placeholder="Email" />
+          <input type="email" name="email" id="email" placeholder="Email" required />
           <span id="emailError" class="error-message"></span>
         </div>
 
         <div class="input-group">
           <label>Mật khẩu </label>
           <div class="password-wrapper">
-            <input type="password" id="password" placeholder="Mật khẩu" />
-            <span id="togglePassword" onclick="togglePassword()"
-              ><img src="./img/show.svg" alt=""
-            /></span>
+            <input type="password" name="password" id="password" placeholder="Mật khẩu" required />
+            <span id="togglePassword" onclick="togglePassword()">
+              <img src="/img/show.svg" alt="" />
+            </span>
           </div>
           <span id="passwordError" class="error-message"></span>
         </div>
@@ -81,13 +87,9 @@
         <div class="input-group">
           <label>Xác nhận mật khẩu </label>
           <div class="password-wrapper">
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Xác nhận mật khẩu"
-            />
+            <input type="password" id="confirmPassword" placeholder="Xác nhận mật khẩu" required />
             <span id="toggleConfirmPassword" onclick="toggleConfirmPassword()">
-              <img src="./img/show.svg" alt="Hiển thị mật khẩu" />
+              <img src="/img/show.svg" alt="" />
             </span>
           </div>
           <span id="confirmPasswordError" class="error-message"></span>
@@ -98,155 +100,82 @@
 
       <!-- Đăng ký -->
       <div class="login-link">
-        Đã có tài khoản? <a href="./login_nor.ejs">Đăng nhập</a>
+        Đã có tài khoản? <a href="/login">Đăng nhập</a>
       </div>
     </div>
 
     <script>
-      // Dữ liệu tài khoản giả lập
-      const users = [
-        {
-          name: "Nguyễn Văn A",
-          phone: "0123456789",
-          email: "user1@example.com",
-          password: "password123",
-        },
-        {
-          name: "Trần Thị B",
-          phone: "0987654321",
-          email: "user2@example.com",
-          password: "12345678",
-        },
-      ];
+      document.querySelector('form').addEventListener('submit', function(e) {
+        let password = document.getElementById('password').value;
+        let confirmPassword = document.getElementById('confirmPassword').value;
+        let fullName = document.getElementById('fullName').value.trim();
+        let email = document.getElementById('email').value.trim();
+        let username = document.getElementById('username').value.trim();
+        
+        // Reset error messages
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        
+        let hasError = false;
 
-      document.addEventListener("DOMContentLoaded", function () {
-        // Gán sự kiện input để ẩn lỗi khi nhập
-        document.querySelectorAll("input").forEach((input) => {
-          input.addEventListener("input", function () {
-            let errorElement = document.getElementById(this.id + "Error");
-            if (errorElement) {
-              errorElement.innerText = "";
-            }
-          });
-        });
+        // Validate full name
+        if (fullName.length < 2) {
+          document.getElementById('fullNameError').textContent = 'Họ tên phải có ít nhất 2 ký tự';
+          hasError = true;
+        }
+
+        // Validate username
+        if (username.length < 3) {
+          document.getElementById('usernameError').textContent = 'Tên đăng nhập phải có ít nhất 3 ký tự';
+          hasError = true;
+        }
+
+        // Validate email format
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+          document.getElementById('emailError').textContent = 'Email không hợp lệ';
+          hasError = true;
+        }
+
+        // Validate password
+        if (password.length < 6) {
+          document.getElementById('passwordError').textContent = 'Mật khẩu phải có ít nhất 6 ký tự';
+          hasError = true;
+        }
+
+        // Validate password confirmation
+        if (password !== confirmPassword) {
+          document.getElementById('confirmPasswordError').textContent = 'Mật khẩu xác nhận không khớp';
+          hasError = true;
+        }
+
+        if (hasError) {
+          e.preventDefault();
+        }
       });
 
-      function validateRegister(event) {
-        event.preventDefault(); // Ngăn chặn form submit mặc định
-
-        let fullName = document.getElementById("fullName").value.trim();
-        let username = document.getElementById("username").value.trim();
-        let email = document.getElementById("email").value.trim();
-        let password = document.getElementById("password").value.trim();
-        let confirmPassword = document
-          .getElementById("confirmPassword")
-          .value.trim();
-
-        let usernameError = document.getElementById("usernameError");
-        let fullNameError = document.getElementById("fullNameError");
-        let emailError = document.getElementById("emailError");
-        let passwordError = document.getElementById("passwordError");
-        let confirmPasswordError = document.getElementById(
-          "confirmPasswordError"
-        );
-
-        usernameError.innerText = "";
-        fullNameError.innerText = "";
-        emailError.innerText = "";
-        passwordError.innerText = "";
-        confirmPasswordError.innerText = "";
-
-        let hasError = false; // Biến này dùng để kiểm tra có lỗi không
-
-        if (fullName === "") {
-          fullNameError.innerText = "Họ và tên không được để trống!";
-          hasError = true;
-        }
-
-        if (username === "") {
-          usernameError.innerText = "Tên đăng nhập không được để trống!";
-          hasError = true;
-        }
-
-        let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailPattern.test(email)) {
-          emailError.innerText = "Email không hợp lệ!";
-          hasError = true;
-        }
-
-        if (password.length < 6) {
-          passwordError.innerText = "Mật khẩu phải có ít nhất 6 ký tự!";
-          hasError = true;
-        }
-
-        if (password === "") {
-          confirmPasswordError.innerText = "Vui lòng nhập mật khẩu trước!";
-          hasError = true;
-        } else if (password !== confirmPassword) {
-          confirmPasswordError.innerText = "Mật khẩu xác nhận không khớp!";
-          hasError = true;
-        }
-
-        let existingUser = users.find((user) => user.email === email);
-        if (existingUser) {
-          showNotification(
-            "Email đã tồn tại! Vui lòng sử dụng email khác.",
-            "error"
-          );
-          hasError = true;
-        }
-
-        // Nếu có bất kỳ lỗi nào, dừng lại và không thực hiện đăng ký
-        if (hasError) {
-          return;
-        }
-
-        let newUser = { fullName, username, email, password };
-        users.push(newUser);
-
-        showNotification("Đăng ký thành công!", "success");
-        setTimeout(() => {
-          window.location.href = "./login_nor.ejs";
-        }, 1000);
-      }
-
-      function showNotification(message, type) {
-        let notification = document.createElement("div");
-        notification.className = `notification ${type}`;
-        notification.innerText = message;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-          notification.style.opacity = "0";
-          setTimeout(() => {
-            notification.remove();
-          }, 500);
-        }, 5000);
-      }
-
       function togglePassword() {
-        let passwordInput = document.getElementById("password");
-        let toggleIcon = document.querySelector("#togglePassword img");
-
-        if (passwordInput.type === "password") {
-          passwordInput.type = "text";
-          toggleIcon.src = "./img/hide.svg";
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.querySelector('#togglePassword img');
+        
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          toggleIcon.src = '/img/hide.svg';
         } else {
-          passwordInput.type = "password";
-          toggleIcon.src = "./img/show.svg";
+          passwordInput.type = 'password';
+          toggleIcon.src = '/img/show.svg';
         }
       }
 
       function toggleConfirmPassword() {
-        let confirmPasswordInput = document.getElementById("confirmPassword");
-        let toggleIcon = document.querySelector("#toggleConfirmPassword img");
-
-        if (confirmPasswordInput.type === "password") {
-          confirmPasswordInput.type = "text";
-          toggleIcon.src = "./img/hide.svg";
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const toggleIcon = document.querySelector('#toggleConfirmPassword img');
+        
+        if (confirmPasswordInput.type === 'password') {
+          confirmPasswordInput.type = 'text';
+          toggleIcon.src = '/img/hide.svg';
         } else {
-          confirmPasswordInput.type = "password";
-          toggleIcon.src = "./img/show.svg";
+          confirmPasswordInput.type = 'password';
+          toggleIcon.src = '/img/show.svg';
         }
       }
     </script>
