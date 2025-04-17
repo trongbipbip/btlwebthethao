@@ -37,61 +37,7 @@
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
-    <header>
-      <div class="logo">
-        <a href="./index.ejs"
-          ><img src="./assets/img/header-logo.png" alt=""
-        /></a>
-      </div>
-      <div class="header-content">
-        <div class="category">
-          <div class="category-item">
-            <img src="./assets/img/home.svg" alt="" />
-            <h2><a href="./index.ejs">TRANG CHỦ</a></h2>
-          </div>
-
-          <div class="category-item news-dropdown">
-            <img src="./assets/img/news.svg" alt="" />
-            <h2><a href="./category-news.ejs">TIN TỨC</a></h2>
-            <ul class="news-dropdown-menu">
-              <li><a href="./category-news.ejs?category=1">Đời sống</a></li>
-              <li>
-                <a href="./category-news.ejs?category=2"
-                  >Khoảnh khắc đáng nhớ</a
-                >
-              </li>
-              <li>
-                <a href="./category-news.ejs?category=3">Người nổi tiếng</a>
-              </li>
-              <li><a href="./category-news.ejs?category=4">Hồi ức</a></li>
-            </ul>
-          </div>
-
-          <div class="category-item">
-            <img src="./assets/img/tournament.svg" alt="" />
-            <h2><a href="./category-tournament.ejs">GIẢI ĐẤU</a></h2>
-          </div>
-
-          <div class="bar"></div>
-
-          <form class="search-box" onsubmit="searchGoogle(event)">
-            <input type="text" id="search-input" placeholder="Tìm kiếm" />
-            <button type="submit">
-              <img src="./assets/img/search.svg" alt="Search" />
-            </button>
-          </form>
-
-          <div class="bar"></div>
-
-          <div class="category-item">
-            <div id="header"></div>
-          </div>
-        </div>
-        <div class="sub-logo">
-          <img src="./assets/img/emirate.png" alt="" />
-        </div>
-      </div>
-    </header>
+    <%- include('partials/header') %>
     <!-- Popup -->
     <div id="login-popup"></div>
     <main>

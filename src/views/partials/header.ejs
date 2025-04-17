@@ -19,7 +19,6 @@
           <li><a href="/categorynews?category=4">Hồi ức</a></li>
         </ul>
       </div>
-
       <div class="category-item">
         <img src="/assets/img/tournament.svg" alt="" />
         <h2><a href="/categorytournament">GIẢI ĐẤU</a></h2>
@@ -52,7 +51,7 @@
       <% } else { %>
         <!-- Header khi chưa đăng nhập -->
         <div class="login-buttons">
-          <a href="/login" class="login-btn">Đăng nhập</a>
+          <button onclick="showPopup()" class="login-btn">Đăng nhập</button>
           <a href="/signin" class="signup-btn">Đăng ký</a>
         </div>
       <% } %>
@@ -61,4 +60,22 @@
       <img src="/assets/img/emirate.png" alt="" />
     </div>
   </div>
-</header> 
+</header>
+
+<!-- Login Popup -->
+<div class="popup-overlay">
+  <div id="login-popup">
+    <button class="popup-close">&times;</button>
+    <h2>Chọn vai trò đăng nhập</h2>
+    <div class="role-buttons">
+      <button href="/login" class="role-btn" >
+        <img src="/assets/img/user-icon.png" alt="User">
+        <span>Người dùng</span>
+      </button>
+      <button href="/admin/login"class="role-btn" >
+        <img src="/assets/img/admin-icon.png" alt="Admin">
+        <span>Quản trị viên</span>
+      </button>
+    </div>
+  </div>
+</div> 

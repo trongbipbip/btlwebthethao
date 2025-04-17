@@ -28,7 +28,6 @@
   </head>
   <body>
     <%- include('partials/header') %>
-
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -68,11 +67,60 @@
             </div>
         </div>
     </div>
-
-    <%- include('partials/footer') %>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer class="footer">
+        <div class="main-content">
+          <div class="left-footer">
+            <img src="/assets/img/footer-logo.png" alt="" class="logo" />
+            <div class="media">
+              <a href=""><img src="/assets/img/facebook.svg" alt="" /></a>
+              <a href=""><img src="/assets/img/youtube.svg" alt="" /></a>
+              <a href=""><img src="/assets/img/email.svg" alt="" /></a>
+              <a href=""><img src="/assets/img/twitter.svg" alt="" /></a>
+              <a href=""><img src="/assets/img/linkedin.svg" alt="" /></a>
+            </div>
+            <div class="hotline">
+              <div class="hotline-number">
+                <img src="/assets/img/phone.svg" alt="" />
+                <div class="hotline-content">
+                  <p>Đường dây nóng :</p>
+                  <p>+84 38 290 51 69</p>
+                </div>
+              </div>
+              <div class="hotline-email">
+                <img src="/assets/img/email-hotline.png" alt="" />
+                <div class="hotline-content">
+                  <p>Email :</p>
+                  <p>nguyenskt2004@gmail.com</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="right-footer">
+            <div class="newsletter">
+              <h3 class="newsletter-title">Đăng ký nhận bản tin TENNIS TOUR</h3>
+              <p class="newsletter-comment">
+                Nhận thông tin tiếp thị chính thức từ TENNIS TOUR! Chúng tôi sẽ
+                gửi cho bạn các bản tin để thông báo cho bạn về tin tức, giải đấu,
+                cuộc thi, bán vé, ưu đãi của đối tác và hơn thế nữa.
+              </p>
+              <div class="subscribe-container">
+                <div class="subscribe-container__input">
+                  <label for="email">Địa chỉ email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="Nhập email của bạn"
+                  />
+                </div>
+                <button>SUBCRIBE</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>ALL RIGHTS RESERVED.© 2025</p>
+        </div>
+      </footer>
     
     <!-- Custom JS -->
     <script src="/assets/js/headerLogined.js"></script>
