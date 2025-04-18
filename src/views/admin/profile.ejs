@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hồ sơ cá nhân</title>
     <!-- Reset CSS -->
-    <link rel="stylesheet" href="../assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
 
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="./css/profile.css" />
+    <link rel="stylesheet" href="/css/profile.css" />
 
     <!-- Embed Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,19 +20,19 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="../assets/favicon/apple-touch-icon.png"
+      href="/assets/favicon/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="../assets/favicon/favicon-32x32.png"
+      href="/assets/favicon/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="../assets/favicon/favicon-16x16.png"
+      href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
   </head>
@@ -40,31 +40,31 @@
     <div class="admin">
       <div class="main-content">
         <div class="left-admin">
-          <img src="./img/logo.png" alt="Logo" class="logo" />
+          <img src="/img/logo.png" alt="Logo" class="logo" />
           <div class="sidebar">
             <div class="menu-item">
-              <a href="./admin.html">BẢNG ĐIỀU KHIỂN</a>
+              <a href="/admin/home">BẢNG ĐIỀU KHIỂN</a>
             </div>
             <div class="menu-item">
-              <a href="./news-management.html">QUẢN LÝ BÀI BÁO</a>
+              <a href="/admin/news">QUẢN LÝ BÀI BÁO</a>
             </div>
             <div class="menu-item">
-              <a href="./category-management.html">QUẢN LÝ DANH MỤC</a>
+              <a href="/admin/categories">QUẢN LÝ DANH MỤC</a>
             </div>
             <div class="menu-item">
-              <a href="./tournament-management.html">QUẢN LÝ GIẢI ĐẤU</a>
+              <a href="/admin/tournaments">QUẢN LÝ GIẢI ĐẤU</a>
             </div>
             <div class="menu-item">
-              <a href="./user-management.html">QUẢN LÝ NGƯỜI DÙNG</a>
+              <a href="/admin/users">QUẢN LÝ NGƯỜI DÙNG</a>
             </div>
             <div class="menu-item">
-              <a href="./suggestion.html">QUẢN LÝ GÓP Ý</a>
+              <a href="/admin/suggestion">QUẢN LÝ GÓP Ý</a>
             </div>
             <div class="menu-item">
-              <a href="./profile.html">HỒ SƠ CÁ NHÂN</a>
+              <a href="admin/profile">HỒ SƠ CÁ NHÂN</a>
             </div>
             <div class="menu-item">
-              <a id="logout-btn">ĐĂNG XUẤT</a>
+              <a href="/admin/logout" id="logout-btn">ĐĂNG XUẤT</a>
             </div>
           </div>
         </div>
@@ -102,7 +102,7 @@
                     <span
                       id="toggleCurrentPassword"
                       onclick="togglePassword('current-password', 'toggleCurrentPassword')"
-                      ><img src="./img/show.svg" alt=""
+                      ><img src="/img/show.svg" alt=""
                     /></span>
                   </div>
                 </div>
@@ -117,7 +117,7 @@
                     <span
                       id="toggleNewPassword"
                       onclick="togglePassword('new-password', 'toggleNewPassword')"
-                      ><img src="./img/show.svg" alt=""
+                      ><img src="/img/show.svg" alt=""
                     /></span>
                   </div>
                 </div>
@@ -130,7 +130,7 @@
         </div>
       </div>
     </div>
-
+  <!--
     <script type="module">
       import { userAdmin } from "../data/adminData.js";
       let users = userAdmin;
@@ -257,5 +257,6 @@
         updateProfile(); // Cập nhật thông tin người dùng
       });
     </script>
+  -->
   </body>
 </html>

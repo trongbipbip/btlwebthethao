@@ -2,13 +2,11 @@ const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const connection = require('../config/connection.js');
 const session = require('express-session');
-const viewConfig = require('../config/viewConfig.js');
+const viewConfig = require('../config/viewConfig.js'); 
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
 // Kết nối CSDL
-
-// Kiểm tra kết nối database
 connection.connect((err) => {
     if (err) {
         console.error('Error connecting to database:', err);
@@ -41,11 +39,13 @@ exports.showUserForgotAdmin = (req, res) => {
 };
 exports.loginUser = async (req, res) => {
     try {
-        let username = req.body.username;
-        let password = req.body.password;
+    let username = req.body.username;
+	let password = req.body.password;
         
         if (!username || !password) {
-            return res.render('login/login_nor', { error: 'Vui lòng nhập đầy đủ thông tin!' });
+            return res.render('login/login_nor', { 
+                error: 'Vui lòng nhập đầy đủ thông tin!' 
+            });
         }
 
         connection.query(
@@ -53,82 +53,57 @@ exports.loginUser = async (req, res) => {
             [username], 
             async function(error, results) {
                 if (error) {
-                    return res.render('login/login_nor', { error: 'Lỗi hệ thống!' });
+                    return res.render('login/login_nor', { 
+                        error: 'Lỗi hệ thống!' 
+                    });
                 }
                 
-                if (results.length > 0) {
+			if (results.length > 0) {
                     const user = results[0];
                     const match = await bcrypt.compare(password, user.password);
                     
                     if (match) {
+                        // Lưu thông tin vào session
                         req.session.user = {
                             id: user.id,
                             username: user.username,
                             fullName: user.fullName,
                             email: user.email,
-                            role: user.role || 'user'
+                            role: user.role
                         };
+
                         return res.redirect('/home');
                     }
                 }
-                return res.render('login/login_nor', { error: 'Tên đăng nhập hoặc mật khẩu không đúng!' });
+                return res.render('login/login_nor', { 
+                    error: 'Tên đăng nhập hoặc mật khẩu không đúng!' 
+                });
             }
         );
     } catch (err) {
-        return res.render('login/login_nor', { error: 'Lỗi hệ thống!' });
+        return res.render('login/login_nor', { 
+            error: 'Lỗi hệ thống!' 
+        });
     }
 };
 
-// Hiển thị login cho admin
-exports.showAdminLogin = (req, res) => {
-    res.render('login/login_admin.ejs', { error: null });
-};
-
-
-exports.loginAdmin = (req, res) => {
-    console.log(req.body);
-    const { username, password } = req.body;
-    const role = 'admin';
-
-    connection.query('SELECT * FROM users WHERE username = ? AND role = ?', [username, role], async (err, results) => {
-        if (err) return res.send('Lỗi CSDL');
-        if (results.length === 0) return res.render('login/login_admin.ejs', { error: 'Sai thông tin quản trị' });
-
-        const admin = results[0];
-        const match = await bcrypt.compare(password, admin.password);
-
-        if (!match) return res.render('login/login_admin.ejs', { error: 'Sai mật khẩu' });
-
-        req.session.user = { 
-            id: admin.id, 
-            username: admin.username, 
-            role: admin.role 
-        };
-        res.redirect('/admin/home');
-    });
-};
 exports.logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
-            console.log(err);
+            console.error('Lỗi khi đăng xuất:', err);
+            return res.redirect('/home');
         }
-        res.redirect('/home');
+        res.clearCookie('connect.sid'); // Xóa cookie session
+        res.redirect('/login');
     });
 };
+
 // Home user
 exports.userHome = (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
     }
     res.render('index', { user: req.session.user });
-};
-
-// Home admin
-exports.adminHome = (req, res) => {
-    if (!req.session.user || req.session.user.role !== 'admin') {
-        return res.redirect('/admin/login');
-    }
-    res.render('admin/admin.ejs', { user: req.session.user });
 };
 
 exports.registerUser = async (req, res) => {

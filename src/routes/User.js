@@ -41,6 +41,10 @@ router.get('/saved-news', authController.showSavedNews);
 // Route đăng xuất
 router.get('/logout', authController.logout);
 
+
+//route cho admin
+ 
+
 module.exports = router;
 
 

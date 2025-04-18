@@ -1,11 +1,9 @@
-
-
 const express = require('express')
 const router = express.Router();
-const newcontroller = require('../controller/Article.js');
+const newController = require('../controller/Article.js');
 
-router.get('/categorynews', newcontroller.showNewLogin);
-router.get('/categorytournament', newcontroller.showNewtournament);
-router.get('/details', newcontroller.showNewdetail);
+router.get('/categorynews', newController.showNewLogin);
+router.get('/categorytournament', newController.showNewtournament);
+router.get('/details', newController.showNewdetail);
 
-module.exports= router
+module.exports = router;
