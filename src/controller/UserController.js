@@ -37,6 +37,7 @@ exports.showUserForgot = (req, res) => {
 exports.showUserForgotAdmin = (req, res) => {
     res.render('login/forgotpass-admin', { error: null });
 };
+
 exports.loginUser = async (req, res) => {
     try {
     let username = req.body.username;

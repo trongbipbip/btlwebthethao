@@ -1,9 +1,10 @@
-const mysql = require('mysql2'); // 
+const mysql = require('mysql2');
 
+// Khôi phục kết nối thật
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'trong091204',
+  password: 'root', // !!! Đảm bảo đây là mật khẩu đúng !!!
   database: 'nodejs'
 });
 
@@ -60,4 +61,14 @@ connection.on('error', function(err) {
     }
 });
 
-module.exports = connection; 
+// Khôi phục phần kiểm tra kết nối
+connection.connect((err) => {
+  if (err) {
+    console.error('Lỗi kết nối database khi khởi động: ' + err.stack);
+    // Có thể throw err; ở đây nếu muốn dừng hẳn server khi lỗi kết nối
+    return;
+  }
+  console.log('Đã kết nối database thành công với ID ' + connection.threadId);
+});
+
+module.exports = connection; // Export connection thật 

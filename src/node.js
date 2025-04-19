@@ -57,6 +57,10 @@ const authRoutes = require('./routes/User.js');
 const adminRoutes = require('./routes/Admin.js');
 const HomeRoutes = require('./routes/Home.js');
 const newroutes = require('./routes/New.js');
+const eventroutes = require('./routes/New.js');
+const savednewsroutes = require('./routes/New.js');
+const categorynewsroutes = require('./routes/New.js');
+
 
 // Mount routes
 app.use('/', authRoutes);
@@ -103,7 +107,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
     console.log('Available routes:');
