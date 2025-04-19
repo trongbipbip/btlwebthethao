@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chi tiết tin tức</title>
+    <title><% if(typeof article !== 'undefined') { %><%= article.title %> - <% } %>Chi tiết tin tức</title>
     <!-- Reset CSS -->
     <link rel="stylesheet" href="/assets/css/reset.css" />
 
@@ -47,14 +47,25 @@
         <div class="main-content">
           <div class="news-block">
             <button id="backBtn" onclick="goBack()">⬅ Quay lại tin tức</button>
-            <h1 id="news-title"></h1>
-            <p id="news-date"></p>
-            <img id="news-image" src="" alt="News Image" />
-            <p id="news-content"></p>
-            <div class="buttons">
-              <button class="btn save">LƯU</button>
-              <button class="btn suggest">GÓP Ý</button>
-            </div>
+            <% if(typeof article !== 'undefined') { %>
+              <h1 id="news-title"><%= article.title %></h1>
+              <p id="news-date"><%= new Date(article.date).toLocaleDateString('vi-VN') %></p>
+              <img id="news-image" src="<%= article.image %>" alt="<%= article.title %>" />
+              <div id="news-content" class="article-content"><%- article.content %></div>
+              <div class="buttons">
+                <button class="btn save" onclick="saveArticle('<%= article.id %>')">LƯU</button>
+                <button class="btn suggest">GÓP Ý</button>
+              </div>
+            <% } else { %>
+              <h1 id="news-title"></h1>
+              <p id="news-date"></p>
+              <img id="news-image" src="" alt="News Image" />
+              <div id="news-content"><p>Không tìm thấy bài viết</p></div>
+              <div class="buttons">
+                <button class="btn save">LƯU</button>
+                <button class="btn suggest">GÓP Ý</button>
+              </div>
+            <% } %>
             <div class="tournament-block">
               <h2>KHÁM PHÁ CÁC GIẢI ĐẤU</h2>
               <div class="tournaments">
@@ -232,7 +243,43 @@
     <script src="/assets/js/headerLogined.js"></script>
     <script src="/assets/js/headerNotLogin.js"></script>
     <script src="/assets/js/header.js"></script>
-    <script src="/assets/js/category-news.js"></script>
-    <script src="/assets/js/news.js"></script>
+    <script>
+      // Hàm quay lại trang trước
+      function goBack() {
+        window.history.back();
+      }
+      
+      // Xử lý nút góp ý
+      const suggestBtn = document.querySelector('.suggest');
+      const overlay = document.querySelector('.overlay');
+      const cancelBtn = document.querySelector('.cancel');
+      
+      suggestBtn.addEventListener('click', function() {
+        overlay.style.display = 'flex';
+      });
+      
+      cancelBtn.addEventListener('click', function() {
+        overlay.style.display = 'none';
+      });
+      
+      // Hàm lưu bài viết
+      function saveArticle(articleId) {
+        fetch('/save-news', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ newsId: articleId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message || 'Đã lưu bài viết thành công!');
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Vui lòng đăng nhập để lưu bài viết!');
+        });
+      }
+    </script>
   </body>
 </ejs>

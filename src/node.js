@@ -66,6 +66,9 @@ const categorynewsroutes = require('./routes/New.js');
 app.use('/', authRoutes);
 app.use('/', HomeRoutes);
 app.use('/', newroutes);
+app.use('/',eventroutes);
+app.use('/',savednewsroutes);
+app.use('/',categorynewsroutes);
 
 // Admin routes should be mounted at /admin
 app.use('/admin', adminRoutes);
@@ -74,7 +77,7 @@ app.use('/admin', adminRoutes);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'rootroot',
     database: 'nodejs'
 });
 

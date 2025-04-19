@@ -270,7 +270,7 @@ function renderTournaments(filter = "") {
         const eventInfo = document.createElement("div");
         eventInfo.classList.add("event-info");
         eventInfo.onclick = function () {
-          window.location.href = `event.html?id=${event.id}`;
+          window.location.href = `event.ejs?id=${event.id}`;
         };
 
         const eventName = document.createElement("p");

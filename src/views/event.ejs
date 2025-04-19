@@ -1,14 +1,14 @@
-<!DOCTYPE ejs>
-<ejs lang="en">
+<!DOCTYPE html>
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chi tiết giải đấu</title>
     <!-- Reset CSS -->
-    <link rel="stylesheet" href="./assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
 
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="./assets/css/tournament-detail.css" />
+    <link rel="stylesheet" href="/assets/css/tournament-detail.css" />
 
     <!-- Embed Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,19 +20,19 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="./assets/favicon/apple-touch-icon.png"
+      href="/assets/favicon/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="./assets/favicon/favicon-32x32.png"
+      href="/assets/favicon/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="./assets/favicon/favicon-16x16.png"
+      href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
   </head>
@@ -49,7 +49,29 @@
             <div class="tour-detail">
               <div class="event-container">
                 <h1>Chi tiết giải đấu</h1>
-                <div id="eventDetails"></div>
+                <% if(typeof event !== 'undefined') { %>
+                <div id="eventDetails">
+                  <h2><%= event.name || event.title %></h2>
+                  <div class="event-info">
+                    <p><strong>Địa điểm:</strong> <%= event.location || 'Chưa cập nhật' %></p>
+                    <p><strong>Thời gian:</strong> <%= event.date ? new Date(event.date).toLocaleDateString('vi-VN') : 'Chưa cập nhật' %></p>
+                    <p><strong>Trạng thái:</strong> <%= event.status || 'Chưa cập nhật' %></p>
+                  </div>
+                  <div class="event-description">
+                    <h3>Mô tả giải đấu</h3>
+                    <div><%- event.description || 'Chưa có mô tả chi tiết' %></div>
+                  </div>
+                  <% if(event.image) { %>
+                  <div class="event-image">
+                    <img src="<%= event.image %>" alt="<%= event.name || event.title %>" />
+                  </div>
+                  <% } %>
+                </div>
+                <% } else { %>
+                <div id="eventDetails">
+                  <p>Không tìm thấy thông tin giải đấu hoặc ID không hợp lệ.</p>
+                </div>
+                <% } %>
               </div>
               <div id="eventContent"></div>
               <div class="news-container__horizontal">
@@ -61,7 +83,7 @@
                   <div class="news-item__horizontal">
                     <a href="">
                       <img
-                        src="./assets/img/more-news1.png"
+                        src="/assets/img/more-news1.png"
                         alt="Humbert vô địch"
                       />
                       <p>Đương kim vô địch Humbert tại Dubai</p>
@@ -70,7 +92,7 @@
                   <div class="news-item__horizontal">
                     <a href=""
                       ><img
-                        src="./assets/img/more-news2.png"
+                        src="/assets/img/more-news2.png"
                         alt="Garin chiến thắng"
                       />
                       <p>Garin tuyên bố sẽ giành chiến thắng tại Santiago</p></a
@@ -79,7 +101,7 @@
                   <div class="news-item__horizontal">
                     <a href=""
                       ><img
-                        src="./assets/img/more-news3.png"
+                        src="/assets/img/more-news3.png"
                         alt="Budkov ghi tên vào lịch sử"
                       />
                       <p>Nicolai Budkov Kjaer ghi tên mình vào lịch sử</p></a
@@ -91,12 +113,12 @@
             <div class="news-container">
               <div class="news-header">
                 <h2>TIN TỨC</h2>
-                <a href="./category-news.ejs">Xem thêm</a>
+                <a href="/category-news.ejs">Xem thêm</a>
               </div>
               <div class="news-block">
                 <div class="featured-news">
                   <a href="">
-                    <img src="./assets/img/featured-new.png" alt="" />
+                    <img src="/assets/img/featured-new.png" alt="" />
                     <p>
                       Người Mỹ gốc Séc được khen thưởng 15 danh hiệu trong mùa
                       giải
@@ -106,16 +128,16 @@
                 <div class="news-list">
                   <div class="news-item">
                     <a href="">
-                      <img src="./assets/img/more-news1.png" alt="" />
+                      <img src="/assets/img/more-news1.png" alt="" />
                       <p>
-                        Ngôi sao trẻ của Na Uy “Budkov Kjaer” tham gia cùng Ruud
+                        Ngôi sao trẻ của Na Uy "Budkov Kjaer" tham gia cùng Ruud
                       </p>
                     </a>
                   </div>
 
                   <div class="news-item">
                     <a href="">
-                      <img src="./assets/img/more-news2.png" alt="" />
+                      <img src="/assets/img/more-news2.png" alt="" />
                       <p>
                         Alexander Zverev đứng thứ hai tại Tennis Tour về số trận
                         thắng giao bóng
@@ -125,7 +147,7 @@
 
                   <div class="news-item">
                     <a href="">
-                      <img src="./assets/img/more-news3.png" alt="" />
+                      <img src="/assets/img/more-news3.png" alt="" />
                       <p>Bí mật về trò chơi của Zverev ẩn giấu</p>
                     </a>
                   </div>
@@ -152,7 +174,7 @@
       <div class="ads-hori">
         <a href=""
           ><img
-            src="./assets/img/ads-horizontal.png"
+            src="/assets/img/ads-horizontal.png"
             alt=""
             class="ads-hori__img"
         /></a>
@@ -161,24 +183,24 @@
     <footer class="footer">
       <div class="main-content">
         <div class="left-footer">
-          <img src="./assets/img/footer-logo.png" alt="" class="logo" />
+          <img src="/assets/img/footer-logo.png" alt="" class="logo" />
           <div class="media">
-            <a href=""><img src="./assets/img/facebook.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/youtube.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/email.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/twitter.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/linkedin.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/facebook.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/youtube.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/email.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/twitter.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/linkedin.svg" alt="" /></a>
           </div>
           <div class="hotline">
             <div class="hotline-number">
-              <img src="./assets/img/phone.svg" alt="" />
+              <img src="/assets/img/phone.svg" alt="" />
               <div class="hotline-content">
                 <p>Đường dây nóng :</p>
                 <p>+84 38 290 51 69</p>
               </div>
             </div>
             <div class="hotline-email">
-              <img src="./assets/img/email-hotline.png" alt="" />
+              <img src="/assets/img/email-hotline.png" alt="" />
               <div class="hotline-content">
                 <p>Email :</p>
                 <p>nguyenskt2004@gmail.com</p>
@@ -212,11 +234,11 @@
         <p>ALL RIGHTS RESERVED.© 2025</p>
       </div>
     </footer>
-    <script src="./assets/js/headerLogined.js"></script>
-    <script src="./assets/js/headerNotLogin.js"></script>
-    <script src="./assets/js/header.js"></script>
-    <script src="./assets/js/tournaments.js"></script>
-    <script src="./assets/js/event.js"></script>
-    <script src="./assets/js/tournament-slider.js"></script>
+    <script src="/assets/js/headerLogined.js"></script>
+    <script src="/assets/js/headerNotLogin.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/tournaments.js"></script>
+    <script src="/assets/js/event.js"></script>
+    <script src="/assets/js/tournament-slider.js"></script>
   </body>
-</ejs>
+</html>
