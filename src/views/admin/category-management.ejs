@@ -48,7 +48,7 @@
             <div class="menu-item">
               <a href="/admin/news">QUẢN LÝ BÀI BÁO</a>
             </div>
-            <div class="menu-item">
+            <div class="menu-item active">
               <a href="/admin/categories">QUẢN LÝ DANH MỤC</a>
             </div>
             <div class="menu-item">
@@ -61,7 +61,7 @@
               <a href="/admin/profile">QUẢN LÝ GÓP Ý</a>
             </div>
             <div class="menu-item">
-              <a href="./profile.html">HỒ SƠ CÁ NHÂN</a>
+              <a href="/admin/profile">HỒ SƠ CÁ NHÂN</a>
             </div>
             <div class="menu-item">
               <a href="/admin/logout" id="logout-btn">ĐĂNG XUẤT</a>
@@ -81,7 +81,10 @@
             <div class="category-title">
               <div class="category-header">
                 <h3>Danh Mục</h3>
-                <button class="btn-create-category">Tạo danh mục mới</button>
+                <a href="/admin/categories/create" class="btn-create">
+                  <img src="/img/plus.svg" alt="Create" class="btn-icon">
+                  Tạo danh mục mới
+                </a>
               </div>
 
               <!-- Phần tìm kiếm và select -->
@@ -99,11 +102,21 @@
                 <tr>
                   <th>Tên danh mục</th>
                   <th>Số lượng tin tức</th>
-                  <th>Hành động</th>
                 </tr>
               </thead>
               <tbody id="category-list">
-                <!-- Dữ liệu sẽ được load bằng JavaScript -->
+                <% if (categories && categories.length > 0) { %>
+                  <% categories.forEach(function(category) { %>
+                    <tr>
+                      <td><%= category.name %></td>
+                      <td><%= category.count %></td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="2" class="no-data">Không có danh mục nào</td>
+                  </tr>
+                <% } %>
               </tbody>
             </table>
 
@@ -135,17 +148,7 @@
 
       let currentPage = 1;
       const itemsPerPage = 10;
-
       let searchKeyword = "";
-
-      // Hàm cắt chuỗi theo số từ
-      function truncateByWords(text, wordLimit) {
-        const words = text.split(" ");
-        if (words.length > wordLimit) {
-          return words.slice(0, wordLimit).join(" ") + "...";
-        }
-        return text;
-      }
 
       function loadCategories() {
         let filteredCategories = [...categoryData];
@@ -165,19 +168,11 @@
 
         filteredCategories.slice(start, end).forEach((category) => {
           categoryList += `
-        <tr>
-            <td>${truncateByWords(category.name, 8)}</td>
-            <td>${category.count}</td>
-            <td class="actions">
-                <img src="./img/view.svg" onclick="editCategory(${
-                  category.id
-                })" title="Sửa">
-                <img src="./img/delete.svg" onclick="deleteCategory(${
-                  category.id
-                })" title="Xóa">
-            </td>
-        </tr>
-    `;
+            <tr>
+                <td>${category.name}</td>
+                <td>${category.count}</td>
+            </tr>
+          `;
         });
 
         document.getElementById("category-list").innerHTML = categoryList;
@@ -196,32 +191,6 @@
         loadCategories();
       }
 
-      function editCategory(id) {
-        window.location.href = `edit-category.html?id=${id}`;
-      }
-
-      async function deleteCategory(id) {
-        // Xác nhận hành động xóa
-        const confirmDelete = confirm(
-          "Bạn có chắc chắn muốn xóa danh mục có ID: " + id + "?"
-        );
-        if (!confirmDelete) return; // Nếu không xác nhận thì không thực hiện xóa
-
-        try {
-          const response = await fetch(`/api/deleteCategory/${id}`, {
-            method: "DELETE",
-          });
-
-          if (!response.ok) {
-            throw new Error("Xóa danh mục thất bại");
-          }
-
-          loadCategories();
-        } catch (error) {
-          alert("Đã xảy ra lỗi khi xóa danh mục: " + error.message);
-        }
-      }
-
       // Hàm xử lý sự kiện tìm kiếm danh mục theo tên
       function handleSearch() {
         searchKeyword = document.getElementById("search-input").value;
@@ -234,16 +203,8 @@
         .addEventListener("input", handleSearch);
 
       window.changePage = changePage;
-      window.editCategory = editCategory;
-      window.deleteCategory = deleteCategory;
 
       document.addEventListener("DOMContentLoaded", loadCategories);
-
-      document
-        .querySelector(".btn-create-category")
-        .addEventListener("click", () => {
-          window.location.href = "./create-category.html";
-        });
     </script>
     <script type="module">
       import { userAdmin } from "../data/adminData.js";
@@ -306,3 +267,45 @@
     </script>
   </body>
 </html>
+
+<style>
+.btn-create {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-create:hover {
+  background-color: #1976D2;
+  transform: translateY(-1px);
+}
+
+.btn-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.category-header h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+</style>
