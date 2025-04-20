@@ -1111,25 +1111,122 @@ exports.manageSuggestions = async (req, res) => {
             return res.redirect('/admin/login');
         }
 
-        // Lấy danh sách góp ý từ người dùng
-        const [suggestions] = await connection.promise().query(`
-            SELECT s.*, u.username, u.fullName 
-            FROM suggestions s
-            LEFT JOIN user u ON s.user_id = u.id
-            ORDER BY s.created_at DESC
-        `);
-
-        res.render('admin/suggestion', {
+        res.render('admin/suggestion.ejs', {
             user: req.session.user,
-            suggestions: suggestions,
             error: null
         });
     } catch (error) {
         console.error('Error in manageSuggestions:', error);
-        res.render('admin/suggestion', {
-            user: req.session.user,
-            suggestions: [],
-            error: 'Có lỗi khi tải dữ liệu góp ý'
+        res.status(500).send('Lỗi hệ thống');
+    }
+};
+
+// API lấy danh sách góp ý
+exports.getSuggestions = async (req, res) => {
+    try {
+        // Get filter parameters
+        const title = req.query.title || '';
+        const fromDate = req.query.fromDate || '';
+        const toDate = req.query.toDate || '';
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const offset = (page - 1) * limit;
+
+        // Build the base query
+        let query = `
+            SELECT s.*, n.title as articleTitle 
+            FROM suggestions s
+            LEFT JOIN news n ON s.news_id = n.id
+            WHERE 1=1
+        `;
+        let countQuery = `
+            SELECT COUNT(*) as total
+            FROM suggestions s
+            LEFT JOIN news n ON s.news_id = n.id
+            WHERE 1=1
+        `;
+        const queryParams = [];
+
+        // Add title filter if specified
+        if (title) {
+            query += ' AND s.title LIKE ?';
+            countQuery += ' AND s.title LIKE ?';
+            queryParams.push(`%${title}%`);
+        }
+
+        // Add date filter if specified
+        if (fromDate && toDate) {
+            query += ' AND DATE(s.created_at) BETWEEN ? AND ?';
+            countQuery += ' AND DATE(s.created_at) BETWEEN ? AND ?';
+            queryParams.push(fromDate, toDate);
+        }
+
+        // Add ordering
+        query += ' ORDER BY s.created_at DESC LIMIT ? OFFSET ?';
+        queryParams.push(limit, offset);
+
+        // Execute queries
+        const [suggestions] = await connection.promise().query(query, queryParams);
+        const [countResult] = await connection.promise().query(countQuery, queryParams.slice(0, -2));
+        const totalSuggestions = countResult[0].total;
+        const totalPages = Math.ceil(totalSuggestions / limit);
+
+        return res.json({
+            success: true,
+            suggestions,
+            pagination: {
+                total: totalSuggestions,
+                totalPages,
+                currentPage: page,
+                limit
+            }
+        });
+    } catch (error) {
+        console.error('Error in getSuggestions:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi hệ thống khi lấy danh sách góp ý'
+        });
+    }
+};
+
+// Cập nhật trạng thái góp ý
+exports.updateSuggestionStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!id || !status) {
+            return res.status(400).json({
+                success: false,
+                message: 'Thiếu thông tin cần thiết'
+            });
+        }
+
+        // Validate status
+        const validStatuses = ['Chưa xử lý', 'Đã xử lý'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái không hợp lệ'
+            });
+        }
+
+        // Update status
+        await connection.promise().query(
+            'UPDATE suggestions SET status = ? WHERE id = ?',
+            [status, id]
+        );
+
+        return res.json({
+            success: true,
+            message: 'Cập nhật trạng thái góp ý thành công'
+        });
+    } catch (error) {
+        console.error('Error in updateSuggestionStatus:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi hệ thống khi cập nhật trạng thái góp ý'
         });
     }
 };

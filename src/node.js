@@ -5,7 +5,7 @@ const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const path = require('path');
-const mysql = require('mysql2');
+const connection = require('./config/connection.js'); // Import connection từ file connection.js
 
 const app = express();
 
@@ -21,8 +21,21 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Method override middleware
-app.use(methodOverride('_method'));
+// Method override middleware - cập nhật để hỗ trợ cả query parameter
+app.use(methodOverride(function (req, res) {
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    var method = req.body._method;
+    delete req.body._method;
+    return method;
+  } 
+  else if (req.query && '_method' in req.query) {
+    // look in query string
+    var method = req.query._method;
+    return method;
+  }
+  return undefined;
+}));
 
 // File upload middleware
 app.use(fileUpload({
@@ -57,30 +70,20 @@ const authRoutes = require('./routes/User.js');
 const adminRoutes = require('./routes/Admin.js');
 const HomeRoutes = require('./routes/Home.js');
 const newroutes = require('./routes/New.js');
+const eventroutes = require('./routes/New.js');
+const savednewsroutes = require('./routes/New.js');
+const categorynewsroutes = require('./routes/New.js');
 
 // Mount routes
 app.use('/', authRoutes);
 app.use('/', HomeRoutes);
 app.use('/', newroutes);
+app.use('/',eventroutes);
+app.use('/',savednewsroutes);
+app.use('/',categorynewsroutes);
 
 // Admin routes should be mounted at /admin
 app.use('/admin', adminRoutes);
-
-// Database connection
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'nodejs'
-});
-
-connection.connect((err) => {
-    if (err) {
-        console.error('Error connecting to database:', err);
-        return;
-    }
-    console.log('Connected to database successfully');
-});
 
 // 404 handler
 app.use((req, res) => {
@@ -103,7 +106,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
     console.log('Available routes:');

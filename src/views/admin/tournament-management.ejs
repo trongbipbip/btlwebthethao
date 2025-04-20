@@ -320,7 +320,8 @@
                         <a href="/admin/tournaments/edit/<%= tournament.id %>" class="btn-edit">
                           <i class="fas fa-edit"></i> Sửa
                         </a>
-                        <form action="/admin/tournaments/delete/<%= tournament.id %>?_method=DELETE" method="POST" style="display: inline;">
+                        <form action="/admin/tournaments/delete/<%= tournament.id %>" method="POST" style="display: inline;">
+                          <input type="hidden" name="_method" value="DELETE">
                           <button type="submit" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa giải đấu này?')">
                             <i class="fas fa-trash"></i> Xóa
                           </button>

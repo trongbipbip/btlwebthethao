@@ -47,17 +47,48 @@
           <div class="tournaments">
             <div class="event-block">
               <div class="search-box">
-                <input
-                  type="text"
-                  id="searchBar"
-                  placeholder="Tìm kiếm giải đấu"
-                />
+                <div class="search-container">
+                  <input type="text" id="searchBar" name="q" placeholder="Tìm kiếm giải đấu" autocomplete="off" />
+                  <div id="tournament-suggestions" class="search-suggestions"></div>
+                </div>
                 <button>
                   <img src="/assets/img/search.svg" alt="Search" />
                 </button>
               </div>
               <div class="event">
-                <div id="calendar"></div>
+                <div id="calendar">
+                  <!-- Hiển thị giải đấu theo năm từ dữ liệu database -->
+                  <% if (typeof tournaments !== 'undefined' && tournaments && Object.keys(tournaments).length > 0) { %>
+                    <% Object.keys(tournaments).forEach(year => { %>
+                      <div class="tournament-year">
+                        <h3><%= year %></h3>
+                        <div class="tournament-list">
+                          <% tournaments[year].forEach(tournament => { %>
+                            <div class="tournament-item">
+                              <a href="/event?id=<%= tournament.id %>">
+                                <div class="tournament-image">
+                                  <img src="<%= tournament.image || '/assets/img/tennis-logo.png' %>" alt="<%= tournament.name %>" />
+                                </div>
+                                <div class="tournament-info">
+                                  <h4><%= tournament.name %></h4>
+                                  <p class="tournament-location"><%= tournament.location || 'Chưa cập nhật địa điểm' %></p>
+                                  <p class="tournament-date">
+                                    <%= tournament.start_date ? new Date(tournament.start_date).toLocaleDateString('vi-VN') : 'Chưa xác định' %> - 
+                                    <%= tournament.end_date ? new Date(tournament.end_date).toLocaleDateString('vi-VN') : 'Chưa xác định' %>
+                                  </p>
+                                </div>
+                              </a>
+                            </div>
+                          <% }); %>
+                        </div>
+                      </div>
+                    <% }); %>
+                  <% } else { %>
+                    <div class="no-tournaments">
+                      <p>Chưa có giải đấu nào được thêm vào hệ thống.</p>
+                    </div>
+                  <% } %>
+                </div>
                 <div class="portraits">
                   <h2 class="portraits-title">
                     Chân dung của những nhà vô địch trước
@@ -86,6 +117,25 @@
                 <a href="/categorynews">Xem thêm</a>
               </div>
               <div class="news-block">
+                <!-- Đoạn này sẽ được cập nhật để hiển thị tin tức từ database -->
+                <% if (typeof latestNews !== 'undefined' && latestNews && latestNews.length > 0) { %>
+                  <div class="featured-news">
+                    <a href="/news/<%= latestNews[0].id %>">
+                      <img src="<%= latestNews[0].image_url %>" alt="<%= latestNews[0].title %>" />
+                      <p><%= latestNews[0].title %></p>
+                    </a>
+                  </div>
+                  <div class="news-list">
+                    <% for(let i = 1; i < Math.min(4, latestNews.length); i++) { %>
+                      <div class="news-item">
+                        <a href="/news/<%= latestNews[i].id %>">
+                          <img src="<%= latestNews[i].image_url %>" alt="<%= latestNews[i].title %>" />
+                          <p><%= latestNews[i].title %></p>
+                        </a>
+                      </div>
+                    <% } %>
+                  </div>
+                <% } else { %>
                 <div class="featured-news">
                   <a href="">
                     <img src="/assets/img/featured-new.png" alt="" />
@@ -100,7 +150,7 @@
                     <a href="">
                       <img src="/assets/img/more-news1.png" alt="" />
                       <p>
-                        Ngôi sao trẻ của Na Uy “Budkov Kjaer” tham gia cùng Ruud
+                          Ngôi sao trẻ của Na Uy "Budkov Kjaer" tham gia cùng Ruud
                       </p>
                     </a>
                   </div>
@@ -122,6 +172,7 @@
                     </a>
                   </div>
                 </div>
+                <% } %>
               </div>
             </div>
           </div>
@@ -186,6 +237,251 @@
     <script src="/assets/js/headerLogined.js"></script>
     <script src="/assets/js/headerNotLogin.js"></script>
     <script src="/assets/js/header.js"></script>
-    <script src="/assets/js/tournaments.js"></script>
+    <script>
+      // Xử lý tìm kiếm tự động gợi ý cho giải đấu
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchBar');
+        const suggestionsContainer = document.getElementById('tournament-suggestions');
+        let debounceTimer;
+
+        // Thêm CSS inline cho search suggestions
+        const style = document.createElement('style');
+        style.innerHTML = `
+          .search-container {
+            position: relative;
+            width: 100%;
+          }
+          
+          .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: none;
+          }
+          
+          .search-suggestions.show {
+            display: block;
+          }
+          
+          .tournament-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+          }
+          
+          .tournament-item:hover {
+            background-color: #f5f5f5;
+          }
+          
+          .tournament-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 10px;
+            border-radius: 4px;
+          }
+          
+          .tournament-item-content {
+            flex: 1;
+          }
+          
+          .tournament-item-content h4 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            color: #333;
+          }
+          
+          .tournament-item-content p {
+            margin: 0;
+            font-size: 12px;
+            color: #666;
+          }
+
+          .tournament-date {
+            font-size: 11px;
+            color: #999;
+            margin-top: 3px;
+          }
+          
+          /* CSS cho hiển thị giải đấu theo năm */
+          .tournament-year {
+            margin-bottom: 30px;
+          }
+          
+          .tournament-year h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #f0f0f0;
+          }
+          
+          .tournament-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+          }
+          
+          .tournament-list .tournament-item {
+            padding: 0;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+          }
+          
+          .tournament-list .tournament-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+          }
+          
+          .tournament-list .tournament-item a {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+          }
+          
+          .tournament-image {
+            height: 160px;
+            overflow: hidden;
+          }
+          
+          .tournament-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+          }
+          
+          .tournament-item:hover .tournament-image img {
+            transform: scale(1.05);
+          }
+          
+          .tournament-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+          }
+          
+          .tournament-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #222;
+          }
+          
+          .tournament-location {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+          }
+          
+          .tournament-date {
+            color: #888;
+            font-size: 13px;
+            margin-top: auto;
+          }
+          
+          .no-tournaments {
+            text-align: center;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            color: #666;
+          }
+        `;
+        document.head.appendChild(style);
+
+        // Định dạng ngày tháng
+        function formatDate(dateStr) {
+          if (!dateStr) return '';
+          const date = new Date(dateStr);
+          return date.toLocaleDateString('vi-VN');
+        }
+
+        // Hàm xử lý tìm kiếm
+        searchInput.addEventListener('input', function() {
+          const query = this.value.trim();
+          
+          clearTimeout(debounceTimer);
+          
+          if (query.length < 2) {
+            suggestionsContainer.classList.remove('show');
+            suggestionsContainer.innerHTML = '';
+            return;
+          }
+          
+          debounceTimer = setTimeout(function() {
+            fetch(`/api/tournament-suggestions?q=${encodeURIComponent(query)}`)
+              .then(response => response.json())
+              .then(data => {
+                suggestionsContainer.innerHTML = '';
+                
+                if (data.suggestions && data.suggestions.length > 0) {
+                  suggestionsContainer.classList.add('show');
+                  
+                  data.suggestions.forEach(item => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'tournament-item';
+                    
+                    // Sử dụng hình ảnh mặc định nếu không có
+                    const imageUrl = item.image || '/assets/img/tennis-logo.png';
+                    
+                    suggestionItem.innerHTML = `
+                      <img src="${imageUrl}" alt="${item.name}" />
+                      <div class="tournament-item-content">
+                        <h4>${item.name}</h4>
+                        <p>${item.location || ''}</p>
+                        <span class="tournament-date">
+                          ${formatDate(item.start_date)} - ${formatDate(item.end_date)}
+                        </span>
+                      </div>
+                    `;
+                    
+                    suggestionItem.addEventListener('click', function() {
+                      window.location.href = `/event?id=${item.id}`;
+                    });
+                    
+                    suggestionsContainer.appendChild(suggestionItem);
+                  });
+                } else {
+                  suggestionsContainer.classList.remove('show');
+                }
+              })
+              .catch(error => {
+                console.error('Lỗi tìm kiếm giải đấu:', error);
+                suggestionsContainer.classList.remove('show');
+              });
+          }, 300); // Đợi 300ms sau khi người dùng ngừng gõ
+        });
+        
+        // Đóng suggestions khi click bên ngoài
+        document.addEventListener('click', function(e) {
+          if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+            suggestionsContainer.classList.remove('show');
+          }
+        });
+        
+        // Đóng suggestions khi nhấn Escape
+        searchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            suggestionsContainer.classList.remove('show');
+          }
+        });
+      });
+    </script>
   </body>
 </ejs>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chi tiết tin tức</title>
+    <title><% if(typeof article !== 'undefined') { %><%= article.title %> - <% } %>Chi tiết tin tức</title>
     <!-- Reset CSS -->
     <link rel="stylesheet" href="/assets/css/reset.css" />
 
@@ -35,6 +35,76 @@
       href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
+    <style>
+      .btn.save.saved {
+        background-color: #4CAF50;
+      }
+      
+      /* CSS cho phần góp ý */
+      .user-suggestions, .all-suggestions {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      .user-suggestions h3, .all-suggestions h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #333;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 8px;
+      }
+      
+      .suggestion-item {
+        padding: 12px;
+        background: white;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        border-left: 3px solid #2196F3;
+      }
+      
+      .suggestion-content {
+        margin-bottom: 8px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      
+      .suggestion-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #666;
+        flex-wrap: wrap;
+      }
+      
+      .suggestion-author {
+        font-weight: bold;
+        color: #2196F3;
+      }
+      
+      .suggestion-status {
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+      
+      .suggestion-status.pending {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+      
+      .suggestion-status.processed {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      
+      .all-suggestions {
+        border-top: 2px dashed #ddd;
+        margin-top: 40px;
+        background-color: #f0f8ff;
+      }
+    </style>
   </head>
   <body>
     <%- include('partials/header') %>
@@ -47,14 +117,60 @@
         <div class="main-content">
           <div class="news-block">
             <button id="backBtn" onclick="goBack()">⬅ Quay lại tin tức</button>
-            <h1 id="news-title"></h1>
-            <p id="news-date"></p>
-            <img id="news-image" src="" alt="News Image" />
-            <p id="news-content"></p>
-            <div class="buttons">
-              <button class="btn save">LƯU</button>
-              <button class="btn suggest">GÓP Ý</button>
-            </div>
+            <% if(typeof article !== 'undefined') { %>
+              <h1 id="news-title"><%= article.title %></h1>
+              <p id="news-date"><%= new Date(article.date).toLocaleDateString('vi-VN') %></p>
+              <img id="news-image" src="<%= article.image %>" alt="<%= article.title %>" />
+              <div id="news-content" class="article-content"><%- article.content %></div>
+              <div class="buttons">
+                <button id="saveBtn" class="btn save" data-id="<%= article.id %>">LƯU</button>
+                <button class="btn suggest">GÓP Ý</button>
+              </div>
+
+              <!-- Phần hiển thị tất cả góp ý đã được xử lý -->
+              <% if (typeof processedSuggestions !== 'undefined' && processedSuggestions.length > 0) { %>
+                <div class="all-suggestions">
+                  <h3>Góp ý từ người dùng</h3>
+                  <% processedSuggestions.forEach(function(suggestion) { %>
+                    <div class="suggestion-item">
+                      <p class="suggestion-content"><%= suggestion.detail %></p>
+                      <div class="suggestion-meta">
+                        <span class="suggestion-author">Góp ý bởi: <%= suggestion.name %></span>
+                        <span class="suggestion-date"><%= new Date(suggestion.created_at).toLocaleString('vi-VN') %></span>
+                        <span class="suggestion-status processed">Đã xử lý</span>
+                      </div>
+                    </div>
+                  <% }); %>
+                </div>
+              <% } %>
+
+              <!-- Phần hiển thị góp ý của người dùng hiện tại (chỉ hiển thị khi đăng nhập) -->
+              <% if (user && typeof mySuggestions !== 'undefined' && mySuggestions.length > 0) { %>
+              <div class="user-suggestions">
+                <h3>Góp ý của bạn</h3>
+                <% mySuggestions.forEach(function(suggestion) { %>
+                  <div class="suggestion-item">
+                    <p class="suggestion-content"><%= suggestion.detail %></p>
+                    <div class="suggestion-meta">
+                      <span class="suggestion-date"><%= new Date(suggestion.created_at).toLocaleString('vi-VN') %></span>
+                      <span class="suggestion-status <%= suggestion.status === 'Đã xử lý' ? 'processed' : 'pending' %>">
+                        <%= suggestion.status %>
+                      </span>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+              <% } %>
+            <% } else { %>
+              <h1 id="news-title"></h1>
+              <p id="news-date"></p>
+              <img id="news-image" src="" alt="News Image" />
+              <div id="news-content"><p>Không tìm thấy bài viết</p></div>
+              <div class="buttons">
+                <button class="btn save">LƯU</button>
+                <button class="btn suggest">GÓP Ý</button>
+              </div>
+            <% } %>
             <div class="tournament-block">
               <h2>KHÁM PHÁ CÁC GIẢI ĐẤU</h2>
               <div class="tournaments">
@@ -142,17 +258,18 @@
               <div class="overlay">
                 <div class="popup">
                   <h3>GÓP Ý TIN TỨC</h3>
-                  <label><strong>Ý kiến đóng góp</strong></label>
-                  <textarea placeholder="Nhập ý kiến đóng góp..."></textarea>
-                  <div class="popup-buttons">
-                    <button class="cancel">HUỶ</button>
-                    <button class="submit">GỬI GÓP Ý</button>
-                  </div>
-                  <p>
-                    <small
-                      >(Lưu ý: Vui lòng đăng nhập trước khi gửi góp ý)</small
-                    >
-                  </p>
+                  <form id="suggestionForm" method="POST" action="/api/submit-suggestion">
+                    <input type="hidden" name="news_id" value="<%= article.id %>">
+                    <label><strong>Ý kiến đóng góp</strong></label>
+                    <textarea name="detail" placeholder="Nhập ý kiến đóng góp..." required></textarea>
+                    <div class="popup-buttons">
+                      <button type="button" class="cancel" onclick="closePopup()">HUỶ</button>
+                      <button type="submit" class="submit">GỬI GÓP Ý</button>
+                    </div>
+                    <p>
+                      <small>(Lưu ý: Vui lòng đăng nhập trước khi gửi góp ý)</small>
+                    </p>
+                  </form>
                 </div>
               </div>
             </div>
@@ -232,7 +349,205 @@
     <script src="/assets/js/headerLogined.js"></script>
     <script src="/assets/js/headerNotLogin.js"></script>
     <script src="/assets/js/header.js"></script>
-    <script src="/assets/js/category-news.js"></script>
-    <script src="/assets/js/news.js"></script>
+    <script>
+      // Kiểm tra trạng thái đăng nhập
+      const userLoggedIn = <%= user ? 'true' : 'false' %>;
+      
+      // Hàm quay lại trang trước
+      function goBack() {
+        window.history.back();
+      }
+      
+      // Xử lý nút góp ý
+      const suggestBtn = document.querySelector('.suggest');
+      const overlay = document.querySelector('.overlay');
+      const cancelBtn = document.querySelector('.cancel');
+      const suggestionForm = document.getElementById('suggestionForm');
+      
+      suggestBtn.addEventListener('click', function() {
+        // Kiểm tra đăng nhập từ biến toàn cục được đặt ở đầu trang
+        if (userLoggedIn) {
+          overlay.style.display = 'flex';
+        } else {
+          // Thông báo yêu cầu đăng nhập
+          alert('Vui lòng đăng nhập để gửi góp ý!');
+          showPopup(); // Hiển thị popup đăng nhập
+        }
+      });
+      
+      function closePopup() {
+        overlay.style.display = 'none';
+      }
+      
+      cancelBtn.addEventListener('click', closePopup);
+      
+      // Xử lý form góp ý
+      suggestionForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        if (!userLoggedIn) {
+          alert('Vui lòng đăng nhập để gửi góp ý!');
+          showPopup();
+          return;
+        }
+        
+        const formData = new FormData(suggestionForm);
+        const suggestion = {
+          news_id: formData.get('news_id'),
+          detail: formData.get('detail')
+        };
+        
+        fetch('/api/submit-suggestion', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(suggestion)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Cảm ơn bạn đã gửi góp ý!');
+            closePopup();
+            // Reload trang để hiển thị góp ý mới
+            window.location.reload();
+          } else {
+            alert(data.message || 'Có lỗi xảy ra khi gửi góp ý. Vui lòng thử lại sau!');
+          }
+        })
+        .catch(error => {
+          console.error('Lỗi gửi góp ý:', error);
+          alert('Có lỗi xảy ra khi gửi góp ý. Vui lòng thử lại sau!');
+        });
+      });
+      
+      // Hàm lưu bài viết
+      function saveArticle(articleId) {
+        fetch('/save-news', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ newsId: articleId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message || 'Đã lưu bài viết thành công!');
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Vui lòng đăng nhập để lưu bài viết!');
+        });
+      }
+
+      // Xử lý nút LƯU BÀI
+      document.addEventListener('DOMContentLoaded', function() {
+        const saveBtn = document.getElementById('saveBtn');
+        
+        if (saveBtn) {
+          const newsId = saveBtn.getAttribute('data-id');
+          
+          // Kiểm tra trạng thái đã lưu hay chưa khi tải trang
+          checkSavedStatus(newsId);
+          
+          // Thêm sự kiện click cho nút lưu
+          saveBtn.addEventListener('click', function() {
+            toggleSaveNews(newsId);
+          });
+        }
+      });
+      
+      // Kiểm tra trạng thái đã lưu
+      function checkSavedStatus(newsId) {
+        fetch(`/api/check-saved/${newsId}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              updateSaveButton(data.isSaved);
+            }
+          })
+          .catch(error => {
+            console.error('Lỗi kiểm tra trạng thái lưu:', error);
+          });
+      }
+      
+      // Lưu/bỏ lưu bài viết
+      function toggleSaveNews(newsId) {
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) {
+          // Disable button during request
+          saveBtn.disabled = true;
+        }
+        
+        fetch(`/api/toggle-save/${newsId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              updateSaveButton(data.isSaved);
+              
+              if (data.isSaved) {
+                // Bài viết đã được lưu, hiển thị thông báo và đề xuất chuyển đến trang tin đã lưu
+                const viewSaved = confirm(`${data.message}\n\nBạn có muốn xem tất cả tin đã lưu không?`);
+                if (viewSaved) {
+                  window.location.href = '/saved-news';
+                }
+              } else {
+                // Bài viết đã bỏ lưu
+                alert(data.message);
+              }
+            } else {
+              // Nếu chưa đăng nhập, hiển thị popup đăng nhập
+              if (data.message.includes('đăng nhập')) {
+                alert('Vui lòng đăng nhập để lưu bài viết!');
+                // Có thể mở popup đăng nhập ở đây
+                showPopup();
+              } else {
+                alert(data.message);
+              }
+            }
+            
+            // Re-enable button
+            if (saveBtn) {
+              saveBtn.disabled = false;
+            }
+          })
+          .catch(error => {
+            console.error('Lỗi lưu bài viết:', error);
+            alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+            
+            // Re-enable button
+            if (saveBtn) {
+              saveBtn.disabled = false;
+            }
+          });
+      }
+      
+      // Cập nhật trạng thái nút lưu
+      function updateSaveButton(isSaved) {
+        const saveBtn = document.getElementById('saveBtn');
+        
+        if (isSaved) {
+          saveBtn.textContent = 'ĐÃ LƯU';
+          saveBtn.classList.add('saved');
+        } else {
+          saveBtn.textContent = 'LƯU';
+          saveBtn.classList.remove('saved');
+        }
+      }
+
+      // Hiển thị debug info khi nhấn Ctrl+D
+      document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.key === 'd') {
+          event.preventDefault();
+          const debugInfo = document.getElementById('debug-info');
+          debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+        }
+      });
+    </script>
   </body>
 </ejs>

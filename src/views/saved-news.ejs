@@ -1,14 +1,14 @@
-<!DOCTYPE ejs>
-<ejs lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tin bài đã lưu</title>
     <!-- Reset CSS -->
-    <link rel="stylesheet" href="./assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
 
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="./assets/css/saved-news.css" />
+    <link rel="stylesheet" href="/assets/css/saved-news.css" />
 
     <!-- Embed Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,21 +20,110 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="./assets/favicon/apple-touch-icon.png"
+      href="/assets/favicon/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="./assets/favicon/favicon-32x32.png"
+      href="/assets/favicon/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="./assets/favicon/favicon-16x16.png"
+      href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
+    <style>
+      .saved-news-item {
+        display: flex;
+        border-bottom: 1px solid #eaeaea;
+        padding: 20px 0;
+        margin-bottom: 10px;
+      }
+      .saved-news-item img {
+        width: 120px;
+        height: 80px;
+        object-fit: cover;
+        margin-right: 15px;
+      }
+      .saved-news-content {
+        flex: 1;
+      }
+      .saved-news-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 18px;
+      }
+      .saved-news-description {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      .saved-news-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #888;
+      }
+      .saved-news-category {
+        background-color: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+      .saved-news-time {
+        font-style: italic;
+      }
+      .remove-saved {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 3px;
+        margin-top: 5px;
+      }
+      .remove-saved:hover {
+        background-color: #d32f2f;
+      }
+      .btn.save.saved {
+        background-color: #4CAF50;
+      }
+      .empty-saved {
+        text-align: center;
+        padding: 40px 0;
+        color: #888;
+      }
+      .error-message {
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #ffebee;
+        border-left: 5px solid #f44336;
+        color: #b71c1c;
+      }
+      .login-message {
+        padding: 20px;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+      }
+      .login-message p {
+        margin-bottom: 15px;
+      }
+      .login-btn {
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      .login-btn:hover {
+        background-color: #0d8bf2;
+      }
+    </style>
   </head>
   <body>
     <%- include('partials/header') %>
@@ -42,9 +131,10 @@
       <div class="main-content">
         <!-- sub-menu-container -->
         <div class="sub-menu-container">
+          <% if (typeof user !== 'undefined' && user) { %>
           <div class="sub-menu-item">
-            <img src="" alt="" class="avatar" id="submenuAvatar" />
-            <div class="username"><p id="submenuUsername">Họ và tên</p></div>
+            <img src="/assets/img/avatar.jpg" alt="" class="avatar" id="submenuAvatar" />
+            <div class="username"><p id="submenuUsername"><%= user.username %></p></div>
           </div>
           <div class="sub-menu-item">
             <a href="/account-detail"
@@ -53,37 +143,70 @@
             >
           </div>
           <div class="sub-menu-item">
-            <a href=""
+            <a href="/saved-news"
               ><img src="/assets/img/save.svg" alt="" />
               <div class="saved-news">
                 <p>Tin tức đã lưu</p>
-                <span class="badge" id="savedCount">0</span>
+                <span class="badge" id="savedCount"><%= typeof savedNews !== 'undefined' ? savedNews.length : 0 %></span>
               </div></a
             >
           </div>
           <div class="sub-menu-item">
-            <a href=""
+            <a href="/logout"
               ><img src="/assets/img/logout.svg" alt="" />
               <p>Thoát tài khoản</p></a
             >
           </div>
+          <% } else { %>
+          <div class="sub-menu-item">
+            <div class="login-message">
+              <p>Vui lòng đăng nhập để xem tin bài đã lưu</p>
+              <button onclick="showPopup()" class="login-btn">Đăng nhập</button>
+            </div>
+          </div>
+          <% } %>
         </div>
         <!-- savedNewsContainer -->
         <div class="savedNews-container">
           <h2>Tin bài đã lưu</h2>
-          <button id="clearSavedNews">Xóa tất cả</button>
-          <div id="savedNewsContainer"></div>
-          <div class="divider"></div>
-          <h3>Có thể bạn sẽ quan tâm</h3>
-          <div class="news-container" id="news-list"></div>
-        </div>
-        <!-- Phân trang -->
-        <div class="pagination" style="display: none">
-          <button id="prevBtn" onclick="changePage(-1)" disabled>
-            « Trước
-          </button>
-          <span id="page-info"></span>
-          <button id="nextBtn" onclick="changePage(1)">Tiếp »</button>
+          <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error-message">
+              <p><%= error %></p>
+              <!-- Log error to console for debugging -->
+              <script>console.error("Error loading saved news:", "<%= error %>");</script>
+            </div>
+          <% } else if (typeof savedNews !== 'undefined' && savedNews.length > 0) { %>
+            <button id="clearAllSaved" class="remove-saved">Xóa tất cả</button>
+            <div id="savedNewsContainer">
+              <% savedNews.forEach(function(article) { 
+                try { %>
+                  <div class="saved-news-item" data-id="<%= article.id %>">
+                    <a href="/news-detail?id=<%= article.id %>">
+                      <img src="<%= article.image || '/assets/img/default-news.jpg' %>" alt="<%= article.title || 'Tin tức' %>" onerror="this.src='/assets/img/default-news.jpg'">
+                    </a>
+                    <div class="saved-news-content">
+                      <div class="saved-news-title">
+                        <a href="/news-detail?id=<%= article.id %>"><%= article.title || 'Tiêu đề không có sẵn' %></a>
+                      </div>
+                      <div class="saved-news-description"><%= article.description || 'Không có mô tả' %></div>
+                      <div class="saved-news-meta">
+                        <span class="saved-news-category"><%= article.category_name || 'Chưa phân loại' %></span>
+                        <span class="saved-news-time">Đã lưu: <%= new Date(article.saved_at).toLocaleString('vi-VN') %></span>
+                      </div>
+                      <button class="remove-saved" data-id="<%= article.id %>">Bỏ lưu</button>
+                    </div>
+                  </div>
+                <% } catch (e) { 
+                  console.error("Error rendering article:", e, article);
+                } 
+              }); %>
+            </div>
+          <% } else { %>
+            <div class="empty-saved">
+              <p>Bạn chưa lưu bài viết nào</p>
+              <p>Hãy lưu các bài viết yêu thích để đọc sau</p>
+            </div>
+          <% } %>
         </div>
       </div>
 
@@ -102,22 +225,22 @@
         <div class="left-footer">
           <img src="/assets/img/footer-logo.png" alt="" class="logo" />
           <div class="media">
-            <a href=""><img src="./assets/img/facebook.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/youtube.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/email.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/twitter.svg" alt="" /></a>
-            <a href=""><img src="./assets/img/linkedin.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/facebook.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/youtube.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/email.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/twitter.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/linkedin.svg" alt="" /></a>
           </div>
           <div class="hotline">
             <div class="hotline-number">
-              <img src="./assets/img/phone.svg" alt="" />
+              <img src="/assets/img/phone.svg" alt="" />
               <div class="hotline-content">
                 <p>Đường dây nóng :</p>
                 <p>+84 38 290 51 69</p>
               </div>
             </div>
             <div class="hotline-email">
-              <img src="./assets/img/email-hotline.png" alt="" />
+              <img src="/assets/img/email-hotline.png" alt="" />
               <div class="hotline-content">
                 <p>Email :</p>
                 <p>nguyenskt2004@gmail.com</p>
@@ -155,7 +278,139 @@
     <script src="/assets/js/headerLogined.js"></script>
     <script src="/assets/js/headerNotLogin.js"></script>
     <script src="/assets/js/header.js"></script>
-    <script src="/assets/js/savedNews.js"></script>
-    <script src="/assets/js/category-news.js"></script>
+    <script>
+      // Hiển thị popup đăng nhập
+      function showPopup() {
+        const overlay = document.querySelector('.popup-overlay');
+        if (overlay) {
+          overlay.style.display = 'flex';
+        }
+      }
+      
+      document.addEventListener('DOMContentLoaded', function() {
+        // Force a fresh load of data when the page is first opened
+        // This helps ensure we're always seeing the most current saved articles
+        if (performance.navigation.type !== 1) { // Not a page refresh
+          const currentTimestamp = new Date().getTime();
+          const lastVisit = sessionStorage.getItem('lastSavedNewsVisit');
+          
+          // Only reload if it's been more than 2 seconds since last visit
+          // This prevents excessive reloads while still ensuring fresh data
+          if (!lastVisit || (currentTimestamp - lastVisit > 2000)) {
+            sessionStorage.setItem('lastSavedNewsVisit', currentTimestamp);
+            if (window.location.href.indexOf('?t=') === -1) {
+              window.location.href = window.location.href + (window.location.href.indexOf('?') === -1 ? '?t=' : '&t=') + currentTimestamp;
+            }
+          }
+        }
+        
+        // Xử lý nút bỏ lưu
+        document.querySelectorAll('.remove-saved').forEach(button => {
+          if (button.getAttribute('data-id')) { // Bỏ qua nút "Xóa tất cả"
+            button.addEventListener('click', function() {
+              // Disable the button to prevent double-clicks
+              this.disabled = true;
+              
+              const newsId = this.getAttribute('data-id');
+              toggleSaveNews(newsId, this);
+            });
+          }
+        });
+        
+        // Xử lý nút xóa tất cả
+        const clearAllBtn = document.getElementById('clearAllSaved');
+        if (clearAllBtn) {
+          clearAllBtn.addEventListener('click', function() {
+            if (confirm('Bạn có chắc chắn muốn xóa tất cả bài viết đã lưu?')) {
+              // Thực hiện xóa tất cả bài viết đã lưu
+              clearAllSavedNews();
+            }
+          });
+        }
+      });
+      
+      // Bỏ lưu bài viết
+      function toggleSaveNews(newsId, button) {
+        fetch(`/api/toggle-save/${newsId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success && !data.isSaved) {
+              // Xóa bài viết khỏi danh sách với hiệu ứng fade out
+              const articleElement = button.closest('.saved-news-item');
+              articleElement.style.transition = 'all 0.5s ease';
+              articleElement.style.opacity = '0';
+              articleElement.style.transform = 'translateX(30px)';
+              
+              setTimeout(() => {
+                // Xóa phần tử khỏi DOM sau khi hiệu ứng hoàn thành
+                articleElement.remove();
+                
+                // Cập nhật số lượng bài viết đã lưu
+                const savedCount = document.getElementById('savedCount');
+                if (savedCount) {
+                  const newCount = parseInt(savedCount.textContent) - 1;
+                  savedCount.textContent = newCount;
+                  
+                  // Nếu không còn bài viết nào, hiển thị thông báo
+                  if (newCount === 0) {
+                    const container = document.getElementById('savedNewsContainer');
+                    if (container) {
+                      container.innerHTML = `
+                        <div class="empty-saved">
+                          <p>Bạn chưa lưu bài viết nào</p>
+                          <p>Hãy lưu các bài viết yêu thích để đọc sau</p>
+                        </div>
+                      `;
+                      
+                      // Ẩn nút xóa tất cả
+                      const clearAllBtn = document.getElementById('clearAllSaved');
+                      if (clearAllBtn) {
+                        clearAllBtn.style.display = 'none';
+                      }
+                    }
+                  }
+                }
+              }, 500);
+            } else if (!data.success) {
+              // Re-enable button on error
+              button.disabled = false;
+              alert(data.message);
+            }
+          })
+          .catch(error => {
+            console.error('Lỗi bỏ lưu bài viết:', error);
+            // Re-enable button on error
+            button.disabled = false;
+          });
+      }
+      
+      // Xóa tất cả bài đã lưu
+      function clearAllSavedNews() {
+        fetch('/api/clear-all-saved', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Reload trang để hiển thị trạng thái mới
+            window.location.reload();
+          } else {
+            alert(data.message || 'Có lỗi xảy ra khi xóa các bài đã lưu');
+          }
+        })
+        .catch(error => {
+          console.error('Lỗi xóa tất cả bài đã lưu:', error);
+          alert('Có lỗi xảy ra, vui lòng thử lại sau');
+        });
+      }
+    </script>
   </body>
-</ejs>
+</html>

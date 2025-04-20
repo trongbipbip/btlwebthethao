@@ -58,10 +58,10 @@
               <a href="/admin/users">QUẢN LÝ NGƯỜI DÙNG</a>
             </div>
             <div class="menu-item">
-              <a href="/admin/profile">QUẢN LÝ GÓP Ý</a>
+              <a href="/admin/suggestion">QUẢN LÝ GÓP Ý</a>
             </div>
             <div class="menu-item">
-              <a href="./profile.html">HỒ SƠ CÁ NHÂN</a>
+              <a href="/admin/profile">HỒ SƠ CÁ NHÂN</a>
             </div>
             <div class="menu-item">
               <a href="/user/logout" id="logout-btn">ĐĂNG XUẤT</a>
@@ -128,179 +128,327 @@
         </div>
       </div>
     </div>
-  <!--
-    <script type="module">
-      import { suggestions } from "../data/suggestionData.js";
 
+    <script>
       let currentPage = 1;
       let itemsPerPage = 10;
-
-      function displaySuggestions(filteredSuggestions) {
-        const suggestionList = document.getElementById("suggestion-list");
-        suggestionList.innerHTML = "";
-
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-
-        const pageSuggestions = filteredSuggestions.slice(startIndex, endIndex);
-        pageSuggestions.forEach((suggestion, index) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-                  <td>${suggestion.title}</td>
-                  <td>${suggestion.detail}</td>
-                  <td>${suggestion.name}</td>
-                  <td>
-                    <img src="./img/view.svg" onclick="viewDetail(${suggestion.id})" title="Sửa">
-                  </td>
-              `;
-          suggestionList.appendChild(row);
-        });
-
-        document.getElementById("page-number").textContent = currentPage;
-
-        document.getElementById("prev-page").disabled = currentPage === 1;
-        document.getElementById("next-page").disabled =
-          currentPage * itemsPerPage >= filteredSuggestions.length;
-      }
-
-      function changePage(direction) {
-        const filteredSuggestions = suggestions.filter((suggestion) => {
-          const title = document.getElementById("title").value.toLowerCase();
-          const titleMatch = suggestion.title.toLowerCase().includes(title);
-
-          const fromDate = document.getElementById("from-date").value;
-          const toDate = document.getElementById("to-date").value;
-          let dateMatch = true;
-
-          if (fromDate && toDate) {
-            const suggestionDate = new Date(
-              suggestion.date.split("/").reverse().join("-")
-            );
-            const startDate = new Date(fromDate);
-            const endDate = new Date(toDate);
-            dateMatch =
-              suggestionDate >= startDate && suggestionDate <= endDate;
-          }
-
-          return titleMatch && dateMatch;
-        });
-
-        currentPage += direction;
-
-        displaySuggestions(filteredSuggestions);
-      }
-
-      function filter() {
-        const title = document
-          .getElementById("title")
-          .value.trim()
-          .toLowerCase();
+      let totalPages = 1;
+      
+      // Fetch suggestions data
+      function fetchSuggestions() {
+        const title = document.getElementById("title").value;
         const fromDate = document.getElementById("from-date").value;
         const toDate = document.getElementById("to-date").value;
-
-        let filteredSuggestions = suggestions.filter((suggestion) => {
-          let titleMatch = suggestion.title.toLowerCase().includes(title);
-          let dateMatch = true; // Mặc định true để nếu không chọn ngày thì vẫn hiển thị tất cả
-
-          if (fromDate && toDate) {
-            // Chỉ lọc theo ngày nếu cả hai đều được chọn
-            const suggestionDate = new Date(
-              suggestion.date.split("/").reverse().join("-")
-            );
-            const startDate = new Date(fromDate);
-            const endDate = new Date(toDate);
-            dateMatch =
-              suggestionDate >= startDate && suggestionDate <= endDate;
-          }
-
-          return titleMatch && dateMatch; // Chỉ lọc khi cả hai điều kiện đúng
-        });
-
-        currentPage = 1; // Reset trang
-        displaySuggestions(filteredSuggestions);
+        
+        const url = `/admin/api/suggestions?page=${currentPage}&title=${encodeURIComponent(title)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`;
+        
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              displaySuggestions(data.suggestions);
+              updatePagination(data.pagination);
+            } else {
+              alert(data.message || "Có lỗi khi tải dữ liệu góp ý");
+            }
+          })
+          .catch(error => {
+            console.error("Error fetching suggestions:", error);
+            alert("Có lỗi khi tải dữ liệu góp ý");
+          });
       }
-      window.filter = filter;
-
-      function viewDetail(id) {
-        const suggestion = suggestions.find((s) => s.id === id);
-        if (suggestion) {
-          document.getElementById("popup-title").textContent = suggestion.title;
-          document.getElementById("popup-detail").textContent =
-            suggestion.detail;
-          document.getElementById("popup-overlay").style.display = "flex";
+      
+      // Display suggestions
+      function displaySuggestions(suggestions) {
+        const suggestionList = document.getElementById("suggestion-list");
+        suggestionList.innerHTML = "";
+        
+        if (suggestions.length === 0) {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td colspan="4" class="text-center">Không có góp ý nào</td>`;
+          suggestionList.appendChild(row);
+          return;
         }
+        
+        suggestions.forEach(suggestion => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${suggestion.title}</td>
+            <td>${suggestion.detail.length > 100 ? suggestion.detail.substring(0, 100) + '...' : suggestion.detail}</td>
+            <td>${suggestion.name}</td>
+            <td class="actions">
+              <button class="view-btn" onclick="viewDetail('${suggestion.title}', '${suggestion.detail.replace(/'/g, "\\'")}')" title="Xem chi tiết">
+                <img src="/assets/img/view.svg" alt="Xem">
+              </button>
+              ${suggestion.status === 'Chưa xử lý' ? 
+                `<button class="process-btn" onclick="processItem(${suggestion.id})" title="Đánh dấu đã xử lý">
+                  <i class="fas fa-check"></i> Đánh dấu đã xử lý
+                </button>` : 
+                `<span class="status-processed">Đã xử lý</span>`
+              }
+            </td>
+          `;
+          suggestionList.appendChild(row);
+        });
       }
-
+      
+      // Update pagination
+      function updatePagination(pagination) {
+        totalPages = pagination.totalPages;
+        document.getElementById("page-number").textContent = `${currentPage} / ${totalPages || 1}`;
+        document.getElementById("prev-page").disabled = currentPage === 1;
+        document.getElementById("next-page").disabled = currentPage === totalPages || totalPages === 0;
+      }
+      
+      // Change page
+      function changePage(direction) {
+        const newPage = currentPage + direction;
+        if (newPage < 1 || (totalPages > 0 && newPage > totalPages)) return;
+        
+        currentPage = newPage;
+        fetchSuggestions();
+      }
+      
+      // Filter suggestions
+      function filter() {
+        currentPage = 1;
+        fetchSuggestions();
+      }
+      
+      // View detail
+      function viewDetail(title, detail) {
+        document.getElementById("popup-title").textContent = title;
+        document.getElementById("popup-detail").textContent = detail;
+        document.getElementById("popup-overlay").style.display = "flex";
+      }
+      
+      // Process suggestion
+      function processItem(id) {
+        if (!confirm("Bạn có chắc chắn muốn đánh dấu góp ý này là đã xử lý?")) return;
+        
+        fetch(`/admin/suggestion/update-status/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'Đã xử lý' })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(data.message || "Cập nhật trạng thái thành công");
+            fetchSuggestions();
+          } else {
+            alert(data.message || "Có lỗi khi cập nhật trạng thái");
+          }
+        })
+        .catch(error => {
+          console.error("Error updating status:", error);
+          alert("Có lỗi khi cập nhật trạng thái");
+        });
+      }
+      
+      // Close popup
       function closePopup() {
         document.getElementById("popup-overlay").style.display = "none";
       }
-
-      window.viewDetail = viewDetail;
-      window.closePopup = closePopup;
-
-      window.onload = () => {
-        displaySuggestions(suggestions);
-      };
-    </script>
-    <script type="module">
-      import { userAdmin } from "../data/adminData.js";
-
-      // Hàm khởi tạo dữ liệu từ adminData.js nếu localStorage chưa có
-      function initializeUserData() {
-        const storedUserData = localStorage.getItem("user");
-
-        if (!storedUserData) {
-          localStorage.setItem("user", JSON.stringify(users));
-        }
-      }
-
-      // Hàm hiển thị dữ liệu lên UI
-      function loadUserData() {
-        const storedUserData = localStorage.getItem("user");
-
-        if (storedUserData) {
-          const user = JSON.parse(storedUserData)[0]; // Lấy người dùng đầu tiên
-
-          if (user) {
-            // Cập nhật tên Admin
-            const adminNameElement = document.querySelector(".admin-name");
-            if (adminNameElement) {
-              adminNameElement.textContent = user.name;
-            }
-
-            // Cập nhật Avatar
-            const avatarElement = document.querySelector("#avatar-img");
-            if (avatarElement) {
-              if (user.avatar.startsWith("/")) {
-                user.avatar = ".." + user.avatar;
-              }
-              avatarElement.src = user.avatar;
-            }
+      
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchSuggestions();
+        
+        // Event listeners
+        document.getElementById("from-date").addEventListener("change", function() {
+          const toDate = document.getElementById("to-date");
+          if (this.value && !toDate.value) {
+            toDate.value = new Date().toISOString().split('T')[0];
           }
-        }
-      }
-
-      // Hàm xử lý đăng xuất
-      function logout() {
-        localStorage.clear();
-        window.location.href = "../login/login_admin.html";
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const logoutButton = document.getElementById("logout-btn");
-        if (logoutButton) {
-          logoutButton.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-          });
-        }
-      });
-
-      document.addEventListener("DOMContentLoaded", () => {
-        initializeUserData(); // Đảm bảo dữ liệu đã có trong localStorage
-        loadUserData(); // Hiển thị dữ liệu lên UI
+        });
+        
+        document.getElementById("to-date").addEventListener("change", function() {
+          const fromDate = document.getElementById("from-date");
+          if (this.value && !fromDate.value) {
+            const date = new Date();
+            date.setMonth(date.getMonth() - 1);
+            fromDate.value = date.toISOString().split('T')[0];
+          }
+        });
       });
     </script>
-  -->
+
+    <style>
+      /* Additional styles for suggestion management */
+      .actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+      
+      .view-btn, .process-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+      }
+      
+      .view-btn img {
+        width: 20px;
+        height: 20px;
+      }
+      
+      .process-btn {
+        background-color: #28a745;
+        color: white;
+        border-radius: 4px;
+        padding: 5px 10px;
+        transition: background-color 0.3s;
+      }
+      
+      .process-btn:hover {
+        background-color: #218838;
+      }
+      
+      .status-processed {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 5px 10px;
+        border-radius: 4px;
+        display: inline-block;
+      }
+      
+      .filter {
+        display: grid;
+        grid-template-columns: auto 1fr auto 1fr auto 1fr auto;
+        grid-gap: 10px;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+      }
+      
+      .filter input, .filter button {
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+      }
+      
+      .filter button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 8px 20px;
+        transition: background-color 0.3s;
+      }
+      
+      .filter button:hover {
+        background-color: #0069d9;
+      }
+      
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      
+      table th, table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #e9ecef;
+      }
+      
+      table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+      }
+      
+      table tr:hover {
+        background-color: #f8f9fa;
+      }
+      
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      
+      .pagination button {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      
+      .pagination button:hover:not(:disabled) {
+        background-color: #0069d9;
+      }
+      
+      .pagination button:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+      }
+      
+      #popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .popup {
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        width: 80%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      
+      .popup h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e9ecef;
+      }
+      
+      .popup p {
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+      
+      .popup-buttons {
+        display: flex;
+        justify-content: flex-end;
+      }
+      
+      .popup-buttons button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .popup-buttons .cancel {
+        background-color: #6c757d;
+        color: white;
+      }
+    </style>
   </body>
 </html>

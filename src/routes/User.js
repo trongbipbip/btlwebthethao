@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const authController = require('../controller/UserController.js');
+const articleController = require('../controller/Article.js');
 
 // Test route trong router
 router.post('/forgotpass-test', (req, res) => {
@@ -36,7 +37,15 @@ router.post('/reset-password/:token', authController.resetPassword);
 // Routes cho tài khoản
 router.get('/account-detail', authController.showAccountDetail);
 router.post('/account-detail', authController.updateAccount);
-router.get('/saved-news', authController.showSavedNews);
+router.get('/saved-news', articleController.showsavednews);
+router.get('/api/check-saved/:newsId', articleController.checkSavedNews);
+router.post('/api/toggle-save/:newsId', articleController.toggleSaveNews);
+router.post('/unsave-news/:newsId', articleController.unsaveNews);
+router.post('/api/clear-all-saved', articleController.clearAllSavedNews);
+
+// Route cho góp ý
+router.post('/api/submit-suggestion', articleController.submitSuggestion);
+router.get('/api/suggestions/:userId', articleController.getUserSuggestions);
 
 // Route đăng xuất
 router.get('/logout', authController.logout);

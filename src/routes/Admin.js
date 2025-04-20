@@ -29,34 +29,38 @@ router.post('/auth-admin', adminController.loginAdmin);
 // Route trang chủ admin
 router.get('/home', checkAdminAuth, adminController.adminHome);
 
-// Route quản lý bài báo
+// Route quản lý bài báo (chỉ xem)
 router.get('/news', checkAdminAuth, adminController.manageNews);
+
 router.get('/news/create', checkAdminAuth, adminController.showCreateNews);
 router.post('/news/create', checkAdminAuth, adminController.createNews);
 router.get('/news/edit/:id', checkAdminAuth, adminController.showEditNews);
 router.put('/news/edit/:id', checkAdminAuth, adminController.updateNews);
 router.delete('/news/:id', checkAdminAuth, adminController.deleteNews);
 
-// Route quản lý danh mục
+
+// Route quản lý danh mục (chỉ xem)
 router.get('/categories', checkAdminAuth, adminController.manageCategories);
 router.get('/categories/create', checkAdminAuth, adminController.showCreateCategory);
 router.post('/categories/create', checkAdminAuth, adminController.createCategory);
 
-// Route quản lý giải đấu
+// Route quản lý giải đấu (chỉ xem)
 router.get('/tournaments', checkAdminAuth, adminController.manageTournaments);
 router.get('/tournaments/create', checkAdminAuth, adminController.showCreateTournament);
 router.post('/tournaments/create', checkAdminAuth, adminController.createTournament);
 router.get('/tournaments/edit/:id', checkAdminAuth, adminController.showEditTournament);
 router.put('/tournaments/edit/:id', checkAdminAuth, adminController.updateTournament);
-router.post('/tournaments/delete/:id', checkAdminAuth, adminController.deleteTournament);
+router.delete('/tournaments/delete/:id', checkAdminAuth, adminController.deleteTournament);
 
-// Route quản lý người dùng
+// Route quản lý người dùng (chỉ xem)
 router.get('/users', checkAdminAuth, adminController.manageUsers);
 router.post('/users/toggle-status/:id', checkAdminAuth, adminController.toggleUserStatus);
 router.post('/users/delete/:id', checkAdminAuth, adminController.deleteUser);
 
 // Route quản lý góp ý
 router.get('/suggestion', checkAdminAuth, adminController.manageSuggestions);
+router.post('/suggestion/update-status/:id', checkAdminAuth, adminController.updateSuggestionStatus);
+router.get('/api/suggestions', checkAdminAuth, adminController.getSuggestions);
 
 // Route hồ sơ cá nhân
 router.get('/profile', checkAdminAuth, adminController.showProfile);
@@ -65,6 +69,11 @@ router.post('/profile/change-password', checkAdminAuth, adminController.changePa
 
 // Route đăng xuất
 router.get('/logout', adminController.logout);
+
+
+
+
+
 
 module.exports = router;
 

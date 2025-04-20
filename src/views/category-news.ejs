@@ -1,5 +1,5 @@
-<!DOCTYPE ejs>
-<ejs lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -45,17 +45,44 @@
       <div class="news-category">
         <div class="main-content">
           <h1 class="news-category__title" id="category-title">
+            <% if (typeof category !== 'undefined' && category) { %>
+              <%= category.name %>
+            <% } else { %>
             TIN TỨC MỚI NHẤT
+            <% } %>
           </h1>
           <div class="category-content">
             <div class="category-block">
-              <div class="news-container" id="news-list"></div>
+              <div class="news-container" id="news-list">
+                <% if (typeof articles !== 'undefined' && articles.length > 0) { %>
+                  <% articles.forEach(function(article) { %>
+                    <div class="news-item" data-id="<%= article.id %>">
+                      <a href="/news-detail?id=<%= article.id %>">
+                        <img src="<%= article.image %>" alt="<%= article.title %>" class="news-img">
+                      </a>
+                      <div class="news-content">
+                        <div class="news-detail">
+                          <div class="news-title">
+                            <a href="/news-detail?id=<%= article.id %>"><%= article.title %></a>
+                          </div>
+                          <div class="news-description"><%= article.description %></div>
+                        </div>
+                        <div class="saved-btn" data-id="<%= article.id %>">
+                          Lưu bài
+                        </div>
+                      </div>
+                    </div>
+                  <% }); %>
+                <% } else { %>
+                  <p>Không có tin tức nào cho danh mục này.</p>
+                <% } %>
+              </div>
               <!-- Phân trang -->
               <div class="pagination">
                 <button id="prevBtn" onclick="changePage(-1)" disabled>
                   « Trước
                 </button>
-                <span id="page-info"></span>
+                <span id="page-info">Trang 1</span>
                 <button id="nextBtn" onclick="changePage(1)">Tiếp »</button>
               </div>
             </div>
@@ -66,30 +93,24 @@
             </div>
           </div>
         </div>
-        <!-- category news -->
+        
+        <% if (typeof category === 'undefined' || !category) { %>
+        <!-- category news sections - only show when viewing all categories -->
         <div id="news-section-container">
           <div class="main-content">
-            <div id="section-1" class="news-section">
-              <h2 class="section-title">Đời sống</h2>
-              <div class="subnews-list"></div>
+            <% if (typeof categories !== 'undefined' && categories.length > 0) { %>
+              <% categories.forEach(function(cat) { %>
+                <div id="section-<%= cat.id %>" class="news-section">
+                  <h2 class="section-title"><%= cat.name %></h2>
+                  <div class="subnews-list">
+                    <!-- Sẽ được điền bằng JavaScript -->
             </div>
-
-            <div id="section-2" class="news-section">
-              <h2 class="section-title">Khoảng khắc đáng nhớ</h2>
-              <div class="subnews-list"></div>
             </div>
-
-            <div id="section-3" class="news-section">
-              <h2 class="section-title">Người nổi tiếng</h2>
-              <div class="subnews-list"></div>
-            </div>
-
-            <div id="section-4" class="news-section">
-              <h2 class="section-title">Hồi ức</h2>
-              <div class="subnews-list"></div>
-            </div>
+              <% }); %>
+            <% } %>
           </div>
         </div>
+        <% } %>
       </div>
 
       <!-- ads -->
@@ -159,137 +180,183 @@
     <script src="/assets/js/headerLogined.js"></script>
     <script src="/assets/js/headerNotLogin.js"></script>
     <script src="/assets/js/header.js"></script>
-    <script src="/assets/js/category-news.js"></script>
-    <!-- Lặp qua từng danh mục -->
-    <script type="module">
-      // import { newsData } from "./data/newsData.js";
+    
+    <style>
+      /* Add styling for the save button */
+      .saved-btn {
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+      
+      .saved-btn:hover {
+        background-color: #e9ecef;
+      }
+      
+      .saved-btn.saved {
+        background-color: #4CAF50;
+        color: white;
+        border-color: #45a049;
+      }
+      
+      .saved-btn.saved:hover {
+        background-color: #45a049;
+      }
+      
+      .saved-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    </style>
 
-      function renderNewsBySection() {
-        const sections = {};
-
-        newsData.forEach((news) => {
-          if (!sections[news.categoryId]) {
-            sections[news.categoryId] = [];
-          }
-          sections[news.categoryId].push(news);
+    <script>
+      // Set global variables from server-side data
+      document.addEventListener('DOMContentLoaded', function() {
+        window.isLoggedIn = <%= typeof user !== 'undefined' && user ? 'true' : 'false' %>;
+        window.totalArticles = <%= typeof articles !== 'undefined' ? articles.length : 0 %>;
+        
+        // Check saved status on page load
+        checkSavedStatus();
+        
+        // Thêm event listeners cho tất cả các nút "Lưu bài"
+        document.querySelectorAll('.saved-btn').forEach(button => {
+          button.addEventListener('click', function() {
+            const newsId = this.getAttribute('data-id');
+            saveNews(newsId, this);
+          });
         });
-
-        Object.keys(sections).forEach((categoryId) => {
-          const sectionContainer = document.querySelector(
-            `#section-${categoryId} .subnews-list`
-          );
-
-          if (sectionContainer) {
-            sectionContainer.innerHTML = ""; // Xóa nội dung cũ
-
-            const topNews = sections[categoryId]
-              .sort((a, b) => b.id - a.id)
-              .slice(0, 4);
-
-            if (topNews.length > 0) {
-              // Tin có ID cao nhất (hiển thị lớn)
-              const mainNews = document.createElement("a");
-              mainNews.href = `news-detail.ejs?id=${topNews[0].id}`;
-              mainNews.classList.add("category-news-item", "main-news");
-              mainNews.innerHTML = `
-                <img src="${topNews[0].image}" alt="News Image" class="news-img">
-                <div class="news-content">
-                  <h3 class="news-title">${topNews[0].title}</h3>
-                  <p class="news-description">${topNews[0].description}</p>
-                </div>
-              `;
-              sectionContainer.appendChild(mainNews);
-
-              // 3 tin còn lại (hiển thị dưới dạng danh sách, không có ảnh)
-              const subNewsContainer = document.createElement("div");
-              subNewsContainer.classList.add("sub-news");
-
-              topNews.slice(1).forEach((news) => {
-                const subNews = document.createElement("a");
-                subNews.href = `news-detail.ejs?id=${news.id}`;
-                subNews.classList.add("category-news-item", "sub-news-item");
-                subNews.innerHTML = `
-                  <div class="news-content">
-                    <h3 class="news-title">${news.title}</h3>
-                  </div>
-                `;
-                subNewsContainer.appendChild(subNews);
-              });
-
-              sectionContainer.appendChild(subNewsContainer);
-            }
+        
+        updatePagination();
+      });
+      
+      // Hiển thị popup đăng nhập
+      function showPopup() {
+        const overlay = document.querySelector('.popup-overlay');
+        if (overlay) {
+          overlay.style.display = 'flex';
+        }
+      }
+      
+      // Hàm lưu bài viết
+      function saveNews(newsId, button) {
+        if (!window.isLoggedIn) {
+          alert('Bạn cần đăng nhập để lưu bài viết!');
+          showPopup(); // Show login popup
+          return;
+        }
+        
+        // Disable button to prevent double clicks
+        button.disabled = true;
+        
+        // Call API to toggle save status
+        fetch(`/api/toggle-save/${newsId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
           }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            if (data.isSaved) {
+              button.classList.add('saved');
+              button.textContent = 'Đã lưu';
+              
+              // Add animation effect
+              button.style.backgroundColor = '#4CAF50';
+              button.style.color = 'white';
+              
+              // Ask if user wants to view saved articles
+              const viewSavedArticles = confirm(`${data.message || 'Đã lưu bài viết thành công!'}\n\nBạn có muốn xem tất cả tin đã lưu không?`);
+              if (viewSavedArticles) {
+                window.location.href = '/saved-news';
+              }
+            } else {
+              button.classList.remove('saved');
+              button.textContent = 'Lưu bài';
+              button.style.backgroundColor = '';
+              button.style.color = '';
+              alert(data.message || 'Đã bỏ lưu bài viết!');
+            }
+          } else {
+            alert(data.message || 'Có lỗi xảy ra khi lưu bài viết!');
+          }
+          
+          // Re-enable button
+          button.disabled = false;
+        })
+        .catch(error => {
+          console.error('Lỗi khi lưu bài viết:', error);
+          alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+          // Re-enable button
+          button.disabled = false;
         });
       }
-      document.addEventListener("DOMContentLoaded", renderNewsBySection);
-    </script>
-    <script type="module">
-      // import { newsData } from "./data/newsData.js";
-      import { categoryData } from "/data/categoryData.js";
-
-      document.addEventListener("DOMContentLoaded", function () {
-        // Lấy categoryId từ URL
+      
+      // Hàm kiểm tra bài viết đã lưu hay chưa
+      function checkSavedStatus() {
+        if (!window.isLoggedIn) return;
+        
+        // Get all article IDs on the page
+        const buttons = document.querySelectorAll('.saved-btn');
+        const newsIds = Array.from(buttons).map(btn => btn.getAttribute('data-id'));
+        
+        if (newsIds.length === 0) return;
+        
+        // Create a mapping from ID to button
+        const buttonMap = {};
+        buttons.forEach(btn => {
+          buttonMap[btn.getAttribute('data-id')] = btn;
+        });
+        
+        // Check saved status for each article
+        newsIds.forEach(id => {
+          fetch(`/api/check-saved/${id}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.success && data.isSaved) {
+                const button = buttonMap[id];
+                if (button) {
+                  button.classList.add('saved');
+                  button.textContent = 'Đã lưu';
+                }
+              }
+            })
+            .catch(error => {
+              console.error(`Error checking saved status for article ${id}:`, error);
+            });
+        });
+      }
+      
+      // Hàm phân trang
+      let currentPage = 1;
+      const itemsPerPage = 10;
+      const totalItems = window.totalArticles;
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      
+      function updatePagination() {
+        document.getElementById('page-info').textContent = `Trang ${currentPage} / ${totalPages || 1}`;
+        document.getElementById('prevBtn').disabled = currentPage === 1;
+        document.getElementById('nextBtn').disabled = currentPage === totalPages || totalPages === 0;
+      }
+      
+      function changePage(direction) {
+        currentPage += direction;
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        
+        // Reload trang với tham số trang mới
         const urlParams = new URLSearchParams(window.location.search);
-        const categoryId = urlParams.get("category");
-
-        const titleElement = document.getElementById("category-title");
-
-        if (categoryId) {
-          const category = categoryData.find((cat) => cat.id == categoryId);
-
-          if (category) {
-            titleElement.textContent = category.name;
-          } else {
-            titleElement.textContent = "Danh mục không tồn tại";
-          }
-        } else {
-          titleElement.textContent = "Tin tức mới nhất";
-        }
-
-        if (categoryId && categoryData.some((cat) => cat.id == categoryId)) {
-          renderNewsByCategory(categoryId);
-        }
-      });
-
-      // Hàm hiển thị danh sách tin tức theo categoryId
-      function renderNewsByCategory(categoryId) {
-        const newsList = document.getElementById("news-list");
-
-        // Lọc tin tức theo categoryId
-        const filteredNews = newsData.filter(
-          (news) => news.categoryId == categoryId
-        );
-
-        // Kiểm tra nếu có tin tức thuộc danh mục đó
-        if (filteredNews.length > 0) {
-          newsList.innerHTML = filteredNews
-            .map(
-              (news) => `
-              <a href="#" onclick="viewDetail(${news.id})"><img src="${
-                news.image
-              }" alt="News Image"></a>
-                              <div class="news-content">
-                                <div class="news-detail">
-                                  <div class="news-title"><a href="#" onclick="viewDetail(${
-                                    news.id
-                                  })">${news.title}</a></div>
-                                  <div class="news-description">${
-                                    news.description
-                                  }</div>
-                                </div>
-                                <div class="saved-btn ${
-                                  isSaved ? "saved" : ""
-                                }" onclick="saveNews(${news.id}, this)">
-                                    ${isSaved ? "Đã lưu" : "Lưu bài"}
-                                </div>
-                              </div>
-            `
-            )
-            .join("");
-        } else {
-          newsList.innerHTML = `<p>Không có tin tức nào cho danh mục này.</p>`;
-        }
+        urlParams.set('page', currentPage);
+        window.location.search = urlParams.toString();
       }
     </script>
   </body>
-</ejs>
+</html>

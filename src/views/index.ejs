@@ -571,22 +571,22 @@
 
         newsList.innerHTML = `
     <div class="blog">
-      <a href="/details?id=${mainBlog.id}">
+      <a href="/news-detail?id=${mainBlog.id}">
         <img src="${mainBlog.image}" alt="${mainBlog.title}" class="blog-img" />
       </a>
       <h3 class="blog-title">
-        <a href="details?id=${mainBlog.id}">${mainBlog.title}</a>
+        <a href="/news-detail?id=${mainBlog.id}">${mainBlog.title}</a>
       </h3>
       <p class="blog-comment">${mainBlog.description}</p>
     </div>
     <div class="subblog">
       ${subBlogs.map((news) => `
         <div class="subblog-content">
-          <a href="/details?id=${news.id}">
+          <a href="/news-detail?id=${news.id}">
             <img src="${news.image}" alt="${news.title}" class="subblog-img" />
           </a>
           <h3 class="subblog-title">
-            <a href="/details?id=${news.id}">${news.title}</a>
+            <a href="/news-detail?id=${news.id}">${news.title}</a>
           </h3>
         </div>
       `).join('')}
@@ -609,22 +609,22 @@
         }
         dailyNewsContainer.innerHTML = `
           <div class="daily">
-            <a href="/details?id=${latestNews.id}">
+            <a href="/news-detail?id=${latestNews.id}">
               <img src="${latestNews.image}" alt="${latestNews.title}" class="daily-img" />
             </a>
             <h3 class="daily-title">
-              <a href="/details?id=${latestNews.id}">${latestNews.title}</a>
+              <a href="/news-detail?id=${latestNews.id}">${latestNews.title}</a>
             </h3>
             <p class="daily-comment">${latestNews.description}</p>
           </div>
           <div class="daily-list">
             ${nextNews.map((news) => `
               <div class="daily-item">
-                <a href="/details?id=${news.id}">
+                <a href="/news-detail?id=${news.id}">
                   <img src="${news.image}" alt="${news.title}" class="daily-item-img" />
                 </a>
                 <h3 class="daily-item-title">
-                  <a href="/details?id=${news.id}">${news.title}</a>
+                  <a href="/news-detail?id=${news.id}">${news.title}</a>
                 </h3>
               </div>
             `).join('')}
@@ -652,11 +652,11 @@
 
         breakingNewsContainer.innerHTML = `
           <div class="breaking">
-            <a href="/details?id=${latestNews.id}">
+            <a href="/news-detail?id=${latestNews.id}">
               <img src="${latestNews.image}" alt="Breaking News" class="breaking-img">
             </a>
             <h3 class="breaking-title">
-              <a href="/details?id=${latestNews.id}">${latestNews.title}</a>
+              <a href="/news-detail?id=${latestNews.id}">${latestNews.title}</a>
             </h3>
             <p class="breaking-comment">${latestNews.description}</p>
           </div>
@@ -664,7 +664,7 @@
             ${nextThreeNews.map((news) => `
               <div class="breaking-item">
                 <h3 class="breaking-item__title">
-                  <a href="/details?id=${news.id}">${news.title}</a>
+                  <a href="/news-detail?id=${news.id}">${news.title}</a>
                 </h3>
               </div>
             `).join('')}

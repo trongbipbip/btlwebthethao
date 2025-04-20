@@ -414,7 +414,7 @@ function changePage(step) {
 }
 
 function viewDetail(id) {
-  window.location.href = `news-detail.html?id=${id}`;
+  window.location.href = `news-detail.ejs?id=${id}`;
 }
 
 // Hàm lưu / xóa bài viết khỏi localStorage
