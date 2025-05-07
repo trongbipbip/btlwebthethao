@@ -95,7 +95,7 @@ exports.logout = (req, res) => {
             return res.redirect('/home');
         }
         res.clearCookie('connect.sid'); // Xóa cookie session
-        res.redirect('/login');
+    res.redirect('/home');
     });
 };
 

@@ -77,7 +77,7 @@ app.use('/admin', adminRoutes);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'rootroot',
+    password: 'root',
     database: 'nodejs'
 });
 

@@ -36,6 +36,79 @@
       href="/assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
+    <style>
+      .status-active {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      
+      .status-inactive {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      
+      .action-btn {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+        margin-right: 5px;
+      }
+
+      .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .pagination button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 8px 16px;
+        margin: 0 5px;
+        cursor: pointer;
+      }
+
+      .pagination button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      .pagination span {
+        margin: 0 10px;
+      }
+      
+      .error-message {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border-left: 4px solid #c62828;
+      }
+      
+      .success-message {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border-left: 4px solid #2e7d32;
+      }
+    </style>
   </head>
   <body>
     <div class="admin">
@@ -65,44 +138,64 @@
               <a href="/admin/profile">HỒ SƠ CÁ NHÂN</a>
             </div>
             <div class="menu-item">
-              <a href="/user/logout" id="logout-btn">ĐĂNG XUẤT</a>
+              <a href="/admin/logout" id="logout-btn">ĐĂNG XUẤT</a>
             </div>
           </div>
         </div>
         <div class="right-admin">
           <div class="header">
             <div class="admin-section">
-              <span class="admin-name"></span>
-              <div class="admin-avatar"><img id="avatar-img" alt="" /></div>
+              <span class="admin-name"><%= user ? user.fullName : '' %></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="Admin Avatar" /></div>
             </div>
           </div>
 
-          <!-- Bảng tin tức -->
+          <!-- Bảng người dùng -->
           <div class="user-container">
             <div class="user-title">
               <div class="user-header">
-                <h3>TIN TỨC GẦN ĐÂY</h3>
-                <button class="btn-create-user">Tạo tin tức mới</button>
+                <h3>QUẢN LÝ NGƯỜI DÙNG</h3>
               </div>
 
               <!-- Phần tìm kiếm và select -->
               <div class="search-section">
-                <input
-                  type="text"
-                  id="search-input"
-                  class="input-field"
-                  placeholder="Tìm kiếm tin tức"
-                />
-                <select id="status-filter" class="input-field">
-                  <option value="">Tất cả trạng thái</option>
-                  <option value="Đang hoạt động">Đang hoạt động</option>
-                  <option value="Dừng hoạt động">Bị ban</option>
-                </select>
+                <form action="/admin/users" method="GET">
+                  <input
+                    type="text"
+                    name="search"
+                    id="search-input"
+                    class="input-field"
+                    placeholder="Tìm kiếm người dùng"
+                    value="<%= searchTerm || '' %>"
+                  />
+                  <select name="status" id="status-filter" class="input-field">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="active" <%= selectedStatus === 'active' ? 'selected' : '' %>>Đang hoạt động</option>
+                    <option value="inactive" <%= selectedStatus === 'inactive' ? 'selected' : '' %>>Bị khóa</option>
+                  </select>
+                  <button type="submit" class="btn-search">Tìm kiếm</button>
+                </form>
               </div>
             </div>
+            
+            <% if (error) { %>
+              <div class="error-message"><%= error %></div>
+            <% } %>
+            
+            <% if (typeof req !== 'undefined' && req.session && req.session.error) { %>
+              <div class="error-message"><%= req.session.error %></div>
+              <% req.session.error = null; %>
+            <% } %>
+            
+            <% if (typeof req !== 'undefined' && req.session && req.session.success) { %>
+              <div class="success-message"><%= req.session.success %></div>
+              <% req.session.success = null; %>
+            <% } %>
+            
             <table>
               <thead>
                 <tr>
+                  <th>ID</th>
                   <th>Tên người dùng</th>
                   <th>Tên đăng nhập</th>
                   <th>Email</th>
@@ -111,194 +204,57 @@
                 </tr>
               </thead>
               <tbody id="user-list">
-                <!-- Dữ liệu sẽ được load bằng JavaScript -->
+                <% if (users && users.length > 0) { %>
+                  <% users.forEach(function(user) { %>
+                    <% if (user.role === 'user') { %>
+                      <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.fullName %></td>
+                        <td><%= user.username %></td>
+                        <td><%= user.email %></td>
+                        <td>
+                          <form action="/admin/users/toggle-status/<%= user.id %>" method="POST" style="display: inline;">
+                            <button type="submit" class="<%= user.status === 'active' ? 'status-active' : 'status-inactive' %>">
+                              <%= user.status === 'active' ? 'Đang hoạt động' : 'Bị khóa' %>
+                            </button>
+                          </form>
+                        </td>
+                        <td>
+                          <form action="/admin/users/delete/<%= user.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?')">
+                            <button type="submit" class="action-btn">Xóa</button>
+                          </form>
+                        </td>
+                      </tr>
+                    <% } %>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="6" style="text-align: center;">Không có người dùng nào</td>
+                  </tr>
+                <% } %>
               </tbody>
             </table>
 
             <div class="pagination">
-              <button id="prevPage" onclick="changePage(-1)">Trước</button>
-              <span id="pageInfo">1 / 1</span>
-              <button id="nextPage" onclick="changePage(1)">Sau</button>
+              <% if (typeof currentPage !== 'undefined' && typeof totalPages !== 'undefined') { %>
+                <button id="prevPage" <%= currentPage <= 1 ? 'disabled' : '' %> onclick="location.href='/admin/users?page=<%= currentPage - 1 %>&search=<%= searchTerm || '' %>&status=<%= selectedStatus || '' %>'">Trước</button>
+                <span id="pageInfo"><%= currentPage %> / <%= totalPages %></span>
+                <button id="nextPage" <%= currentPage >= totalPages ? 'disabled' : '' %> onclick="location.href='/admin/users?page=<%= currentPage + 1 %>&search=<%= searchTerm || '' %>&status=<%= selectedStatus || '' %>'">Sau</button>
+              <% } %>
             </div>
           </div>
         </div>
       </div>
     </div>
-  <!--
-    <script type="module">
-      import { users } from "../data/userData.js";
 
-      localStorage.setItem("users", JSON.stringify(users));
-
-      function initializeUserData() {
-        const storedUserData = localStorage.getItem("user");
-
-        if (!storedUserData) {
-          localStorage.setItem("user", JSON.stringify(users));
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Set admin name from session if available
+        const adminName = document.querySelector('.admin-name');
+        if (adminName && '<%= user ? true : false %>' === 'true') {
+          adminName.textContent = '<%= user ? user.fullName : "" %>';
         }
-      }
-
-      let currentPage = 1;
-      const itemsPerPage = 10;
-      let searchKeyword = "";
-      let selectedStatus = "";
-
-      function loadUsers() {
-        let storedUsers = JSON.parse(localStorage.getItem("users"));
-
-        let filteredUsers = storedUsers.filter(
-          (user) =>
-            user.name.toLowerCase().includes(searchKeyword.toLowerCase()) &&
-            (selectedStatus === "" || user.status === selectedStatus)
-        );
-
-        let start = (currentPage - 1) * itemsPerPage;
-        let end = start + itemsPerPage;
-        let userList = "";
-
-        filteredUsers.slice(start, end).forEach((user) => {
-          const statusClass =
-            user.status === "Đang hoạt động"
-              ? "status-active"
-              : "status-inactive";
-          userList += `
-            <tr>
-              <td>${user.name}</td>
-              <td>${user.username}</td>
-              <td>${user.email}</td>
-              <td><button class="${statusClass}" onclick="toggleStatus('${user.id}')">${user.status}</button></td>
-              <td><img src="./img/delete.svg" onclick="deleteUser('${user.id}')" title="Xóa"></td>
-            </tr>
-          `;
-        });
-
-        document.getElementById("user-list").innerHTML = userList;
-        document.getElementById(
-          "pageInfo"
-        ).innerText = `${currentPage} / ${Math.ceil(
-          filteredUsers.length / itemsPerPage
-        )}`;
-        document.getElementById("prevPage").disabled = currentPage === 1;
-        document.getElementById("nextPage").disabled =
-          currentPage === Math.ceil(filteredUsers.length / itemsPerPage);
-      }
-
-      function changePage(step) {
-        currentPage += step;
-        loadUsers();
-      }
-
-      function deleteUser(id) {
-        if (confirm("Bạn có chắc muốn xóa người dùng này?")) {
-          const index = users.findIndex((user) => user.id === id);
-          if (index !== -1) {
-            users.splice(index, 1);
-            loadUsers();
-          }
-        }
-      }
-
-      function toggleStatus(id) {
-        console.log("toggleStatus called for id:", id);
-
-        let storedUsers = JSON.parse(localStorage.getItem("users")) || users;
-
-        const user = storedUsers.find((user) => String(user.id) === String(id));
-        if (user) {
-          console.log("Current status:", user.status);
-
-          if (user.status === "Đang hoạt động") {
-            const confirmBan = confirm("Bạn có muốn ban người dùng này không?");
-            if (confirmBan) {
-              user.status = "Bị ban";
-            }
-          } else {
-            user.status = "Đang hoạt động";
-          }
-
-          localStorage.setItem("users", JSON.stringify(storedUsers));
-          loadUsers();
-        }
-      }
-
-      document.getElementById("search-input").addEventListener("input", (e) => {
-        searchKeyword = e.target.value;
-        loadUsers();
-      });
-
-      document
-        .getElementById("status-filter")
-        .addEventListener("change", (e) => {
-          selectedStatus = e.target.value;
-          loadUsers();
-        });
-
-      window.changePage = changePage;
-      window.deleteUser = deleteUser;
-      window.toggleStatus = toggleStatus;
-      document.addEventListener("DOMContentLoaded", loadUsers);
-    </script>
-    <script type="module">
-      import { userAdmin } from "../data/adminData.js";
-
-      // Hàm khởi tạo dữ liệu từ adminData.js nếu localStorage chưa có
-      function initializeUserData() {
-        const storedUserData = localStorage.getItem("user");
-
-        if (!storedUserData) {
-          localStorage.setItem("user", JSON.stringify(users));
-        }
-      }
-
-      function loadUserData() {
-        const storedUserData = localStorage.getItem("user");
-
-        if (storedUserData) {
-          const user = JSON.parse(storedUserData)[0];
-
-          if (user) {
-            const adminNameElement = document.querySelector(".admin-name");
-            if (adminNameElement) {
-              adminNameElement.textContent = user.name;
-            }
-            const avatarElement = document.querySelector("#avatar-img");
-            if (avatarElement) {
-              if (user.avatar.startsWith("/")) {
-                user.avatar = ".." + user.avatar;
-              }
-              avatarElement.src = user.avatar;
-            }
-          }
-        }
-      }
-
-      // Hàm xử lý đăng xuất
-      function logout() {
-        localStorage.clear();
-        window.location.href = "../login/login_admin.html";
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const logoutButton = document.getElementById("logout-btn");
-        if (logoutButton) {
-          logoutButton.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-          });
-        }
-      });
-
-      // Gọi hàm cập nhật khi trang đã sẵn sàng
-      document.addEventListener("DOMContentLoaded", () => {
-        loadUserData(); // Tải lại dữ liệu người dùng khi trang được load
-        updateProfile(); // Cập nhật thông tin người dùng
-      });
-
-      document.addEventListener("DOMContentLoaded", () => {
-        initializeUserData();
-        loadUserData();
       });
     </script>
-  -->
   </body>
 </html>
