@@ -124,7 +124,6 @@
               <thead>
                 <tr>
                   <th>Tiêu đề</th>
-                  <th>Tác giả</th>
                   <th>Trạng thái</th>
                   <th>Ngày tạo</th>
                   <th>Thao tác</th>
@@ -135,7 +134,6 @@
                   <% recentNews.forEach(function(news) { %>
                     <tr>
                       <td><%= news.title %></td>
-                      <td><%= news.authorName %></td>
                       <td>
                         <span class="status-badge <%= news.status %>">
                           <%= news.status === 'Đang hoạt động' ? 'Hoạt động' : 
@@ -143,7 +141,7 @@
                         </span>
                       </td>
                       <td><%= new Date(news.created_at).toLocaleDateString('vi-VN') %></td>
-                      <td>
+                      <td class="actions">
                         <a href="/admin/news/edit/<%= news.id %>" class="action-btn edit">Sửa</a>
                         <button onclick="toggleStatus('<%- news.id %>')" class="action-btn toggle">
                           <%= news.status === 'Đang hoạt động' ? 'Dừng' : 'Kích hoạt' %>
@@ -153,7 +151,7 @@
                   <% }); %>
                 <% } else { %>
                   <tr>
-                    <td colspan="5" class="no-data">Không có tin tức nào</td>
+                    <td colspan="4" class="no-data">Không có tin tức nào</td>
                   </tr>
                 <% } %>
               </tbody>

@@ -280,29 +280,60 @@ tr:hover {
 }
 
 /* Action Buttons */
-.action-btn {
-  padding: 6px 12px;
+.action-btn, .btn-edit, .btn-delete, .status-btn, .btn-page, .btn-search, .btn-create {
+  padding: 8px 12px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: opacity 0.3s;
+  transition: all 0.3s ease;
   color: white;
   text-decoration: none;
   font-size: 14px;
-  margin-right: 5px;
   display: inline-block;
+  text-align: center;
+  min-width: 80px;
+  height: 36px;
+  line-height: 20px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  margin: 0 4px;
+  font-weight: 500;
 }
 
-.action-btn.edit {
-  background-color: #ffc107;
+.action-btn.edit, .btn-edit, button[type="submit"].edit {
+  background-color: #2196F3;
 }
 
-.action-btn.toggle {
+.action-btn.toggle, button.toggle {
   background-color: #6c757d;
 }
 
-.action-btn:hover {
-  opacity: 0.8;
+.btn-delete, button.delete {
+  background-color: #dc3545;
+}
+
+button.active, .btn-create, .btn-kichhoat {
+  background-color: #28a745;
+}
+
+.action-btn:hover, .btn-edit:hover, .btn-delete:hover, .status-btn:hover, .btn-page:hover {
+  opacity: 0.85;
+  color: white;
+  text-decoration: none;
+}
+
+/* Đảm bảo nút trên cùng một dòng */
+td:last-child, td.actions {
+  white-space: nowrap;
+  min-width: 180px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+th:last-child {
+  min-width: 180px;
 }
 
 /* No Data Message */

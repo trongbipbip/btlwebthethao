@@ -36,7 +36,7 @@ router.get('/news/create', checkAdminAuth, adminController.showCreateNews);
 router.post('/news/create', checkAdminAuth, adminController.createNews);
 router.get('/news/edit/:id', checkAdminAuth, adminController.showEditNews);
 router.put('/news/edit/:id', checkAdminAuth, adminController.updateNews);
-router.delete('/news/:id', checkAdminAuth, adminController.deleteNews);
+router.delete('/news/delete/:id', checkAdminAuth, adminController.deleteNews);
 router.post('/news/toggle-status/:id', checkAdminAuth, adminController.toggleNewsStatus);
 
 
