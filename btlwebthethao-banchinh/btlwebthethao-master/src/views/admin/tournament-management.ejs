@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý giải đấu</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/tournament-management.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"><%= user.fullName %></span>
+              <div class="admin-avatar">
+                <img src="<%= user.avatar || '/img/avatar-default.jpg' %>" alt="Avatar" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Bảng giải đấu -->
+          <div class="tournament-container">
+            <div class="tournament-title">
+              <div class="tournament-header">
+                <h3>DANH SÁCH GIẢI ĐẤU</h3>
+                <a href="/admin/tournaments/create" class="btn-create-tournament">+ Tạo giải đấu mới</a>
+              </div>
+
+              <!-- Phần tìm kiếm -->
+              <div class="search-section">
+                <form action="/admin/tournaments" method="GET" class="search-form">
+                  <input
+                    type="text"
+                    name="search"
+                    class="input-field"
+                    placeholder="Tìm kiếm giải đấu"
+                    value="<%= typeof search !== 'undefined' ? search : '' %>"
+                  />
+                  <button type="submit" class="btn-search">Tìm kiếm</button>
+                </form>
+              </div>
+            </div>
+
+            <% if (typeof message !== 'undefined') { %>
+              <div class="alert alert-<%= message.type %>">
+                <%= message.text %>
+              </div>
+            <% } %>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Tên giải đấu</th>
+                  <th>Ảnh</th>
+                  <th>Thông tin</th>
+                  <th>Địa điểm</th>
+                  <th>Mặt sân</th>
+                  <th>Giải thưởng</th>
+                  <th>Trạng thái</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (tournaments && tournaments.length > 0) { %>
+                  <% tournaments.forEach(function(tournament) { %>
+                    <tr>
+                      <td><%= tournament.name %></td>
+                      <td>
+                        <img 
+                          src="<%= tournament.image || '/img/default-tournament.jpg' %>" 
+                          alt="<%= tournament.name %>"
+                          class="tournament-image"
+                        >
+                      </td>
+                      <td><%= tournament.more || '-' %></td>
+                      <td><%= tournament.location %></td>
+                      <td><%= tournament.surface %></td>
+                      <td><%= tournament.prize %></td>
+                      <td>
+                        <span class="status-badge <%= tournament.status === 'Đang hoạt động' ? 'active' : 'inactive' %>">
+                          <%= tournament.status %>
+                        </span>
+                      </td>
+                      <td class="actions">
+                        <a href="/admin/tournaments/edit/<%= tournament.id %>" class="btn-edit">
+                          <i class="fas fa-edit"></i> Sửa
+                        </a>
+                        <form action="/admin/tournaments/delete/<%= tournament.id %>" method="POST" style="display: inline;">
+                          <input type="hidden" name="_method" value="DELETE">
+                          <button type="submit" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa giải đấu này?')">
+                            <i class="fas fa-trash"></i> Xóa
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="8" class="no-data">Không có giải đấu nào</td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+
+            <% if (typeof pagination !== 'undefined') { %>
+              <div class="pagination">
+                <% if (pagination.currentPage > 1) { %>
+                  <a href="?page=<%= pagination.currentPage - 1 %><%= search ? '&search=' + search : '' %>" class="btn-page">Trước</a>
+                <% } %>
+                
+                <span class="page-info">
+                  Trang <%= pagination.currentPage %> / <%= pagination.totalPages %>
+                </span>
+
+                <% if (pagination.currentPage < pagination.totalPages) { %>
+                  <a href="?page=<%= pagination.currentPage + 1 %><%= search ? '&search=' + search : '' %>" class="btn-page">Sau</a>
+                <% } %>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+  </body>
+</html>
+

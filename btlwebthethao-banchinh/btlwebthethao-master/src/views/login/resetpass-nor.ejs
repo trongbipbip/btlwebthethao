@@ -1,0 +1,108 @@
+<!DOCTYPE ejs>
+<ejs lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đặt lại mật khẩu</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/resetpass.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <a href="/home"
+      ><img src="/img/logo.png" alt="Logo" class="logo"
+    /></a>
+
+    <div class="login-container">
+      <!-- Logo -->
+
+      <!-- Tiêu đề -->
+      <h1 class="login-title">Đặt Lại Mật Khẩu</h1>
+
+      <% if (error) { %>
+        <div class="error-message" style="color: red; margin-bottom: 15px;">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form action="/reset-password/<%= token %>" method="POST">
+        <div class="input-group">
+          <label>Mật khẩu mới</label>
+          <div class="password-wrapper">
+            <input type="password" id="password" name="password" placeholder="Mật khẩu mới" required minlength="6" />
+            <span class="toggle-password" onclick="togglePassword('password')">
+              <img src="/img/show.svg" alt="Hiển thị mật khẩu" />
+            </span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Xác nhận mật khẩu</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Xác nhận mật khẩu"
+              required
+              minlength="6"
+            />
+            <span class="toggle-password" onclick="togglePassword('confirmPassword')">
+              <img src="/img/show.svg" alt="Hiển thị mật khẩu" />
+            </span>
+          </div>
+        </div>
+
+        <div class="link-container">
+          <div class="return-login">
+            <a href="/login">Quay lại Đăng Nhập?</a>
+          </div>    
+          <button type="submit" class="btn-login">Đặt lại mật khẩu</button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        const img = input.parentElement.querySelector('img');
+        
+        if (input.type === 'password') {
+          input.type = 'text';
+          img.src = '/img/hide.svg';
+        } else {
+          input.type = 'password';
+          img.src = '/img/show.svg';
+        }
+      }
+    </script>
+  </body>
+</ejs>

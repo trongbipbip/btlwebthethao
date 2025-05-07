@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chỉnh sửa giải đấu - <%= tournament.name %></title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+
+      .admin {
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .main-content {
+        display: flex;
+        width: 100%;
+      }
+
+      .left-admin {
+        width: 260px;
+        background: white;
+        padding: 0;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        border-radius: 0;
+        margin: 0;
+        align-self: stretch;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        border-right: 1px solid #e0e0e0;
+      }
+
+      .logo {
+        display: none;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: 100%;
+        padding: 20px 0;
+        background: white;
+        overflow-y: auto;
+      }
+
+      .menu-item {
+        margin-bottom: 0;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 0;
+      }
+
+      .menu-item a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 15px;
+        line-height: 19.36px;
+        color: #2e3a46;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.2s ease;
+        border-left: 4px solid transparent;
+      }
+
+      .menu-item a:hover .icon {
+        transform: scale(1.15);
+      }
+
+      .menu-item.active a {
+        background-color: #2c3e50;
+        color: white;
+        border-left-color: #1b2735;
+      }
+
+      .menu-item:last-child {
+        border-bottom: none;
+      }
+
+
+      .admin-section {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 15px;
+      }
+
+      .admin-name {
+        font-weight: 500;
+        color: #2c3e50;
+      }
+
+      .admin-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #3498db;
+      }
+
+      .admin-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .edit-container {
+        padding: 20px;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .button-group button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s;
+      }
+
+      #backBtn {
+        background-color: #6c757d;
+        color: white;
+      }
+
+      #backBtn:hover {
+        background-color: #5a6268;
+      }
+
+      #saveBtn {
+        background-color: #28a745;
+        color: white;
+      }
+
+      #saveBtn:hover {
+        background-color: #218838;
+      }
+
+      .edit-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .edit-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .edit-header h1 {
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: #495057;
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="url"],
+      .form-group textarea {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input[type="text"]:focus,
+      .form-group input[type="url"]:focus,
+      .form-group textarea:focus {
+        border-color: #80bdff;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+      }
+
+      .preview-image {
+        max-width: 200px;
+        max-height: 120px;
+        margin-top: 10px;
+        border-radius: 4px;
+        display: block;
+      }
+
+      .status-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #28a745;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 14px;
+        line-height: 1.5;
+        min-height: 120px;
+        resize: vertical;
+        transition: all 0.3s ease;
+      }
+
+      .form-group textarea:focus {
+        border-color: #80bdff;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+      }
+
+      .form-section {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"><%= user.fullName %></span>
+              <div class="admin-avatar">
+                <img src="<%= user.avatar || '/img/avatar-default.jpg' %>" alt="Avatar" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Form chỉnh sửa -->
+          <div class="edit-container">
+            <div class="button-group">
+              <a href="/admin/tournaments" class="btn" id="backBtn">
+                <i class="fas fa-arrow-left"></i> Quay lại
+              </a>
+              <button type="submit" form="editTournamentForm" id="saveBtn">
+                <i class="fas fa-save"></i> Lưu giải đấu
+              </button>
+            </div>
+
+            <div class="main-container">
+              <div class="edit-content">
+                <div class="edit-header">
+                  <h1>Chỉnh sửa giải đấu</h1>
+                  <div class="status-container">
+                    <label>Trạng thái:</label>
+                    <label class="switch">
+                      <input type="checkbox" name="status" <%= tournament.status === 'Đang hoạt động' ? 'checked' : '' %> />
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <form id="editTournamentForm" action="/admin/tournaments/edit/<%= tournament.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <label for="name">Tên giải đấu:</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      value="<%= tournament.name %>"
+                      placeholder="Tên giải đấu"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="image">Ảnh giải đấu:</label>
+                    <input type="file" id="image" name="image" accept="image/*" />
+                    <input type="hidden" name="current_image" value="<%= tournament.image %>" />
+                    <% if (tournament.image) { %>
+                      <img src="<%= tournament.image %>" alt="Tournament image" class="preview-image" id="previewImage" />
+                    <% } %>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="prize">Giải thưởng:</label>
+                    <input 
+                      type="text" 
+                      id="prize" 
+                      name="prize" 
+                      value="<%= tournament.prize %>" 
+                      required 
+                      placeholder="Giải thưởng"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="location">Địa điểm:</label>
+                    <input
+                      type="text"
+                      id="location"
+                      name="location"
+                      value="<%= tournament.location %>"
+                      required
+                      placeholder="Địa điểm"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="surface">Mặt sân:</label>
+                    <input
+                      type="text"
+                      id="surface"
+                      name="surface"
+                      value="<%= tournament.surface %>"
+                      required
+                      placeholder="Mặt sân"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="more">Tóm tắt:</label>
+                    <textarea
+                      id="more"
+                      name="more"
+                      rows="4"
+                      placeholder="Tóm tắt ngắn gọn về giải đấu"
+                    ><%= tournament.more || '' %></textarea>
+                  </div>
+
+                  <div class="form-section">
+                    <div class="form-section-title">Nội dung chi tiết</div>
+                  <div class="form-group">
+                      <label for="content">Nội dung:</label>
+                    <textarea
+                        id="content"
+                        name="content"
+                        rows="8"
+                        placeholder="Mô tả chi tiết về giải đấu, lịch thi đấu, thể thức thi đấu, v.v..."
+                      ><%= tournament.content || '' %></textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-section">
+                    <div class="form-section-title">Thông tin bổ sung</div>
+                    <div class="form-group">
+                      <label for="startDate">Ngày bắt đầu:</label>
+                      <input
+                        type="date"
+                        id="startDate"
+                        name="startDate"
+                        value="<%= tournament.startDate || '' %>"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="endDate">Ngày kết thúc:</label>
+                      <input
+                        type="date"
+                        id="endDate"
+                        name="endDate"
+                        value="<%= tournament.endDate || '' %>"
+                      />
+                  </div>
+
+                  <div class="form-group">
+                      <label for="website">Website chính thức:</label>
+                      <input
+                        type="url"
+                        id="website"
+                        name="website"
+                        value="<%= tournament.website || '' %>"
+                        placeholder="https://example.com"
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Preview ảnh khi chọn file mới
+      document.getElementById('image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            document.getElementById('previewImage').src = e.target.result;
+          }
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Format giải thưởng khi nhập
+      document.getElementById('prize').addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, '');
+        if (value) {
+          this.value = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+          }).format(value);
+        }
+      });
+
+      // Tự động điều chỉnh chiều cao của textarea
+      document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+          this.style.height = 'auto';
+          this.style.height = (this.scrollHeight) + 'px';
+        });
+      });
+
+      // Kiểm tra ngày kết thúc phải sau ngày bắt đầu
+      document.getElementById('endDate').addEventListener('change', function() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = this.value;
+        
+        if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+          alert('Ngày kết thúc phải sau ngày bắt đầu');
+          this.value = '';
+        }
+      });
+    </script>
+  </body>
+</html>

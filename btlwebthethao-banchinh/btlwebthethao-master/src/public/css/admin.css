@@ -1,0 +1,477 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --font-hero__heading: Inter, sans-serif;
+  --sidebar-width: 260px;
+  --header-height: 70px;
+  --primary: #2c3e50;       /* Xanh tím than nhẹ */
+  --primary-dark: #1b2735;
+  --bg-light: #f1f3f5;
+  --text: #2e3a46;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: "Inter", sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/*================= Common =================*/
+.main-content {
+  width: 100%;
+  display: flex;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #60b004;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 17px;
+  gap: 12px;
+  min-width: 166px;
+  border-radius: 999px;
+  border: 1px solid #c31414;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2.7rem;
+  text-align: center;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.break-all {
+  word-break: break-all;
+}
+/*================= admin =================*/
+.admin {
+  min-height: 100vh;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.main-content {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  gap: 0;
+}
+
+/* Left Sidebar */
+.left-admin {
+  width: var(--sidebar-width);
+  background: white;
+  padding: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  border-radius: 0;
+  margin: 0;
+  align-self: stretch;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  border-right: 1px solid #e0e0e0;
+}
+
+/* Ẩn logo */
+.logo {
+  display: none;
+}
+
+
+.sidebar .menu-item {
+  margin: 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar .menu-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.sidebar .menu-item a:hover {
+  background-color: #f0f0f0;
+  color: var(--primary);
+}
+
+.sidebar .menu-item a:hover .icon {
+  transform: scale(1.15);
+}
+
+.sidebar .menu-item.active a {
+  background-color: var(--primary);
+  color: white;
+  border-left-color: var(--primary-dark);
+}
+
+.sidebar .menu-item.active a:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.sidebar .menu-item.active a:hover .icon {
+  transform: none;
+}
+
+.sidebar .menu-item:last-child {
+  border-bottom: none;
+}
+
+.icon {
+  width: 20px;
+  text-align: center;
+  color: var(--text);
+  transition: transform 0.2s ease;
+}
+
+.menu-item.active a .icon {
+  color: white;
+}
+
+/* Right Content */
+.right-admin {
+  flex: 1;
+  max-width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
+  padding: 20px;
+  background-color: var(--bg-light);
+}
+
+/* Header */
+.header {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.admin-name {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Stats Container */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.stat-box {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.stat-box h3 {
+  font-size: 28px;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.stat-box p {
+  color: #666;
+  font-size: 14px;
+}
+
+/* News Container */
+.news-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.news-container h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  border-bottom-width: 2px;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Action Buttons */
+.action-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  margin-right: 5px;
+  display: inline-block;
+}
+
+.action-btn.edit {
+  background-color: #ffc107;
+}
+
+.action-btn.toggle {
+  background-color: #6c757d;
+}
+
+.action-btn:hover {
+  opacity: 0.8;
+}
+
+/* No Data Message */
+.no-data {
+  text-align: center;
+  padding: 30px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/*================= sidebar =================*/
+body {
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar {
+  background: white;
+  padding: 0;
+  width: 100%;
+  height: 100%;  padding: 20px 0;
+  overflow-y: auto;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.menu-item {
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu-item a {
+  display: block;
+  padding: 20px 15px;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  background: #efefef;
+  border-radius: 5px;
+}
+
+.admin-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-avatar img {
+  width: 60px;
+  height: 60px;
+  background: #ddd;
+  border-radius: 50%;
+}
+/*================= stats-container =================*/
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.stat-box {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 0 5px rgba(0.2, 0.2, 0.2, 0.2);
+  width: 100%;
+}
+.stat-box h3 {
+  margin: 5px 0;
+  font-size: 20px;
+}
+.stat-box p {
+  font-size: 14px;
+  color: gray;
+}
+
+/* Bảng tin tức */
+.news-container {
+  background: white;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0.2, 0.2, 0.2, 0.2);
+}
+.news-container h2 {
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+  margin-bottom: 25px;
+  margin-top: 10px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+#news-list td {
+  vertical-align: middle;
+}
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+th {
+  background: #ddd;
+  font-weight: bold;
+}
+.news-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.actions img {
+  width: 20px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+.status-active {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 5px;
+  text-align: center;
+  border: none;
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+
+.status-inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 5px;
+  border: none;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+/* Pagination */
+.pagination {
+  margin-top: 15px;
+  text-align: center;
+}
+.pagination button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 3px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

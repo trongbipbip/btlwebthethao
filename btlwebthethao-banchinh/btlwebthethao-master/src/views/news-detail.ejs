@@ -1,0 +1,553 @@
+<!DOCTYPE ejs>
+<ejs lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><% if(typeof article !== 'undefined') { %><%= article.title %> - <% } %>Chi tiết tin tức</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/assets/css/news-detail.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <style>
+      .btn.save.saved {
+        background-color: #4CAF50;
+      }
+      
+      /* CSS cho phần góp ý */
+      .user-suggestions, .all-suggestions {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      .user-suggestions h3, .all-suggestions h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #333;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 8px;
+      }
+      
+      .suggestion-item {
+        padding: 12px;
+        background: white;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        border-left: 3px solid #2196F3;
+      }
+      
+      .suggestion-content {
+        margin-bottom: 8px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      
+      .suggestion-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #666;
+        flex-wrap: wrap;
+      }
+      
+      .suggestion-author {
+        font-weight: bold;
+        color: #2196F3;
+      }
+      
+      .suggestion-status {
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+      
+      .suggestion-status.pending {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+      
+      .suggestion-status.processed {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      
+      .all-suggestions {
+        border-top: 2px dashed #ddd;
+        margin-top: 40px;
+        background-color: #f0f8ff;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    <div id="login-popup"></div>
+    <main>
+      <div class="slider"></div>
+
+      <!-- detail -->
+      <div class="news-detail">
+        <div class="main-content">
+          <div class="news-block">
+            <button id="backBtn" onclick="goBack()">⬅ Quay lại tin tức</button>
+            <% if(typeof article !== 'undefined') { %>
+              <h1 id="news-title"><%= article.title %></h1>
+              <p id="news-date"><%= new Date(article.date).toLocaleDateString('vi-VN') %></p>
+              <img id="news-image" src="<%= article.image %>" alt="<%= article.title %>" />
+              <div id="news-content" class="article-content"><%- article.content %></div>
+              <div class="buttons">
+                <button id="saveBtn" class="btn save" data-id="<%= article.id %>">LƯU</button>
+                <button class="btn suggest">GÓP Ý</button>
+              </div>
+
+              <!-- Phần hiển thị tất cả góp ý đã được xử lý -->
+              <% if (typeof processedSuggestions !== 'undefined' && processedSuggestions.length > 0) { %>
+                <div class="all-suggestions">
+                  <h3>Góp ý từ người dùng</h3>
+                  <% processedSuggestions.forEach(function(suggestion) { %>
+                    <div class="suggestion-item">
+                      <p class="suggestion-content"><%= suggestion.detail %></p>
+                      <div class="suggestion-meta">
+                        <span class="suggestion-author">Góp ý bởi: <%= suggestion.name %></span>
+                        <span class="suggestion-date"><%= new Date(suggestion.created_at).toLocaleString('vi-VN') %></span>
+                        <span class="suggestion-status processed">Đã xử lý</span>
+                      </div>
+                    </div>
+                  <% }); %>
+                </div>
+              <% } %>
+
+              <!-- Phần hiển thị góp ý của người dùng hiện tại (chỉ hiển thị khi đăng nhập) -->
+              <% if (user && typeof mySuggestions !== 'undefined' && mySuggestions.length > 0) { %>
+              <div class="user-suggestions">
+                <h3>Góp ý của bạn</h3>
+                <% mySuggestions.forEach(function(suggestion) { %>
+                  <div class="suggestion-item">
+                    <p class="suggestion-content"><%= suggestion.detail %></p>
+                    <div class="suggestion-meta">
+                      <span class="suggestion-date"><%= new Date(suggestion.created_at).toLocaleString('vi-VN') %></span>
+                      <span class="suggestion-status <%= suggestion.status === 'Đã xử lý' ? 'processed' : 'pending' %>">
+                        <%= suggestion.status %>
+                      </span>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+              <% } %>
+            <% } else { %>
+              <h1 id="news-title"></h1>
+              <p id="news-date"></p>
+              <img id="news-image" src="" alt="News Image" />
+              <div id="news-content"><p>Không tìm thấy bài viết</p></div>
+              <div class="buttons">
+                <button class="btn save">LƯU</button>
+                <button class="btn suggest">GÓP Ý</button>
+              </div>
+            <% } %>
+            <div class="tournament-block">
+              <h2>KHÁM PHÁ CÁC GIẢI ĐẤU</h2>
+              <div class="tournaments">
+                <div class="tournament">
+                  <img
+                    src="/assets/img/atp1000.png"
+                    class="tournament-img"
+                    alt=""
+                  />
+                  <div class="tournament-inner">
+                    <h3>Monte-Carlo</h3>
+                    <p>Monte-Carlo, Monaco</p>
+                    <img
+                      src="/assets/img/monaco.svg"
+                      class="countries"
+                      alt="Monaco"
+                    />
+                  </div>
+                </div>
+                <div class="tournament">
+                  <img
+                    src="/assets/img/atp250.png"
+                    class="tournament-img"
+                    alt=""
+                  />
+                  <div class="tournament-inner">
+                    <h3>Bucharest</h3>
+                    <p>Bucharest, Romania</p>
+                    <img
+                      src="/assets/img/romania.svg"
+                      class="countries"
+                      alt="Romania"
+                    />
+                  </div>
+                </div>
+                <div class="tournament">
+                  <img
+                    src="/assets/img/atp500.png"
+                    class="tournament-img"
+                    alt=""
+                  />
+                  <div class="tournament-inner">
+                    <h3>Barcelona</h3>
+                    <p>Barcelona, Spain</p>
+                    <img
+                      src="/assets/img/spain.svg"
+                      class="countries"
+                      alt="Spain"
+                    />
+                  </div>
+                </div>
+                <div class="tournament">
+                  <img
+                    src="/assets/img/atp1000.png"
+                    class="tournament-img"
+                    alt=""
+                  />
+                  <div class="tournament-inner">
+                    <h3>Ronaldo</h3>
+                    <p>Cristiano Ronaldo, Portuguese</p>
+                    <img
+                      src="/assets/img/portugal.svg"
+                      class="countries"
+                      alt="Portugal"
+                    />
+                  </div>
+                </div>
+                <div class="tournament">
+                  <img
+                    src="/assets/img/atp500.png"
+                    class="tournament-img"
+                    alt=""
+                  />
+                  <div class="tournament-inner">
+                    <h3>India Wells</h3>
+                    <p>India Wells, United States</p>
+                    <img
+                      src="/assets/img/united-states.svg"
+                      class="countries"
+                      alt="USA"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="overlay">
+                <div class="popup">
+                  <h3>GÓP Ý TIN TỨC</h3>
+                  <form id="suggestionForm" method="POST" action="/api/submit-suggestion">
+                    <input type="hidden" name="news_id" value="<%= article.id %>">
+                    <label><strong>Ý kiến đóng góp</strong></label>
+                    <textarea name="detail" placeholder="Nhập ý kiến đóng góp..." required></textarea>
+                    <div class="popup-buttons">
+                      <button type="button" class="cancel" onclick="closePopup()">HUỶ</button>
+                      <button type="submit" class="submit">GỬI GÓP Ý</button>
+                    </div>
+                    <p>
+                      <small>(Lưu ý: Vui lòng đăng nhập trước khi gửi góp ý)</small>
+                    </p>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ads-content">
+            <div class="ads-bg">
+              <img src="/assets/img/ads-doc.png" alt="" class="ads" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ads -->
+      <div class="ads-hori">
+        <a href=""
+          ><img
+            src="/assets/img/ads-horizontal.png"
+            alt=""
+            class="ads-hori__img"
+        /></a>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="main-content">
+        <div class="left-footer">
+          <img src="/assets/img/footer-logo.png" alt="" class="logo" />
+          <div class="media">
+            <a href=""><img src="/assets/img/facebook.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/youtube.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/email.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/twitter.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/linkedin.svg" alt="" /></a>
+          </div>
+          <div class="hotline">
+            <div class="hotline-number">
+              <img src="/assets/img/phone.svg" alt="" />
+              <div class="hotline-content">
+                <p>Đường dây nóng :</p>
+                <p>+84 38 290 51 69</p>
+              </div>
+            </div>
+            <div class="hotline-email">
+              <img src="/assets/img/email-hotline.png" alt="" />
+              <div class="hotline-content">
+                <p>Email :</p>
+                <p>nguyenskt2004@gmail.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right-footer">
+          <div class="newsletter">
+            <h3 class="newsletter-title">Đăng ký nhận bản tin TENNIS TOUR</h3>
+            <p class="newsletter-comment">
+              Nhận thông tin tiếp thị chính thức từ TENNIS TOUR! Chúng tôi sẽ
+              gửi cho bạn các bản tin để thông báo cho bạn về tin tức, giải đấu,
+              cuộc thi, bán vé, ưu đãi của đối tác và hơn thế nữa.
+            </p>
+            <div class="subscribe-container">
+              <div class="subscribe-container__input">
+                <label for="email">Địa chỉ email</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Nhập email của bạn"
+                />
+              </div>
+              <button>SUBCRIBE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>ALL RIGHTS RESERVED.© 2025</p>
+      </div>
+    </footer>
+    <script src="/assets/js/headerLogined.js"></script>
+    <script src="/assets/js/headerNotLogin.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script>
+      // Kiểm tra trạng thái đăng nhập
+      const userLoggedIn = <%= user ? 'true' : 'false' %>;
+      
+      // Hàm quay lại trang trước
+      function goBack() {
+        window.history.back();
+      }
+      
+      // Xử lý nút góp ý
+      const suggestBtn = document.querySelector('.suggest');
+      const overlay = document.querySelector('.overlay');
+      const cancelBtn = document.querySelector('.cancel');
+      const suggestionForm = document.getElementById('suggestionForm');
+      
+      suggestBtn.addEventListener('click', function() {
+        // Kiểm tra đăng nhập từ biến toàn cục được đặt ở đầu trang
+        if (userLoggedIn) {
+          overlay.style.display = 'flex';
+        } else {
+          // Thông báo yêu cầu đăng nhập
+          alert('Vui lòng đăng nhập để gửi góp ý!');
+          showPopup(); // Hiển thị popup đăng nhập
+        }
+      });
+      
+      function closePopup() {
+        overlay.style.display = 'none';
+      }
+      
+      cancelBtn.addEventListener('click', closePopup);
+      
+      // Xử lý form góp ý
+      suggestionForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        if (!userLoggedIn) {
+          alert('Vui lòng đăng nhập để gửi góp ý!');
+          showPopup();
+          return;
+        }
+        
+        const formData = new FormData(suggestionForm);
+        const suggestion = {
+          news_id: formData.get('news_id'),
+          detail: formData.get('detail')
+        };
+        
+        fetch('/api/submit-suggestion', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(suggestion)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Cảm ơn bạn đã gửi góp ý!');
+            closePopup();
+            // Reload trang để hiển thị góp ý mới
+            window.location.reload();
+          } else {
+            alert(data.message || 'Có lỗi xảy ra khi gửi góp ý. Vui lòng thử lại sau!');
+          }
+        })
+        .catch(error => {
+          console.error('Lỗi gửi góp ý:', error);
+          alert('Có lỗi xảy ra khi gửi góp ý. Vui lòng thử lại sau!');
+        });
+      });
+      
+      // Hàm lưu bài viết
+      function saveArticle(articleId) {
+        fetch('/save-news', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ newsId: articleId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message || 'Đã lưu bài viết thành công!');
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Vui lòng đăng nhập để lưu bài viết!');
+        });
+      }
+
+      // Xử lý nút LƯU BÀI
+      document.addEventListener('DOMContentLoaded', function() {
+        const saveBtn = document.getElementById('saveBtn');
+        
+        if (saveBtn) {
+          const newsId = saveBtn.getAttribute('data-id');
+          
+          // Kiểm tra trạng thái đã lưu hay chưa khi tải trang
+          checkSavedStatus(newsId);
+          
+          // Thêm sự kiện click cho nút lưu
+          saveBtn.addEventListener('click', function() {
+            toggleSaveNews(newsId);
+          });
+        }
+      });
+      
+      // Kiểm tra trạng thái đã lưu
+      function checkSavedStatus(newsId) {
+        fetch(`/api/check-saved/${newsId}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              updateSaveButton(data.isSaved);
+            }
+          })
+          .catch(error => {
+            console.error('Lỗi kiểm tra trạng thái lưu:', error);
+          });
+      }
+      
+      // Lưu/bỏ lưu bài viết
+      function toggleSaveNews(newsId) {
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) {
+          // Disable button during request
+          saveBtn.disabled = true;
+        }
+        
+        fetch(`/api/toggle-save/${newsId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              updateSaveButton(data.isSaved);
+              
+              if (data.isSaved) {
+                // Bài viết đã được lưu, hiển thị thông báo và đề xuất chuyển đến trang tin đã lưu
+                const viewSaved = confirm(`${data.message}\n\nBạn có muốn xem tất cả tin đã lưu không?`);
+                if (viewSaved) {
+                  window.location.href = '/saved-news';
+                }
+              } else {
+                // Bài viết đã bỏ lưu
+                alert(data.message);
+              }
+            } else {
+              // Nếu chưa đăng nhập, hiển thị popup đăng nhập
+              if (data.message.includes('đăng nhập')) {
+                alert('Vui lòng đăng nhập để lưu bài viết!');
+                // Có thể mở popup đăng nhập ở đây
+                showPopup();
+              } else {
+                alert(data.message);
+              }
+            }
+            
+            // Re-enable button
+            if (saveBtn) {
+              saveBtn.disabled = false;
+            }
+          })
+          .catch(error => {
+            console.error('Lỗi lưu bài viết:', error);
+            alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+            
+            // Re-enable button
+            if (saveBtn) {
+              saveBtn.disabled = false;
+            }
+          });
+      }
+      
+      // Cập nhật trạng thái nút lưu
+      function updateSaveButton(isSaved) {
+        const saveBtn = document.getElementById('saveBtn');
+        
+        if (isSaved) {
+          saveBtn.textContent = 'ĐÃ LƯU';
+          saveBtn.classList.add('saved');
+        } else {
+          saveBtn.textContent = 'LƯU';
+          saveBtn.classList.remove('saved');
+        }
+      }
+
+      // Hiển thị debug info khi nhấn Ctrl+D
+      document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.key === 'd') {
+          event.preventDefault();
+          const debugInfo = document.getElementById('debug-info');
+          debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+        }
+      });
+    </script>
+  </body>
+</ejs>

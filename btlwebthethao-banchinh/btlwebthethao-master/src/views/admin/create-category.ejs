@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tạo danh mục mới</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/create-category.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"><%= user.fullName %></span>
+            </div>
+          </div>
+
+          <!-- Form tạo danh mục -->
+          <div class="edit-container">
+            <div class="main-container">
+              <div class="edit-content">
+                <h1>Tạo danh mục mới</h1>
+                <% if (error) { %>
+                  <div class="alert alert-danger"><%= error %></div>
+                <% } %>
+                <form id="createCategoryForm" action="/admin/categories/create" method="POST">
+                  <div class="form-group">
+                    <label for="categoryName">Tên danh mục:</label>
+                    <input type="text" id="categoryName" name="name" required />
+                  </div>
+                  <div class="button-group">
+                    <a href="/admin/categories" class="btn-back">Quay lại</a>
+                    <button type="submit" class="btn-save">Thêm danh mục</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Xử lý đăng xuất
+      document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+          window.location.href = this.href;
+        }
+      });
+    </script>
+  </body>
+</html>

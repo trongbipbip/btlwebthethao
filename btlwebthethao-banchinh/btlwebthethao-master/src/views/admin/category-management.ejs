@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý danh mục</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/category-management.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="" /></div>
+            </div>
+          </div>
+
+          <!-- Bảng tin tức -->
+          <div class="category-container">
+            <div class="category-title">
+              <div class="category-header">
+                <h3>Danh Mục</h3>
+                <a href="/admin/categories/create" class="btn-create">
+                  <span class="plus-icon">+</span>
+                  Tạo danh mục mới
+                </a>
+              </div>
+
+              <!-- Hiển thị thông báo lỗi hoặc thành công -->
+              <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-danger"><%= error %></div>
+              <% } %>
+              
+              <% if (typeof success !== 'undefined' && success) { %>
+                <div class="alert alert-success"><%= success %></div>
+              <% } %>
+
+              <!-- Phần tìm kiếm và select -->
+              <div class="search-section">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    id="search-input"
+                    class="input-field"
+                    placeholder="Tìm kiếm danh mục"
+                  />
+                  <button id="search-btn" class="search-button">
+                    Tìm kiếm
+                  </button>
+                </div>
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tên danh mục</th>
+                  <th>Số lượng tin tức</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="category-list">
+                <% if (categories && categories.length > 0) { %>
+                  <% categories.forEach(function(category) { %>
+                    <tr>
+                      <td><%= category.name %></td>
+                      <td><%= category.count %></td>
+                      <td><button class="btn-delete" data-id="<%= category.id %>">Xóa</button></td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="3" class="no-data">Không có danh mục nào</td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+
+            <div class="pagination">
+              <button id="prevPage" onclick="changePage(-1)">Trước</button>
+              <span id="pageInfo">1 / 1</span>
+              <button id="nextPage" onclick="changePage(1)">Sau</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Lấy dữ liệu từ tbody ban đầu đã được render từ server
+        let categoriesData = [];
+        
+        // Lấy dữ liệu từ các hàng đã được render
+        const rows = document.querySelectorAll('#category-list tr');
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          if (cells.length >= 3) {
+            const categoryName = cells[0].textContent;
+            const categoryCount = parseInt(cells[1].textContent) || 0;
+            const deleteBtn = cells[2].querySelector('.btn-delete');
+            const categoryId = deleteBtn ? deleteBtn.getAttribute('data-id') : '';
+            
+            if (categoryId) {
+              categoriesData.push({
+                id: categoryId,
+                name: categoryName,
+                count: categoryCount
+              });
+            }
+          }
+        });
+        
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let searchKeyword = "";
+
+        function loadCategories() {
+          let filteredCategories = [...categoriesData];
+
+          // Lọc theo từ khóa tìm kiếm
+          if (searchKeyword) {
+            filteredCategories = filteredCategories.filter((category) =>
+              category.name.toLowerCase().includes(searchKeyword.toLowerCase())
+            );
+          }
+
+          // Tính toán phân trang
+          let start = (currentPage - 1) * itemsPerPage;
+          let end = start + itemsPerPage;
+          let categoryList = "";
+
+          if (filteredCategories.length === 0) {
+            // Hiển thị thông báo khi không tìm thấy kết quả
+            categoryList = `<tr><td colspan="3" class="no-data">Không tìm thấy danh mục phù hợp</td></tr>`;
+          } else {
+            filteredCategories.slice(start, end).forEach((category) => {
+              categoryList += `
+                <tr>
+                    <td>${category.name}</td>
+                    <td>${category.count}</td>
+                    <td><button class="btn-delete" data-id="${category.id}">Xóa</button></td>
+                </tr>
+              `;
+            });
+          }
+
+          document.getElementById("category-list").innerHTML = categoryList;
+          document.getElementById(
+            "pageInfo"
+          ).innerText = `${currentPage} / ${Math.ceil(
+            filteredCategories.length / itemsPerPage || 1
+          )}`;
+          document.getElementById("prevPage").disabled = currentPage === 1;
+          document.getElementById("nextPage").disabled =
+            currentPage === Math.ceil(filteredCategories.length / itemsPerPage) || filteredCategories.length === 0;
+        }
+
+        function changePage(step) {
+          currentPage += step;
+          loadCategories();
+        }
+
+        // Hàm xử lý sự kiện tìm kiếm danh mục theo tên
+        function handleSearch() {
+          searchKeyword = document.getElementById("search-input").value;
+          currentPage = 1; // Reset về trang 1 khi tìm kiếm
+          console.log("Đang tìm kiếm với từ khóa:", searchKeyword);
+          loadCategories(); // Gọi hàm hiển thị kết quả tìm kiếm
+        }
+
+        // Gán các sự kiện
+        document
+          .getElementById("search-input")
+          .addEventListener("input", handleSearch);
+        
+        // Thêm sự kiện click cho nút tìm kiếm
+        document
+          .getElementById("search-btn")
+          .addEventListener("click", handleSearch);
+
+        // Thêm sự kiện Enter cho ô input
+        document
+          .getElementById("search-input")
+          .addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+              handleSearch();
+            }
+          });
+
+        window.changePage = changePage;
+
+        // Chạy lần đầu để hiển thị danh sách
+        loadCategories();
+      });
+    </script>
+    <script type="module">
+      import { userAdmin } from "../data/adminData.js";
+
+      // Hàm khởi tạo dữ liệu từ adminData.js nếu localStorage chưa có
+      function initializeUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (!storedUserData) {
+          localStorage.setItem("user", JSON.stringify(users));
+        }
+      }
+
+      // Hàm hiển thị dữ liệu lên UI
+      function loadUserData() {
+        const storedUserData = localStorage.getItem("user");
+
+        if (storedUserData) {
+          const user = JSON.parse(storedUserData)[0]; // Lấy người dùng đầu tiên
+
+          if (user) {
+            // Cập nhật tên Admin
+            const adminNameElement = document.querySelector(".admin-name");
+            if (adminNameElement) {
+              adminNameElement.textContent = user.name;
+            }
+
+            // Cập nhật Avatar
+            const avatarElement = document.querySelector("#avatar-img");
+            if (avatarElement) {
+              if (user.avatar.startsWith("/")) {
+                user.avatar = ".." + user.avatar;
+              }
+              avatarElement.src = user.avatar;
+            }
+          }
+        }
+      }
+
+      // Hàm xử lý đăng xuất
+      function logout() {
+        localStorage.clear();
+        window.location.href = "../login/login_admin.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-btn");
+        if (logoutButton) {
+          logoutButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+          });
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeUserData(); // Đảm bảo dữ liệu đã có trong localStorage
+        loadUserData(); // Hiển thị dữ liệu lên UI
+      });
+    </script>
+    <script>
+      // Hàm xử lý xóa danh mục
+      function deleteCategory(categoryId) {
+        if (confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
+          // Tạo form để gửi POST 
+          var form = document.createElement('form');
+          form.method = 'POST';
+          form.action = `/admin/categories/delete/${categoryId}`;
+          form.style.display = 'none';
+          
+          // Thêm form vào body và submit
+          document.body.appendChild(form);
+          form.submit();
+        }
+      }
+
+      // Đăng ký sự kiện click cho các nút xóa
+      document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('btn-delete')) {
+          const categoryId = event.target.getAttribute('data-id');
+          deleteCategory(categoryId);
+        }
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+.btn-create {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-create:hover {
+  background-color: #1976D2;
+  transform: translateY(-1px);
+}
+
+.btn-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.category-header h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 60px;
+  text-align: center;
+  display: inline-block;
+  transition: background-color 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+.alert {
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+</style>

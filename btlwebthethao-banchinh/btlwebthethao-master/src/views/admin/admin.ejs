@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng điều khiển - Admin</title>
+    
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+    <!-- Admin CSS -->
+    <link rel="stylesheet" href="/css/admin.css" />    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <!-- Left Sidebar -->
+        <div class="left-admin">
+          <div class="sidebar">
+            <div class="menu-item active">
+              <a href="/admin/home">
+                <i class="fas fa-th-large"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/news">
+                <i class="far fa-newspaper"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="right-admin">
+          <!-- Header -->
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name">Xin chào, <%= user.fullName %></span>
+            </div>
+          </div>
+
+          <!-- Stats Container -->
+          <div class="stats-container">
+            <div class="stat-box">
+              <h3><%= stats.total %></h3>
+              <p>Tổng số tin tức</p>
+            </div>
+            
+            <div class="stat-box">
+              <h3><%= stats.active %></h3>
+              <p>Tin tức đang hoạt động</p>
+            </div>
+            <div class="stat-box">
+              <h3><%= stats.inactive %></h3>
+              <p>Tin tức dừng hoạt động</p>
+            </div>
+          </div>
+
+          <!-- News Container -->
+          <div class="news-container">
+            <h2>TIN TỨC MỚI NHẤT</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tiêu đề</th>
+                  <th>Tác giả</th>
+                  <th>Trạng thái</th>
+                  <th>Ngày tạo</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (recentNews && recentNews.length > 0) { %>
+                  <% recentNews.forEach(function(news) { %>
+                    <tr>
+                      <td><%= news.title %></td>
+                      <td><%= news.authorName %></td>
+                      <td>
+                        <span class="status-badge <%= news.status %>">
+                          <%= news.status === 'Đang hoạt động' ? 'Hoạt động' : 
+                             news.status === 'pending' ? 'Chờ duyệt' : 'Dừng hoạt động' %>
+                        </span>
+                      </td>
+                      <td><%= new Date(news.created_at).toLocaleDateString('vi-VN') %></td>
+                      <td>
+                        <a href="/admin/news/edit/<%= news.id %>" class="action-btn edit">Sửa</a>
+                        <button onclick="toggleStatus('<%- news.id %>')" class="action-btn toggle">
+                          <%= news.status === 'Đang hoạt động' ? 'Dừng' : 'Kích hoạt' %>
+                        </button>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="5" class="no-data">Không có tin tức nào</td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Xử lý đăng xuất
+      document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+          window.location.href = this.href;
+        }
+      });
+
+      // Xử lý toggle status
+      function toggleStatus(newsId) {
+        fetch(`/admin/news/toggle-status/${newsId}`, {
+          method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            window.location.reload();
+          } else {
+            alert('Có lỗi xảy ra khi thay đổi trạng thái tin tức');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Có lỗi xảy ra khi kết nối với máy chủ');
+        });
+      }
+    </script>
+  </body>
+</html>

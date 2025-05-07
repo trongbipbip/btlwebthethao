@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý tin tức</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/news-management.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"><%= user.fullName %></span>
+            </div>
+          </div>
+
+          <!-- Bảng tin tức -->
+          <div class="news-container">
+            <div class="news-title">
+              <div class="news-header">
+                <h3>QUẢN LÝ TIN TỨC</h3>
+                <div class="button-group">
+                  <a href="/admin/news/create" class="btn-create">Tạo tin tức mới</a>
+                </div>
+              </div>
+
+              <!-- Phần tìm kiếm và select -->
+              <div class="search-section">
+                <select id="category-filter" class="input-field">
+                  <option value="">Tất cả danh mục</option>
+                  <% categories.forEach(function(category) { %>
+                    <option value="<%= category.id %>" <%= selectedCategory == category.id ? 'selected' : '' %>>
+                      <%= category.name %>
+                    </option>
+                  <% }); %>
+                </select>
+                <input
+                  type="text"
+                  id="search-input"
+                  class="input-field"
+                  placeholder="Tìm kiếm tin tức"
+                  value="<%= searchTerm %>"
+                />
+                <button id="search-button" class="btn-search">Tìm kiếm</button>
+              </div>
+            </div>
+
+            <% if (error) { %>
+              <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Tiêu đề</th>
+                  <th>Ảnh</th>
+                  <th>Mô tả</th>
+                  <th>Danh mục</th>
+                  <th>Ngày</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (news && news.length > 0) { %>
+                  <% news.forEach(function(item) { %>
+                    <tr>
+                      <td><%= item.title %></td>
+                      <td><img src="<%= item.image %>" alt="<%= item.title %>" class="news-image"></td>
+                      <td><%= item.description %></td>
+                      <td><%= item.categoryName %></td>
+                      <td><%= new Date(item.date).toLocaleDateString('vi-VN') %></td>
+                      <td>
+                        <button 
+                          class="status-btn <%= item.status === 'Đang hoạt động' ? 'active' : 'inactive' %>"
+                          data-id="<%= item.id %>"
+                          data-action="toggle-status">
+                          <%= item.status %>
+                        </button>
+                      </td>
+                      <td class="actions">
+                        <a href="/admin/news/edit/<%= item.id %>" class="btn-edit" title="Sửa">
+                          <img src="/img/edit.svg" alt="Sửa">
+                        </a>
+                        <button data-id="<%= item.id %>" data-action="delete" class="btn-delete" title="Xóa">
+                          <img src="/img/delete.svg" alt="Xóa">
+                        </button>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="7" class="no-data">Không có tin tức nào</td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+
+            <div class="pagination">
+              <% if (currentPage > 1) { %>
+                <a href="?page=<%= currentPage - 1 %>&category=<%= selectedCategory %>&search=<%= searchTerm %>" class="btn-page">Trước</a>
+              <% } %>
+              
+              <span class="page-info">Trang <%= currentPage %> / <%= totalPages %></span>
+              
+              <% if (currentPage < totalPages) { %>
+                <a href="?page=<%= currentPage + 1 %>&category=<%= selectedCategory %>&search=<%= searchTerm %>" class="btn-page">Sau</a>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Xử lý đăng xuất
+      document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+          window.location.href = this.href;
+        }
+      });
+
+      // Update event handlers
+      document.addEventListener('click', function(e) {
+        if (e.target.matches('[data-action="toggle-status"]')) {
+          toggleStatus(e.target.dataset.id);
+        } else if (e.target.matches('[data-action="delete"]')) {
+          deleteNews(e.target.dataset.id);
+        }
+      });
+
+      // Xử lý thay đổi trạng thái
+      function toggleStatus(id) {
+        fetch(`/admin/news/toggle-status/${id}`, {
+          method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            window.location.reload();
+          } else {
+            alert('Có lỗi xảy ra khi thay đổi trạng thái');
+          }
+        });
+      }
+
+    
+      function deleteNews(id) {
+        if (confirm('Bạn có chắc chắn muốn xóa tin tức này?')) {
+          fetch(`/admin/news/delete/${id}`, {
+            method: 'DELETE'
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              window.location.reload();
+            } else {
+              alert('Có lỗi xảy ra khi xóa tin tức');
+            }
+          });
+        }
+      }
+
+      // Xử lý tìm kiếm và lọc
+      const searchInput = document.getElementById('search-input');
+      const categoryFilter = document.getElementById('category-filter');
+      const searchButton = document.getElementById('search-button');
+
+      function applyFilters() {
+        const searchTerm = searchInput.value;
+        const categoryId = categoryFilter.value;
+        window.location.href = `/admin/news?search=${searchTerm}&category=${categoryId}`;
+      }
+
+      searchInput.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+          applyFilters();
+        }
+      });
+
+      searchButton.addEventListener('click', applyFilters);
+
+      categoryFilter.addEventListener('change', applyFilters);
+    </script>
+  </body>
+</html>

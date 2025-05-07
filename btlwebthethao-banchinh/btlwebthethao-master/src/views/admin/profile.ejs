@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hồ sơ cá nhân</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/profile.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <style>
+      .profile-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .profile-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+      
+      .avatar {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-bottom: 20px;
+        background-color: #f0f0f0;
+        border: 3px solid #3498db;
+      }
+      
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .avatar-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        height: 0;
+        transition: .5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .avatar:hover .avatar-overlay {
+        height: 40px;
+      }
+      
+      .select-image {
+        display: inline-block;
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 12px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      
+      .file-input {
+        display: none;
+      }
+      
+      .user-info {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      
+      .user-info h3 {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+        color: #333;
+      }
+      
+      .user-info p {
+        color: #666;
+        margin-bottom: 5px;
+      }
+      
+      .change-password {
+        padding: 20px;
+        border-top: 1px solid #eee;
+      }
+      
+      .change-password h2 {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+      }
+      
+      .form-group {
+        margin-bottom: 15px;
+      }
+      
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+      }
+      
+      .password-wrapper {
+        position: relative;
+      }
+      
+      .password-wrapper input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding-right: 40px;
+      }
+      
+      .password-wrapper span {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+      }
+      
+      .password-wrapper img {
+        width: 20px;
+        height: 20px;
+      }
+      
+      .change-password-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+      }
+      
+      .change-password-btn:hover {
+        background-color: #2980b9;
+      }
+      
+      .error-message {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border-left: 4px solid #c62828;
+      }
+      
+      .success-message {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border-left: 4px solid #2e7d32;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"><%= user ? user.fullName : '' %></span>
+              <div class="admin-avatar">
+                <img id="avatar-img" src="<%= user && user.avatar ? user.avatar : '/img/default-avatar.png' %>" alt="Avatar" />
+              </div>
+            </div>
+          </div>
+          
+          <!-- profile -->
+          <div class="profile-container">
+            <% if (error) { %>
+              <div class="error-message"><%= error %></div>
+            <% } %>
+            
+            <% if (success) { %>
+              <div class="success-message"><%= success %></div>
+            <% } %>
+            
+            <!-- Phần thông tin cá nhân -->
+            <div class="profile-info">
+              <div class="avatar">
+                <img src="<%= profile && profile.avatar ? profile.avatar : '/img/default-avatar.png' %>" alt="Avatar" id="avatar-preview" />
+                <div class="avatar-overlay">
+                  <label for="file-input" class="select-image">Chọn ảnh</label>
+                </div>
+              </div>
+              
+              <form id="avatar-form" action="/admin/profile/update-avatar" method="POST" enctype="multipart/form-data">
+                <input type="file" id="file-input" name="avatar" class="file-input" accept="image/*" onchange="previewImage()" />
+                <button type="submit" id="upload-avatar-btn" style="display: none;">Cập nhật ảnh đại diện</button>
+              </form>
+              
+              <div class="user-info">
+                <h3><%= profile ? profile.fullName : '' %></h3>
+                <p><%= profile ? profile.username : '' %></p>
+                <p><%= profile ? profile.email : '' %></p>
+              </div>
+            </div>
+
+            <!-- Phần đổi mật khẩu -->
+            <div class="change-password">
+              <h2>ĐỔI MẬT KHẨU</h2>
+              <form id="password-form" action="/admin/profile/change-password" method="POST">
+                <div class="form-group">
+                  <label for="current-password">Mật khẩu cũ</label>
+                  <div class="password-wrapper">
+                    <input
+                      type="password"
+                      id="current-password"
+                      name="currentPassword"
+                      placeholder="Nhập mật khẩu cũ"
+                      required
+                    />
+                    <span
+                      id="toggleCurrentPassword"
+                      onclick="togglePassword('current-password', 'toggleCurrentPassword')"
+                      ><img src="/img/show.svg" alt="Toggle password"
+                    /></span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="new-password">Mật khẩu mới</label>
+                  <div class="password-wrapper">
+                    <input
+                      type="password"
+                      id="new-password"
+                      name="newPassword"
+                      placeholder="Nhập mật khẩu mới"
+                      required
+                    />
+                    <span
+                      id="toggleNewPassword"
+                      onclick="togglePassword('new-password', 'toggleNewPassword')"
+                      ><img src="/img/show.svg" alt="Toggle password"
+                    /></span>
+                  </div>
+                </div>
+                <button type="submit" class="change-password-btn">
+                  ĐỔI MẬT KHẨU
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <script>
+      // Hàm xem trước ảnh đại diện khi chọn file
+      function previewImage() {
+        const fileInput = document.getElementById('file-input');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const uploadButton = document.getElementById('upload-avatar-btn');
+        
+        if (fileInput.files && fileInput.files[0]) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            avatarPreview.src = e.target.result;
+            uploadButton.style.display = 'block';
+          };
+          
+          reader.readAsDataURL(fileInput.files[0]);
+        }
+      }
+      
+      // Hàm toggle password visibility
+      function togglePassword(passwordId, toggleId) {
+        const passwordInput = document.getElementById(passwordId);
+        const toggleIcon = document.querySelector(`#${toggleId} img`);
+        
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          toggleIcon.src = "/img/hide.svg";
+        } else {
+          passwordInput.type = "password";
+          toggleIcon.src = "/img/show.svg";
+        }
+      }
+    </script>
+  </body>
+</html>

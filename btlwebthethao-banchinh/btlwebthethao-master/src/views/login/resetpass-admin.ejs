@@ -1,0 +1,218 @@
+<!DOCTYPE ejs>
+<ejs lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đổi mật khẩu</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="./css/resetpass.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <a href="../index.ejs"
+      ><img src="./img/logo.png" alt="Logo" class="logo"
+    /></a>
+
+    <div class="login-container">
+      <!-- Logo -->
+
+      <!-- Tiêu đề -->
+      <h1 class="login-title">Đặt Lại Mật Khẩu</h1>
+
+      <form id="forgotPasswordForm" onsubmit="resetPassword(event)">
+        <div class="input-group">
+          <label>Mật khẩu cũ</label>
+          <div class="password-wrapper">
+            <input type="password" id="oldPassword" placeholder="Mật khẩu" />
+            <span id="toggleOldPassword" onclick="toggleOldPassword()"
+              ><img src="./img/show.svg" alt=""
+            /></span>
+          </div>
+          <span id="oldPasswordError" class="error-message"></span>
+        </div>
+
+        <div class="input-group">
+          <label>Mật khẩu mới</label>
+          <div class="password-wrapper">
+            <input type="password" id="newPassword" placeholder="Mật khẩu" />
+            <span id="toggleNewPassword" onclick="toggleNewPassword()"
+              ><img src="./img/show.svg" alt=""
+            /></span>
+          </div>
+          <span id="newPasswordError" class="error-message"></span>
+        </div>
+
+        <div class="input-group">
+          <label>Xác nhận mật khẩu </label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Xác nhận mật khẩu"
+            />
+            <span id="toggleConfirmPassword" onclick="toggleConfirmPassword()">
+              <img src="./img/show.svg" alt="Hiển thị mật khẩu" />
+            </span>
+          </div>
+          <span id="confirmPasswordError" class="error-message"></span>
+        </div>
+
+        <div class="link-container">
+          <div class="return-login">
+            <a href="./login_admin.ejs">Quay lại Đăng Nhập?</a>
+          </div>
+
+          <button type="submit" class="btn-login">Đặt lại</button>
+        </div>
+      </form>
+    </div>
+
+    <script type="module">
+      import { userAdmin } from "../data/adminData.js";
+
+      function showNotification(message, type = "error") {
+        let notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+        notification.innerText = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        let form = document.getElementById("resetPasswordForm");
+        if (form) {
+          form.addEventListener("submit", resetPassword);
+        }
+      });
+
+      function getQueryParam(param) {
+        let urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
+
+      function resetPassword(event) {
+        event.preventDefault();
+
+        let email = getQueryParam("email");
+        if (!email) {
+          alert("Không tìm thấy email hợp lệ!");
+          return;
+        }
+
+        let oldPassword =
+          document.getElementById("oldPassword")?.value.trim() || "";
+        let newPassword =
+          document.getElementById("newPassword")?.value.trim() || "";
+        let confirmPassword =
+          document.getElementById("confirmPassword")?.value.trim() || "";
+
+        let oldPasswordError = document.getElementById("oldPasswordError");
+        let newPasswordError = document.getElementById("newPasswordError");
+        let confirmPasswordError = document.getElementById(
+          "confirmPasswordError"
+        );
+
+        oldPasswordError.innerText =
+          newPasswordError.innerText =
+          confirmPasswordError.innerText =
+            "";
+
+        if (!Array.isArray(users)) {
+          console.error("Dữ liệu users không hợp lệ.");
+          return;
+        }
+
+        let user = users.find((user) => user.email === email);
+
+        if (user.password !== oldPassword) {
+          oldPasswordError.innerText = "Mật khẩu cũ không chính xác!";
+          return;
+        }
+
+        if (newPassword.length < 6) {
+          newPasswordError.innerText = "Mật khẩu mới phải có ít nhất 6 ký tự!";
+          return;
+        }
+
+        if (newPassword !== confirmPassword) {
+          confirmPasswordError.innerText = "Mật khẩu xác nhận không khớp!";
+          return;
+        }
+
+        user.password = newPassword;
+        alert("Đặt lại mật khẩu thành công!");
+        window.location.href = "./login_admin.ejs";
+      }
+      window.resetPassword = resetPassword;
+
+      function toggleOldPassword() {
+        let passwordInput = document.getElementById("oldPassword");
+        let toggleIcon = passwordInput
+          .closest(".password-wrapper")
+          .querySelector("img");
+        passwordInput.type =
+          passwordInput.type === "password" ? "text" : "password";
+        toggleIcon.src =
+          passwordInput.type === "password"
+            ? "./img/show.svg"
+            : "./img/hide.svg";
+      }
+      window.toggleOldPassword = toggleOldPassword;
+
+      function toggleNewPassword() {
+        let passwordInput = document.getElementById("newPassword");
+        let toggleIcon = passwordInput
+          .closest(".password-wrapper")
+          .querySelector("img");
+        passwordInput.type =
+          passwordInput.type === "password" ? "text" : "password";
+        toggleIcon.src =
+          passwordInput.type === "password"
+            ? "./img/show.svg"
+            : "./img/hide.svg";
+      }
+      window.toggleNewPassword = toggleNewPassword;
+
+      function toggleConfirmPassword() {
+        let passwordInput = document.getElementById("confirmPassword");
+        let toggleIcon = passwordInput
+          .closest(".password-wrapper")
+          .querySelector("img");
+        passwordInput.type =
+          passwordInput.type === "password" ? "text" : "password";
+        toggleIcon.src =
+          passwordInput.type === "password"
+            ? "./img/show.svg"
+            : "./img/hide.svg";
+      }
+      window.toggleConfirmPassword = toggleConfirmPassword;
+    </script>
+  </body>
+</ejs>

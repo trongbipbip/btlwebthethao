@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý góp ý</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/suggestion.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="" /></div>
+            </div>
+          </div>
+
+          <div class="suggestion-container">
+            <h1>BỘ LỌC HÒM THƯ GÓP Ý</h1>
+            <div class="filter">
+              <label for="title">Tiêu đề:</label>
+              <input type="text" id="title" placeholder="Nhập tiêu đề..." />
+
+              <label for="from-date">Từ ngày:</label>
+              <input type="date" id="from-date" />
+
+              <label for="to-date">Đến ngày:</label>
+              <input type="date" id="to-date" />
+
+              <button onclick="filter()">Lọc</button>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Tiêu đề</th>
+                  <th>Chi tiết</th>
+                  <th>Họ tên người góp ý</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="suggestion-list">
+                <!-- Các gợi ý sẽ hiển thị ở đây -->
+              </tbody>
+            </table>
+            <div class="pagination">
+              <button id="prev-page" onclick="changePage(-1)">
+                Trang trước
+              </button>
+              <span id="page-number">1</span>
+              <button id="next-page" onclick="changePage(1)">Trang sau</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup xem chi tiết góp ý -->
+
+    <div id="popup-overlay" class="overlay">
+      <div class="popup">
+        <h3>GÓP Ý TIN TỨC</h3>
+        <label><strong id="popup-title"></strong></label>
+        <p id="popup-detail"></p>
+        <div class="popup-buttons">
+          <button onclick="closePopup()" class="cancel">ĐÓNG</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentPage = 1;
+      let itemsPerPage = 10;
+      let totalPages = 1;
+      
+      // Fetch suggestions data
+      function fetchSuggestions() {
+        const title = document.getElementById("title").value;
+        const fromDate = document.getElementById("from-date").value;
+        const toDate = document.getElementById("to-date").value;
+        
+        const url = `/admin/api/suggestions?page=${currentPage}&title=${encodeURIComponent(title)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`;
+        
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              displaySuggestions(data.suggestions);
+              updatePagination(data.pagination);
+            } else {
+              alert(data.message || "Có lỗi khi tải dữ liệu góp ý");
+            }
+          })
+          .catch(error => {
+            console.error("Error fetching suggestions:", error);
+            alert("Có lỗi khi tải dữ liệu góp ý");
+          });
+      }
+      
+      // Display suggestions
+      function displaySuggestions(suggestions) {
+        const suggestionList = document.getElementById("suggestion-list");
+        suggestionList.innerHTML = "";
+        
+        if (suggestions.length === 0) {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td colspan="4" class="text-center">Không có góp ý nào</td>`;
+          suggestionList.appendChild(row);
+          return;
+        }
+        
+        suggestions.forEach(suggestion => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${suggestion.title}</td>
+            <td>${suggestion.detail.length > 100 ? suggestion.detail.substring(0, 100) + '...' : suggestion.detail}</td>
+            <td>${suggestion.name}</td>
+            <td class="actions">
+              <button class="view-btn" onclick="viewDetail('${suggestion.title}', '${suggestion.detail.replace(/'/g, "\\'")}')" title="Xem chi tiết">
+                <img src="/assets/img/view.svg" alt="Xem">
+              </button>
+              ${suggestion.status === 'Chưa xử lý' ? 
+                `<button class="process-btn" onclick="processItem(${suggestion.id})" title="Đánh dấu đã xử lý">
+                  <i class="fas fa-check"></i> Đánh dấu đã xử lý
+                </button>` : 
+                `<span class="status-processed">Đã xử lý</span>`
+              }
+            </td>
+          `;
+          suggestionList.appendChild(row);
+        });
+      }
+      
+      // Update pagination
+      function updatePagination(pagination) {
+        totalPages = pagination.totalPages;
+        document.getElementById("page-number").textContent = `${currentPage} / ${totalPages || 1}`;
+        document.getElementById("prev-page").disabled = currentPage === 1;
+        document.getElementById("next-page").disabled = currentPage === totalPages || totalPages === 0;
+      }
+      
+      // Change page
+      function changePage(direction) {
+        const newPage = currentPage + direction;
+        if (newPage < 1 || (totalPages > 0 && newPage > totalPages)) return;
+        
+        currentPage = newPage;
+        fetchSuggestions();
+      }
+      
+      // Filter suggestions
+      function filter() {
+        currentPage = 1;
+        fetchSuggestions();
+      }
+      
+      // View detail
+      function viewDetail(title, detail) {
+        document.getElementById("popup-title").textContent = title;
+        document.getElementById("popup-detail").textContent = detail;
+        document.getElementById("popup-overlay").style.display = "flex";
+      }
+      
+      // Process suggestion
+      function processItem(id) {
+        if (!confirm("Bạn có chắc chắn muốn đánh dấu góp ý này là đã xử lý?")) return;
+        
+        fetch(`/admin/suggestion/update-status/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'Đã xử lý' })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(data.message || "Cập nhật trạng thái thành công");
+            fetchSuggestions();
+          } else {
+            alert(data.message || "Có lỗi khi cập nhật trạng thái");
+          }
+        })
+        .catch(error => {
+          console.error("Error updating status:", error);
+          alert("Có lỗi khi cập nhật trạng thái");
+        });
+      }
+      
+      // Close popup
+      function closePopup() {
+        document.getElementById("popup-overlay").style.display = "none";
+      }
+      
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchSuggestions();
+        
+        // Event listeners
+        document.getElementById("from-date").addEventListener("change", function() {
+          const toDate = document.getElementById("to-date");
+          if (this.value && !toDate.value) {
+            toDate.value = new Date().toISOString().split('T')[0];
+          }
+        });
+        
+        document.getElementById("to-date").addEventListener("change", function() {
+          const fromDate = document.getElementById("from-date");
+          if (this.value && !fromDate.value) {
+            const date = new Date();
+            date.setMonth(date.getMonth() - 1);
+            fromDate.value = date.toISOString().split('T')[0];
+          }
+        });
+      });
+    </script>
+
+    <style>
+      /* Additional styles for suggestion management */
+      .actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+      
+      .view-btn, .process-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+      }
+      
+      .view-btn img {
+        width: 20px;
+        height: 20px;
+      }
+      
+      .process-btn {
+        background-color: #28a745;
+        color: white;
+        border-radius: 4px;
+        padding: 5px 10px;
+        transition: background-color 0.3s;
+      }
+      
+      .process-btn:hover {
+        background-color: #218838;
+      }
+      
+      .status-processed {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 5px 10px;
+        border-radius: 4px;
+        display: inline-block;
+      }
+      
+      .filter {
+        display: grid;
+        grid-template-columns: auto 1fr auto 1fr auto 1fr auto;
+        grid-gap: 10px;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+      }
+      
+      .filter input, .filter button {
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+      }
+      
+      .filter button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 8px 20px;
+        transition: background-color 0.3s;
+      }
+      
+      .filter button:hover {
+        background-color: #0069d9;
+      }
+      
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      
+      table th, table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #e9ecef;
+      }
+      
+      table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+      }
+      
+      table tr:hover {
+        background-color: #f8f9fa;
+      }
+      
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      
+      .pagination button {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      
+      .pagination button:hover:not(:disabled) {
+        background-color: #0069d9;
+      }
+      
+      .pagination button:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+      }
+      
+      #popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .popup {
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        width: 80%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      
+      .popup h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e9ecef;
+      }
+      
+      .popup p {
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+      
+      .popup-buttons {
+        display: flex;
+        justify-content: flex-end;
+      }
+      
+      .popup-buttons button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .popup-buttons .cancel {
+        background-color: #6c757d;
+        color: white;
+      }
+    </style>
+  </body>
+</html>

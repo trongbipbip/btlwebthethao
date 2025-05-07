@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chỉnh sửa tin tức</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/edit-news.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"><%= user.fullName %></span>
+            </div>
+          </div>
+
+          <!-- Form chỉnh sửa tin tức -->
+          <div class="edit-container">
+            <% if (error) { %>
+              <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+            <% if (success) { %>
+              <div class="alert alert-success"><%= success %></div>
+            <% } %>
+
+            <div class="button-group">
+              <a href="/admin/news" class="btn btn-back">Quay lại</a>
+              <button type="submit" form="editNewsForm" class="btn btn-save">Lưu tin tức</button>
+            </div>
+
+            <div class="main-container">
+              <!-- Nội dung chính bên trái -->
+              <div class="edit-content">
+                <h1>Chỉnh sửa tin tức</h1>
+                <form id="editNewsForm" action="/admin/news/edit/<%= news.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <label for="title">Tiêu đề tin tức:</label>
+                    <input type="text" id="title" name="title" value="<%= news.title %>" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="description">Mô tả:</label>
+                    <textarea id="description" name="description" rows="4" required><%= news.description %></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="content">Nội dung:</label>
+                    <textarea id="content" name="content" rows="8" required><%= news.content %></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="image">Hình ảnh:</label>
+                    <input type="file" id="image" name="image" accept="image/*" />
+                    <input type="hidden" name="current_image" value="<%= news.image %>" />
+                    <% if (news.image) { %>
+                      <div class="image-preview">
+                        <img src="<%= news.image %>" alt="Preview" id="previewImage" />
+                      </div>
+                    <% } %>
+                  </div>
+                
+                  <!-- Sidebar bên phải -->
+                  <div class="sidebar-section">
+                    <div class="form-group">
+                      <label for="status">Trạng thái:</label>
+                      <select id="status" name="status" required>
+                        <option value="Đang hoạt động" <%= news.status === 'Đang hoạt động' ? 'selected' : '' %>>
+                          Đang hoạt động
+                        </option>
+                        <option value="Ngừng hoạt động" <%= news.status === 'Ngừng hoạt động' ? 'selected' : '' %>>
+                          Ngừng hoạt động
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="category_id">Danh mục:</label>
+                      <select id="category_id" name="category_id" required>
+                        <% categories.forEach(function(category) { %>
+                          <option value="<%= category.id %>" <%= news.category_id == category.id ? 'selected' : '' %>>
+                            <%= category.name %>
+                          </option>
+                        <% }); %>
+                      </select>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Preview image before upload
+      document.getElementById('image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const previewImage = document.getElementById('previewImage');
+            if (!previewImage) {
+              const preview = document.createElement('div');
+              preview.className = 'image-preview';
+              preview.innerHTML = `<img src="${e.target.result}" alt="Preview" id="previewImage">`;
+              this.parentElement.appendChild(preview);
+            } else {
+              previewImage.src = e.target.result;
+            }
+          }
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Form submission
+      document.getElementById('editNewsForm').addEventListener('submit', function(e) {
+        const title = document.getElementById('title').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const content = document.getElementById('content').value.trim();
+        const category_id = document.getElementById('category_id').value;
+
+        if (!title || !description || !content || !category_id) {
+          e.preventDefault();
+          alert('Vui lòng điền đầy đủ thông tin bắt buộc!');
+          return false;
+        }
+        return true;
+      });
+
+      // Xử lý đăng xuất
+      document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+          window.location.href = this.href;
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tạo giải đấu mới</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/create-tournament.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"><%= user.fullName %></span>
+            </div>
+          </div>
+
+          <!-- Form tạo giải đấu -->
+          <div class="edit-container">
+            <div class="button-group">
+              <a href="/admin/tournaments" class="btn" id="backBtn">
+                <i class="fas fa-arrow-left"></i> Quay lại
+              </a>
+              <button type="submit" form="createTournamentForm" id="saveBtn">
+                <i class="fas fa-save"></i> Lưu giải đấu
+              </button>
+            </div>
+
+            <% if (typeof message !== 'undefined') { %>
+              <div class="alert alert-<%= message.type %>">
+                <%= message.text %>
+              </div>
+            <% } %>
+
+            <div class="main-container">
+              <div class="edit-content">
+                <div class="edit-header">
+                  <h1>Tạo giải đấu mới</h1>
+                  <div class="status-container">
+                    <label>Trạng thái:</label>
+                    <label class="switch">
+                      <input type="checkbox" name="status" checked />
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <form id="createTournamentForm" action="/admin/tournaments/create" method="POST" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <label for="name">Tên giải đấu:</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      placeholder="Tên giải đấu"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="image">Ảnh giải đấu:</label>
+                    <input 
+                      type="file" 
+                      id="image" 
+                      name="image" 
+                      accept="image/*" 
+                      required
+                    />
+                    <img id="previewImage" class="preview-image" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="prize">Giải thưởng:</label>
+                    <input 
+                      type="text" 
+                      id="prize" 
+                      name="prize"
+                      required 
+                      placeholder="Nhập số tiền giải thưởng"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="location">Địa điểm:</label>
+                    <input
+                      type="text"
+                      id="location"
+                      name="location"
+                      required
+                      placeholder="Địa điểm tổ chức"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="surface">Mặt sân:</label>
+                    <select
+                      id="surface"
+                      name="surface"
+                      required
+                      class="form-control"
+                    >
+                      <option value="">Chọn loại mặt sân</option>
+                      <option value="Cứng">Cứng</option>
+                      <option value="Đất sét">Đất sét</option>
+                      <option value="Cỏ">Cỏ</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="startDate">Ngày bắt đầu:</label>
+                    <input
+                      type="date"
+                      id="startDate"
+                      name="startDate"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="endDate">Ngày kết thúc:</label>
+                    <input
+                      type="date"
+                      id="endDate"
+                      name="endDate"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="website">Website chính thức:</label>
+                    <input
+                      type="url"
+                      id="website"
+                      name="website"
+                      placeholder="https://example.com"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="more">Tóm tắt:</label>
+                    <textarea
+                      id="more"
+                      name="more"
+                      rows="4"
+                      required
+                      placeholder="Tóm tắt ngắn gọn về giải đấu"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="content">Nội dung chi tiết:</label>
+                    <textarea
+                      id="content"
+                      name="content"
+                      rows="8"
+                      required
+                      placeholder="Mô tả chi tiết về giải đấu, lịch thi đấu, thể thức thi đấu, v.v..."
+                    ></textarea>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Preview ảnh khi chọn file
+      document.getElementById('image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+          const preview = document.getElementById('previewImage');
+          reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+          }
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Format giải thưởng khi nhập
+      document.getElementById('prize').addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, '');
+        if (value) {
+          this.value = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+          }).format(value);
+        }
+      });
+
+      // Kiểm tra ngày kết thúc phải sau ngày bắt đầu
+      document.getElementById('endDate').addEventListener('change', function() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = this.value;
+        
+        if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+          alert('Ngày kết thúc phải sau ngày bắt đầu');
+          this.value = '';
+        }
+      });
+
+      // Xử lý đăng xuất
+      document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+          window.location.href = this.href;
+        }
+      });
+    </script>
+  </body>
+</html>

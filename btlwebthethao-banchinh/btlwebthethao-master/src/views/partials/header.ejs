@@ -1,0 +1,258 @@
+<header>
+  <div class="logo">
+    <a href="/home"><img src="/assets/img/header-logo.png" alt=""/></a>
+  </div>
+  <div class="header-content">
+    <div class="category">
+      <div class="category-item">
+        <img src="/assets/img/home.svg" alt="" />
+        <h2><a href="/home">TRANG CHỦ</a></h2>
+      </div>
+
+      <div class="category-item news-dropdown">
+        <img src="/assets/img/news.svg" alt="" />
+        <h2><a href="/categorynews">TIN TỨC</a></h2>
+        <ul class="news-dropdown-menu">
+          <% if (typeof categories !== 'undefined' && categories.length > 0) { %>
+            <% categories.forEach(function(category) { %>
+              <li><a href="/categorynews?id=<%= category.id %>"><%= category.name %></a></li>
+            <% }); %>
+          <% } else { %>
+            <li><a href="/categorynews">Tất cả tin tức</a></li>
+          <% } %>
+        </ul>
+      </div>
+      <div class="category-item">
+        <img src="/assets/img/tournament.svg" alt="" />
+        <h2><a href="/categorytournament">GIẢI ĐẤU</a></h2>
+      </div>
+
+      <div class="bar"></div>
+
+      <form class="search-box" action="/search" method="GET">
+        <div class="search-container">
+          <input type="text" id="search-input" name="q" placeholder="Tìm kiếm" required autocomplete="off" />
+          <div id="search-suggestions" class="search-suggestions"></div>
+        </div>
+        <button type="submit">
+          <img src="/assets/img/search.svg" alt="Search" />
+        </button>
+      </form>
+
+      <div class="bar"></div>
+
+      <% if (typeof user !== 'undefined' && user) { %>
+        <!-- Header khi đã đăng nhập -->
+        <div class="avatar-container" onclick="toggleMenu()">
+          <img src="/assets/img/avatar.jpg" alt="Avatar" class="avatar" />
+          <div class="dropdown-menu" id="dropdownMenu">
+            <div class="menu-title"><strong><%= user.username %></strong></div>
+            <div class="menu-item">
+              <a href="/account-detail">👤 Thông tin tài khoản</a>
+            </div>
+            <div class="menu-item"><a href="/saved-news">🔖 Tin bài đã lưu</a></div>
+            <div class="menu-item"><a href="/logout">↩️ Thoát tài khoản</a></div>
+          </div>
+        </div>
+      <% } else { %>
+        <!-- Header khi chưa đăng nhập -->
+        <div class="login-buttons">
+          <button onclick="showPopup()" class="login-btn">Đăng nhập</button>
+          <a href="/signin" class="signup-btn">Đăng ký</a>
+        </div>
+      <% } %>
+    </div>
+    <div class="sub-logo">
+      <img src="/assets/img/emirate.png" alt="" />
+    </div>
+  </div>
+</header>
+
+<!-- Login Popup -->
+<div class="popup-overlay" style="display: none;">
+  <div id="login-popup">
+    <button class="popup-close">&times;</button>
+    <h2>Chọn vai trò đăng nhập</h2>
+    <div class="role-buttons">
+      <a href="/login" class="role-btn">
+        <img src="/assets/img/user-icon.png" alt="User">
+        <span>Người dùng</span>
+      </a>
+      <a href="/admin/login" class="role-btn">
+        <img src="/assets/img/admin-icon.png" alt="Admin">
+        <span>Quản trị viên</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  console.log("Header Debug:", {
+    userDefined: typeof user !== 'undefined',
+    hasUser: typeof user !== 'undefined' && !!user,
+    userValue: typeof user !== 'undefined' ? user : null
+  });
+
+  function toggleMenu() {
+    const menu = document.getElementById("dropdownMenu");
+    if (menu) menu.classList.toggle("active");
+  }
+  
+  // Bắt sự kiện click ngoài menu để đóng menu
+  document.addEventListener("click", function(e) {
+    const menu = document.getElementById("dropdownMenu");
+    const avatarContainer = document.querySelector(".avatar-container");
+    if (menu && avatarContainer && !avatarContainer.contains(e.target)) {
+      menu.classList.remove("active");
+    }
+  });
+  
+  function showPopup() {
+    const overlay = document.querySelector(".popup-overlay");
+    if (overlay) overlay.style.display = "flex";
+  }
+  
+  // Đóng popup khi click vào nút đóng
+  document.querySelector(".popup-close")?.addEventListener("click", function() {
+    const overlay = document.querySelector(".popup-overlay");
+    if (overlay) overlay.style.display = "none";
+  });
+
+  // Xử lý tìm kiếm tự động gợi ý
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const suggestionsContainer = document.getElementById('search-suggestions');
+    let debounceTimer;
+
+    // Thêm CSS inline cho search suggestions
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .search-container {
+        position: relative;
+        width: 100%;
+      }
+      
+      .search-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: auto;
+        background-color: white;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        z-index: 1000;
+        display: none;
+      }
+      
+      .search-suggestions.show {
+        display: block;
+      }
+      
+      .suggestion-item {
+        padding: 10px 15px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
+      
+      .suggestion-item:hover {
+        background-color: #f5f5f5;
+      }
+      
+      .suggestion-item img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-right: 10px;
+        border-radius: 4px;
+      }
+      
+      .suggestion-item-content {
+        flex: 1;
+      }
+      
+      .suggestion-item-content h4 {
+        margin: 0 0 5px 0;
+        font-size: 14px;
+        color: #333;
+      }
+      
+      .suggestion-item-content p {
+        margin: 0;
+        font-size: 12px;
+        color: #666;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Hàm xử lý tìm kiếm
+    searchInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      
+      clearTimeout(debounceTimer);
+      
+      if (query.length < 2) {
+        suggestionsContainer.classList.remove('show');
+        suggestionsContainer.innerHTML = '';
+        return;
+      }
+      
+      debounceTimer = setTimeout(function() {
+        fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}`)
+          .then(response => response.json())
+          .then(data => {
+            suggestionsContainer.innerHTML = '';
+            
+            if (data.suggestions && data.suggestions.length > 0) {
+              suggestionsContainer.classList.add('show');
+              
+              data.suggestions.forEach(item => {
+                const suggestionItem = document.createElement('div');
+                suggestionItem.className = 'suggestion-item';
+                suggestionItem.innerHTML = `
+                  <img src="${item.image || '/assets/img/default-news.jpg'}" alt="${item.title}" />
+                  <div class="suggestion-item-content">
+                    <h4>${item.title}</h4>
+                    <p>${item.description || ''}</p>
+                  </div>
+                `;
+                
+                suggestionItem.addEventListener('click', function() {
+                  window.location.href = `/news-detail?id=${item.id}`;
+                });
+                
+                suggestionsContainer.appendChild(suggestionItem);
+              });
+            } else {
+              suggestionsContainer.classList.remove('show');
+            }
+          })
+          .catch(error => {
+            console.error('Lỗi tìm kiếm:', error);
+            suggestionsContainer.classList.remove('show');
+          });
+      }, 300); // Đợi 300ms sau khi người dùng ngừng gõ
+    });
+    
+    // Đóng suggestions khi click bên ngoài
+    document.addEventListener('click', function(e) {
+      if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+        suggestionsContainer.classList.remove('show');
+      }
+    });
+    
+    // Đóng suggestions khi nhấn Escape
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        suggestionsContainer.classList.remove('show');
+      }
+    });
+  });
+</script> 

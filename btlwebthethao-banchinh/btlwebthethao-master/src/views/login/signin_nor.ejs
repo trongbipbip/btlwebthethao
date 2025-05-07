@@ -1,0 +1,183 @@
+<!DOCTYPE ejs>
+<ejs lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng ký</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/signin.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <a href="/" "
+      ><img src="/img/logo.png" alt="Logo" class="logo"
+    /></a>
+
+    <div class="register-container">
+      <!-- Logo -->
+
+      <!-- Tiêu đề -->
+      <h1 class="register-title">ĐĂNG KÝ</h1>
+
+      <% if (error) { %>
+        <div class="error-message" style="color: red; margin-bottom: 10px;">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <!-- Form đăng ký -->
+      <form method="POST" action="/signin">
+        <div class="input-group">
+          <label>Họ và tên </label>
+          <input type="text" name="fullName" id="fullName" placeholder="Họ và tên" required />
+          <span id="fullNameError" class="error-message"></span>
+        </div>
+
+        <div class="input-group">
+          <label>Tên đăng nhập </label>
+          <input type="text" name="username" id="username" placeholder="Tên đăng nhập" required />
+          <span id="usernameError" class="error-message"></span>
+        </div>
+
+        <div class="input-group">
+          <label>Email </label>
+          <input type="email" name="email" id="email" placeholder="Email" required />
+          <span id="emailError" class="error-message"></span>
+        </div>
+
+        <div class="input-group">
+          <label>Mật khẩu </label>
+          <div class="password-wrapper">
+            <input type="password" name="password" id="password" placeholder="Mật khẩu" required />
+            <span id="togglePassword" onclick="togglePassword()">
+              <img src="/img/show.svg" alt="" />
+            </span>
+          </div>
+          <span id="passwordError" class="error-message"></span>
+        </div>
+
+        <div class="input-group">
+          <label>Xác nhận mật khẩu </label>
+          <div class="password-wrapper">
+            <input type="password" id="confirmPassword" placeholder="Xác nhận mật khẩu" required />
+            <span id="toggleConfirmPassword" onclick="toggleConfirmPassword()">
+              <img src="/img/show.svg" alt="" />
+            </span>
+          </div>
+          <span id="confirmPasswordError" class="error-message"></span>
+        </div>
+
+        <button type="submit" class="btn-register">Đăng ký</button>
+      </form>
+
+      <!-- Đăng ký -->
+      <div class="login-link">
+        Đã có tài khoản? <a href="/login">Đăng nhập</a>
+      </div>
+    </div>
+
+    <script>
+      document.querySelector('form').addEventListener('submit', function(e) {
+        let password = document.getElementById('password').value;
+        let confirmPassword = document.getElementById('confirmPassword').value;
+        let fullName = document.getElementById('fullName').value.trim();
+        let email = document.getElementById('email').value.trim();
+        let username = document.getElementById('username').value.trim();
+        
+        // Reset error messages
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        
+        let hasError = false;
+
+        // Validate full name
+        if (fullName.length < 2) {
+          document.getElementById('fullNameError').textContent = 'Họ tên phải có ít nhất 2 ký tự';
+          hasError = true;
+        }
+
+        // Validate username
+        if (username.length < 3) {
+          document.getElementById('usernameError').textContent = 'Tên đăng nhập phải có ít nhất 3 ký tự';
+          hasError = true;
+        }
+
+        // Validate email format
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+          document.getElementById('emailError').textContent = 'Email không hợp lệ';
+          hasError = true;
+        }
+
+        // Validate password
+        if (password.length < 6) {
+          document.getElementById('passwordError').textContent = 'Mật khẩu phải có ít nhất 6 ký tự';
+          hasError = true;
+        }
+
+        // Validate password confirmation
+        if (password !== confirmPassword) {
+          document.getElementById('confirmPasswordError').textContent = 'Mật khẩu xác nhận không khớp';
+          hasError = true;
+        }
+
+        if (hasError) {
+          e.preventDefault();
+        }
+      });
+
+      function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.querySelector('#togglePassword img');
+        
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          toggleIcon.src = '/img/hide.svg';
+        } else {
+          passwordInput.type = 'password';
+          toggleIcon.src = '/img/show.svg';
+        }
+      }
+
+      function toggleConfirmPassword() {
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const toggleIcon = document.querySelector('#toggleConfirmPassword img');
+        
+        if (confirmPasswordInput.type === 'password') {
+          confirmPasswordInput.type = 'text';
+          toggleIcon.src = '/img/hide.svg';
+        } else {
+          confirmPasswordInput.type = 'password';
+          toggleIcon.src = '/img/show.svg';
+        }
+      }
+    </script>
+  </body>
+</ejs>

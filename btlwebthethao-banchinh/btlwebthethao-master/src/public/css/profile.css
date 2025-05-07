@@ -1,0 +1,360 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --font-hero__heading: Inter, sans-serif;
+  --sidebar-width: 260px;
+  --header-height: 70px;
+  --primary: #2c3e50;       /* Xanh tím than nhẹ */
+  --primary-dark: #1b2735;
+  --bg-light: #f1f3f5;
+  --text: #2e3a46;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: "Inter", sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/*================= Common =================*/
+.main-content {
+  width: 100%;
+  display: flex;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #60b004;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 17px;
+  gap: 12px;
+  min-width: 166px;
+  border-radius: 999px;
+  border: 1px solid #c31414;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2.7rem;
+  text-align: center;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.break-all {
+  word-break: break-all;
+}
+/*================= admin =================*/
+.admin {
+  min-height: 100vh;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.right-admin {
+  flex: 1;
+  max-width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
+  padding: 20px;
+  background-color: var(--bg-light);
+}
+
+/*================= sidebar =================*/
+.left-admin {
+  width: var(--sidebar-width);
+  background: white;
+  padding: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  border-radius: 0;
+  margin: 0;
+  align-self: stretch;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  border-right: 1px solid #e0e0e0;
+}
+
+/* Ẩn logo */
+.logo {
+  display: none;
+}
+
+.sidebar {
+  width: 100%;
+  height: 100%;
+  padding: 20px 0;
+  background: white;
+  overflow-y: auto;
+}
+
+.menu-item {
+  margin-bottom: 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.menu-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 15px;
+  line-height: 19.36px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+/* Chỉ animation nhẹ khi hover - phóng to icon */
+.menu-item a:hover .icon {
+  transform: scale(1.15);
+}
+
+.menu-item.active a {
+  background-color: var(--primary);
+  color: white;
+  border-left-color: var(--primary-dark);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.icon {
+  width: 20px;
+  text-align: center;
+  color: var(--text);
+  transition: transform 0.2s ease;
+}
+
+.menu-item.active a .icon {
+  color: white;
+}
+
+/*================= header =================*/
+.header {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.admin-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-avatar img {
+  width: 60px;
+  height: 60px;
+  background: #ddd;
+  border-radius: 50%;
+}
+
+/*================= profile-container =================*/
+.profile-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info {
+  border-right: 2px solid #ddd;
+  padding-right: 40px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.avatar {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ddd;
+}
+
+.select-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.file-input {
+  display: none;
+}
+
+.personal-details {
+  gap: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.personal-details strong {
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+
+.personal-details p {
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+  margin: 5px 0;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.change-password {
+  flex: 1;
+  padding-left: 40px;
+}
+
+.change-password h2 {
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+  margin-bottom: 20px;
+}
+
+#toggleCurrentPassword {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#toggleCurrentPassword img {
+  width: 20px;
+}
+
+#toggleNewPassword {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#toggleNewPassword img {
+  width: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+}
+
+.change-password-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 19.36px;
+  letter-spacing: 0%;
+  cursor: pointer;
+}
+
+.change-password-btn:hover {
+  background-color: #45a049;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-admin {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+  
+  .right-admin {
+    margin-left: 0;
+    padding: 15px;
+  }
+  
+  .profile-container {
+    padding: 15px;
+  }
+}

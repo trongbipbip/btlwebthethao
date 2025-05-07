@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tin tức</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/assets/css/news.css" />
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    <!-- Popup -->
+    <div id="login-popup"></div>
+    <main>
+      <div class="slider"></div>
+      <div class="news-category">
+        <div class="main-content">
+          <h1 class="news-category__title" id="category-title">
+            <% if (typeof category !== 'undefined' && category) { %>
+              <%= category.name %>
+            <% } else { %>
+            TIN TỨC MỚI NHẤT
+            <% } %>
+          </h1>
+          <div class="category-content">
+            <div class="category-block">
+              <div class="news-container" id="news-list">
+                <% if (typeof articles !== 'undefined' && articles.length > 0) { %>
+                  <% articles.forEach(function(article) { %>
+                    <div class="news-item" data-id="<%= article.id %>">
+                      <a href="/news-detail?id=<%= article.id %>">
+                        <img src="<%= article.image %>" alt="<%= article.title %>" class="news-img">
+                      </a>
+                      <div class="news-content">
+                        <div class="news-detail">
+                          <div class="news-title">
+                            <a href="/news-detail?id=<%= article.id %>"><%= article.title %></a>
+                          </div>
+                          <div class="news-description"><%= article.description %></div>
+                        </div>
+                        <div class="saved-btn" data-id="<%= article.id %>">
+                          Lưu bài
+                        </div>
+                      </div>
+                    </div>
+                  <% }); %>
+                <% } else { %>
+                  <p>Không có tin tức nào cho danh mục này.</p>
+                <% } %>
+              </div>
+              <!-- Phân trang -->
+              <div class="pagination">
+                <button id="prevBtn" onclick="changePage(-1)" disabled>
+                  « Trước
+                </button>
+                <span id="page-info">Trang 1</span>
+                <button id="nextBtn" onclick="changePage(1)">Tiếp »</button>
+              </div>
+            </div>
+            <div class="ads-content">
+              <div class="ads-bg">
+                <img src="/assets/img/ads-doc.png" alt="" class="ads" />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <% if (typeof category === 'undefined' || !category) { %>
+        <!-- category news sections - only show when viewing all categories -->
+        <div id="news-section-container">
+          <div class="main-content">
+            <% if (typeof categories !== 'undefined' && categories.length > 0) { %>
+              <% categories.forEach(function(cat) { %>
+                <div id="section-<%= cat.id %>" class="news-section">
+                  <h2 class="section-title"><%= cat.name %></h2>
+                  <div class="subnews-list">
+                    <!-- Sẽ được điền bằng JavaScript -->
+            </div>
+            </div>
+              <% }); %>
+            <% } %>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- ads -->
+      <div class="ads-hori">
+        <a href=""
+          ><img
+            src="/assets/img/ads-horizontal.png"
+            alt=""
+            class="ads-hori__img"
+        /></a>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="main-content">
+        <div class="left-footer">
+          <img src="/assets/img/footer-logo.png" alt="" class="logo" />
+          <div class="media">
+            <a href=""><img src="/assets/img/facebook.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/youtube.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/email.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/twitter.svg" alt="" /></a>
+            <a href=""><img src="/assets/img/linkedin.svg" alt="" /></a>
+          </div>
+          <div class="hotline">
+            <div class="hotline-number">
+              <img src="/assets/img/phone.svg" alt="" />
+              <div class="hotline-content">
+                <p>Đường dây nóng :</p>
+                <p>+84 38 290 51 69</p>
+              </div>
+            </div>
+            <div class="hotline-email">
+              <img src="/assets/img/email-hotline.png" alt="" />
+              <div class="hotline-content">
+                <p>Email :</p>
+                <p>nguyenskt2004@gmail.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right-footer">
+          <div class="newsletter">
+            <h3 class="newsletter-title">Đăng ký nhận bản tin TENNIS TOUR</h3>
+            <p class="newsletter-comment">
+              Nhận thông tin tiếp thị chính thức từ TENNIS TOUR! Chúng tôi sẽ
+              gửi cho bạn các bản tin để thông báo cho bạn về tin tức, giải đấu,
+              cuộc thi, bán vé, ưu đãi của đối tác và hơn thế nữa.
+            </p>
+            <div class="subscribe-container">
+              <div class="subscribe-container__input">
+                <label for="email">Địa chỉ email</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Nhập email của bạn"
+                />
+              </div>
+              <button>SUBCRIBE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>ALL RIGHTS RESERVED.© 2025</p>
+      </div>
+    </footer>
+    <script src="/assets/js/headerLogined.js"></script>
+    <script src="/assets/js/headerNotLogin.js"></script>
+    <script src="/assets/js/header.js"></script>
+    
+    <style>
+      /* Add styling for the save button */
+      .saved-btn {
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+      
+      .saved-btn:hover {
+        background-color: #e9ecef;
+      }
+      
+      .saved-btn.saved {
+        background-color: #4CAF50;
+        color: white;
+        border-color: #45a049;
+      }
+      
+      .saved-btn.saved:hover {
+        background-color: #45a049;
+      }
+      
+      .saved-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    </style>
+
+    <script>
+      // Set global variables from server-side data
+      document.addEventListener('DOMContentLoaded', function() {
+        window.isLoggedIn = <%= typeof user !== 'undefined' && user ? 'true' : 'false' %>;
+        window.totalArticles = <%= typeof articles !== 'undefined' ? articles.length : 0 %>;
+        
+        // Check saved status on page load
+        checkSavedStatus();
+        
+        // Thêm event listeners cho tất cả các nút "Lưu bài"
+        document.querySelectorAll('.saved-btn').forEach(button => {
+          button.addEventListener('click', function() {
+            const newsId = this.getAttribute('data-id');
+            saveNews(newsId, this);
+          });
+        });
+        
+        updatePagination();
+      });
+      
+      // Hiển thị popup đăng nhập
+      function showPopup() {
+        const overlay = document.querySelector('.popup-overlay');
+        if (overlay) {
+          overlay.style.display = 'flex';
+        }
+      }
+      
+      // Hàm lưu bài viết
+      function saveNews(newsId, button) {
+        if (!window.isLoggedIn) {
+          alert('Bạn cần đăng nhập để lưu bài viết!');
+          showPopup(); // Show login popup
+          return;
+        }
+        
+        // Disable button to prevent double clicks
+        button.disabled = true;
+        
+        // Call API to toggle save status
+        fetch(`/api/toggle-save/${newsId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            if (data.isSaved) {
+              button.classList.add('saved');
+              button.textContent = 'Đã lưu';
+              
+              // Add animation effect
+              button.style.backgroundColor = '#4CAF50';
+              button.style.color = 'white';
+              
+              // Ask if user wants to view saved articles
+              const viewSavedArticles = confirm(`${data.message || 'Đã lưu bài viết thành công!'}\n\nBạn có muốn xem tất cả tin đã lưu không?`);
+              if (viewSavedArticles) {
+                window.location.href = '/saved-news';
+              }
+            } else {
+              button.classList.remove('saved');
+              button.textContent = 'Lưu bài';
+              button.style.backgroundColor = '';
+              button.style.color = '';
+              alert(data.message || 'Đã bỏ lưu bài viết!');
+            }
+          } else {
+            alert(data.message || 'Có lỗi xảy ra khi lưu bài viết!');
+          }
+          
+          // Re-enable button
+          button.disabled = false;
+        })
+        .catch(error => {
+          console.error('Lỗi khi lưu bài viết:', error);
+          alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+          // Re-enable button
+          button.disabled = false;
+        });
+      }
+      
+      // Hàm kiểm tra bài viết đã lưu hay chưa
+      function checkSavedStatus() {
+        if (!window.isLoggedIn) return;
+        
+        // Get all article IDs on the page
+        const buttons = document.querySelectorAll('.saved-btn');
+        const newsIds = Array.from(buttons).map(btn => btn.getAttribute('data-id'));
+        
+        if (newsIds.length === 0) return;
+        
+        // Create a mapping from ID to button
+        const buttonMap = {};
+        buttons.forEach(btn => {
+          buttonMap[btn.getAttribute('data-id')] = btn;
+        });
+        
+        // Check saved status for each article
+        newsIds.forEach(id => {
+          fetch(`/api/check-saved/${id}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.success && data.isSaved) {
+                const button = buttonMap[id];
+                if (button) {
+                  button.classList.add('saved');
+                  button.textContent = 'Đã lưu';
+                }
+              }
+            })
+            .catch(error => {
+              console.error(`Error checking saved status for article ${id}:`, error);
+            });
+        });
+      }
+      
+      // Hàm phân trang
+      let currentPage = 1;
+      const itemsPerPage = 10;
+      const totalItems = window.totalArticles;
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      
+      function updatePagination() {
+        document.getElementById('page-info').textContent = `Trang ${currentPage} / ${totalPages || 1}`;
+        document.getElementById('prevBtn').disabled = currentPage === 1;
+        document.getElementById('nextBtn').disabled = currentPage === totalPages || totalPages === 0;
+      }
+      
+      function changePage(direction) {
+        currentPage += direction;
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        
+        // Reload trang với tham số trang mới
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('page', currentPage);
+        window.location.search = urlParams.toString();
+      }
+    </script>
+  </body>
+</html>

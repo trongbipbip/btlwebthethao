@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý người dùng</title>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="/css/user-management.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Embed Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <style>
+      .status-active {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      
+      .status-inactive {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      
+      .action-btn {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+        margin-right: 5px;
+      }
+
+      .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .pagination button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 8px 16px;
+        margin: 0 5px;
+        cursor: pointer;
+      }
+
+      .pagination button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      .pagination span {
+        margin: 0 10px;
+      }
+      
+      .error-message {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border-left: 4px solid #c62828;
+      }
+      
+      .success-message {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border-left: 4px solid #2e7d32;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin">
+      <div class="main-content">
+        <div class="left-admin">
+          <img src="/img/logo.png" alt="Logo" class="logo" />
+          <div class="sidebar">
+            <div class="menu-item">
+              <a href="/admin/home">
+                <i class="fas fa-th-large icon"></i>
+                BẢNG ĐIỀU KHIỂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/news">
+                <i class="far fa-newspaper icon"></i>
+                QUẢN LÝ BÀI BÁO
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/categories">
+                <i class="fas fa-list-alt icon"></i>
+                QUẢN LÝ DANH MỤC
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/tournaments">
+                <i class="fas fa-trophy icon"></i>
+                QUẢN LÝ GIẢI ĐẤU
+              </a>
+            </div>
+            <div class="menu-item active">
+              <a href="/admin/users">
+                <i class="fas fa-user-friends icon"></i>
+                QUẢN LÝ NGƯỜI DÙNG
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/suggestion">
+                <i class="fas fa-comment-dots icon"></i>
+                QUẢN LÝ GÓP Ý
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/profile">
+                <i class="fas fa-user-circle icon"></i>
+                HỒ SƠ CÁ NHÂN
+              </a>
+            </div>
+            <div class="menu-item">
+              <a href="/admin/logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt icon"></i>
+                ĐĂNG XUẤT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="right-admin">
+          <div class="header">
+            <div class="admin-section">
+              <span class="admin-name"><%= user ? user.fullName : '' %></span>
+              <div class="admin-avatar"><img id="avatar-img" alt="Admin Avatar" /></div>
+            </div>
+          </div>
+
+          <!-- Bảng người dùng -->
+          <div class="user-container">
+            <div class="user-title">
+              <div class="user-header">
+                <h3>QUẢN LÝ NGƯỜI DÙNG</h3>
+              </div>
+
+              <!-- Phần tìm kiếm và select -->
+              <div class="search-section">
+                <form action="/admin/users" method="GET">
+                  <input
+                    type="text"
+                    name="search"
+                    id="search-input"
+                    class="input-field"
+                    placeholder="Tìm kiếm người dùng"
+                    value="<%= searchTerm || '' %>"
+                  />
+                  <select name="status" id="status-filter" class="input-field">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="active" <%= selectedStatus === 'active' ? 'selected' : '' %>>Đang hoạt động</option>
+                    <option value="inactive" <%= selectedStatus === 'inactive' ? 'selected' : '' %>>Bị khóa</option>
+                  </select>
+                  <button type="submit" class="btn-search">Tìm kiếm</button>
+                </form>
+              </div>
+            </div>
+            
+            <% if (error) { %>
+              <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+            
+            <% if (typeof req !== 'undefined' && req.session && req.session.error) { %>
+              <div class="alert alert-danger"><%= req.session.error %></div>
+              <% req.session.error = null; %>
+            <% } %>
+            
+            <% if (typeof req !== 'undefined' && req.session && req.session.success) { %>
+              <div class="alert alert-success"><%= req.session.success %></div>
+              <% req.session.success = null; %>
+            <% } %>
+            
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tên người dùng</th>
+                  <th>Tên đăng nhập</th>
+                  <th>Email</th>
+                  <th>Trạng thái</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="user-list">
+                <% if (users && users.length > 0) { %>
+                  <% users.forEach(function(user) { %>
+                    <% if (user.role === 'user') { %>
+                      <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.fullName %></td>
+                        <td><%= user.username %></td>
+                        <td><%= user.email %></td>
+                        <td>
+                          <form action="/admin/users/toggle-status/<%= user.id %>" method="POST" style="display: inline;">
+                            <button type="submit" class="status-btn <%= user.status === 'active' ? 'active' : 'inactive' %>">
+                              <%= user.status === 'active' ? 'Đang hoạt động' : 'Bị khóa' %>
+                            </button>
+                          </form>
+                        </td>
+                        <td>
+                          <form action="/admin/users/delete/<%= user.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?')">
+                            <button type="submit" class="action-btn">Xóa</button>
+                          </form>
+                        </td>
+                      </tr>
+                    <% } %>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="6" class="no-data">Không có người dùng nào</td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+
+            <div class="pagination">
+              <% if (typeof currentPage !== 'undefined' && typeof totalPages !== 'undefined') { %>
+                <% if (currentPage > 1) { %>
+                  <a href="/admin/users?page=<%= currentPage - 1 %>&search=<%= searchTerm || '' %>&status=<%= selectedStatus || '' %>" class="btn-page">Trước</a>
+                <% } %>
+                
+                <span class="page-info"><%= currentPage %> / <%= totalPages %></span>
+                
+                <% if (currentPage < totalPages) { %>
+                  <a href="/admin/users?page=<%= currentPage + 1 %>&search=<%= searchTerm || '' %>&status=<%= selectedStatus || '' %>" class="btn-page">Sau</a>
+                <% } %>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Set admin name from session if available
+        const adminName = document.querySelector('.admin-name');
+        if (adminName && '<%= user ? true : false %>' === 'true') {
+          adminName.textContent = '<%= user ? user.fullName : "" %>';
+        }
+      });
+    </script>
+  </body>
+</html>

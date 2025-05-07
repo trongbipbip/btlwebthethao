@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kết quả tìm kiếm: <%= query %> - Tennis News</title>
+  <!-- Reset CSS -->
+  <link rel="stylesheet" href="/assets/css/reset.css" />
+
+  <!-- Styles CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/news.css" />
+
+  <!-- Embed Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/favicon/apple-touch-icon.png"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon/favicon-32x32.png"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon/favicon-16x16.png"
+  />
+  <link rel="manifest" href="/site.webmanifest" />
+  <style>
+    .search-header {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+    
+    .search-header h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .search-header p {
+      color: #666;
+    }
+    
+    .search-count {
+      font-weight: bold;
+      color: #007bff;
+    }
+    
+    .search-query {
+      font-style: italic;
+      background-color: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    
+    .no-results {
+      padding: 40px 20px;
+      text-align: center;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    
+    .no-results h2 {
+      font-size: 22px;
+      color: #dc3545;
+      margin-bottom: 15px;
+    }
+    
+    .no-results p {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    .search-again {
+      margin-top: 20px;
+    }
+    
+    .search-again input[type="text"] {
+      padding: 10px;
+      width: 300px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+    
+    .search-again button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .search-again button:hover {
+      background-color: #0069d9;
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <main>
+    <div class="main-content">
+      <div class="search-header">
+        <h1>Kết quả tìm kiếm</h1>
+        <p>Tìm thấy <span class="search-count"><%= count %></span> kết quả cho từ khóa: <span class="search-query"><%= query %></span></p>
+      </div>
+      
+      <% if (articles && articles.length > 0) { %>
+        <div class="category-news">
+          <% articles.forEach(function(article) { %>
+            <div class="news-item">
+              <a href="/news-detail?id=<%= article.id %>">
+                <img src="<%= article.image %>" alt="<%= article.title %>" />
+                <div class="news-content">
+                  <h2><%= article.title %></h2>
+                  <p><%= article.description %></p>
+                  <div class="news-info">
+                    <span class="date"><%= new Date(article.date).toLocaleDateString('vi-VN') %></span>
+                    <% if (article.category_name) { %>
+                      <span class="category"><%= article.category_name %></span>
+                    <% } %>
+                  </div>
+                </div>
+              </a>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="no-results">
+          <h2>Không tìm thấy kết quả nào</h2>
+          <p>Không có bài viết nào phù hợp với từ khóa "<%= query %>"</p>
+          <p>Vui lòng thử lại với từ khóa khác hoặc xem các bài viết mới nhất của chúng tôi</p>
+          
+          <div class="search-again">
+            <form action="/search" method="GET">
+              <input type="text" name="q" placeholder="Nhập từ khóa tìm kiếm..." required>
+              <button type="submit">Tìm kiếm</button>
+            </form>
+          </div>
+          
+          <p><a href="/categorynews" style="display: inline-block; margin-top: 20px; color: #007bff;">Xem tất cả bài viết</a></p>
+        </div>
+      <% } %>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="main-content">
+      <div class="left-footer">
+        <img src="/assets/img/footer-logo.png" alt="" class="logo" />
+        <div class="media">
+          <a href=""><img src="/assets/img/facebook.svg" alt="" /></a>
+          <a href=""><img src="/assets/img/youtube.svg" alt="" /></a>
+          <a href=""><img src="/assets/img/email.svg" alt="" /></a>
+          <a href=""><img src="/assets/img/twitter.svg" alt="" /></a>
+          <a href=""><img src="/assets/img/linkedin.svg" alt="" /></a>
+        </div>
+        <div class="hotline">
+          <div class="hotline-number">
+            <img src="/assets/img/phone.svg" alt="" />
+            <div class="hotline-content">
+              <p>Đường dây nóng :</p>
+              <p>+84 38 290 51 69</p>
+            </div>
+          </div>
+          <div class="hotline-email">
+            <img src="/assets/img/email-hotline.png" alt="" />
+            <div class="hotline-content">
+              <p>Email :</p>
+              <p>nguyenskt2004@gmail.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right-footer">
+        <div class="newsletter">
+          <h3 class="newsletter-title">Đăng ký nhận bản tin TENNIS TOUR</h3>
+          <p class="newsletter-comment">
+            Nhận thông tin tiếp thị chính thức từ TENNIS TOUR! Chúng tôi sẽ
+            gửi cho bạn các bản tin để thông báo cho bạn về tin tức, giải đấu,
+            cuộc thi, bán vé, ưu đãi của đối tác và hơn thế nữa.
+          </p>
+          <div class="subscribe-container">
+            <div class="subscribe-container__input">
+              <label for="email">Địa chỉ email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Nhập email của bạn"
+              />
+            </div>
+            <button>SUBCRIBE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>ALL RIGHTS RESERVED.© 2025</p>
+    </div>
+  </footer>
+</body>
+</html>
