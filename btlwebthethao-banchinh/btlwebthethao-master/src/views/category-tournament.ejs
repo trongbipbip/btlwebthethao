@@ -157,7 +157,7 @@
           <h1>GIẢI ĐẤU | Những giải đấu trong năm</h1>
           <div class="tournaments">
             <div class="event-block">
-              <div class="search-box">
+              <form class="search-box" action="/searchevents" method="GET" >
                 <div class="search-container">
                   <input type="text" id="searchBar" name="q" placeholder="Tìm kiếm giải đấu" autocomplete="off" />
                   <div id="tournament-suggestions" class="search-suggestions"></div>
@@ -165,7 +165,7 @@
                 <button>
                   <img src="/assets/img/search.svg" alt="Search" />
                 </button>
-              </div>
+              </form>
               <div class="event">
                 <div id="calendar">
                   <% if (Object.keys(tournaments).length === 0) { %>
@@ -359,87 +359,90 @@
     <script>
       // Xử lý tìm kiếm tự động gợi ý cho giải đấu
       document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchBar');
-        const suggestionsContainer = document.getElementById('tournament-suggestions');
-        let debounceTimer;
+  const searchInput = document.getElementById('searchBar');
+  const suggestionsContainer = document.getElementById('tournament-suggestions');
+  let debounceTimer;
 
-        // Định dạng ngày tháng
-        function formatDate(dateStr) {
-          if (!dateStr) return '';
-          const date = new Date(dateStr);
-          return date.toLocaleDateString('vi-VN');
-        }
-
-        // Hàm xử lý tìm kiếm
-        searchInput.addEventListener('input', function() {
-          const query = this.value.trim();
+  // Hàm xử lý tìm kiếm
+  searchInput.addEventListener('input', function() {
+    const query = this.value.trim();
+    
+    clearTimeout(debounceTimer);
+    
+    if (query.length < 2) {
+      suggestionsContainer.classList.remove('show');
+      suggestionsContainer.innerHTML = '';
+      return;
+    }
+    
+    debounceTimer = setTimeout(function() {
+      fetch(`/api/tournament-suggestions?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+          suggestionsContainer.innerHTML = '';
           
-          clearTimeout(debounceTimer);
-          
-          if (query.length < 2) {
-            suggestionsContainer.classList.remove('show');
-            suggestionsContainer.innerHTML = '';
-            return;
-          }
-          
-          debounceTimer = setTimeout(function() {
-            fetch(`/api/tournament-suggestions?q=${encodeURIComponent(query)}`)
-              .then(response => response.json())
-              .then(data => {
-                suggestionsContainer.innerHTML = '';
-                
-                if (data.suggestions && data.suggestions.length > 0) {
-                  suggestionsContainer.classList.add('show');
-                  
-                  data.suggestions.forEach(item => {
-                    const suggestionItem = document.createElement('div');
-                    suggestionItem.className = 'tournament-item';
-                    
-                    // Sử dụng hình ảnh mặc định nếu không có
-                    const imageUrl = item.image || '/assets/img/tennis-logo.png';
-                    
-                    suggestionItem.innerHTML = `
-                      <img src="${imageUrl}" alt="${item.name}" />
-                      <div class="tournament-item-content">
-                        <h4>${item.name}</h4>
-                        <p>${item.location || ''}</p>
-                        <span class="tournament-date">
-                          ${formatDate(item.start_date)} - ${formatDate(item.end_date)}
-                        </span>
-                      </div>
-                    `;
-                    
-                    suggestionItem.addEventListener('click', function() {
-                      window.location.href = `/event?id=${item.id}`;
-                    });
-                    
-                    suggestionsContainer.appendChild(suggestionItem);
-                  });
+          if (data.suggestions && data.suggestions.length > 0) {
+            suggestionsContainer.classList.add('show');
+            
+            data.suggestions.forEach(item => {
+              const suggestionItem = document.createElement('div');
+              suggestionItem.className = 'tournament-item';
+              
+              // Xử lý hình ảnh
+              let imageUrl = '/assets/img/tennis-logo.png'; // Ảnh mặc định
+              if (item.image) {
+                if (item.image.startsWith('/assets')) {
+                  imageUrl = item.image;
                 } else {
-                  suggestionsContainer.classList.remove('show');
+                  imageUrl = '/uploads/' + item.image;
                 }
-              })
-              .catch(error => {
-                console.error('Lỗi tìm kiếm giải đấu:', error);
-                suggestionsContainer.classList.remove('show');
+              }
+              
+              // Sử dụng thông tin "more" thay vì location và date nếu có
+              let additionalInfo = '';
+              if (item.more) {
+                additionalInfo = `<p>${item.more}</p>`;
+              }
+              
+              suggestionItem.innerHTML = `
+                <img src="${imageUrl}" alt="${item.name}" />
+                <div class="tournament-item-content">
+                  <h4>${item.name}</h4>
+                  ${additionalInfo}
+                </div>
+              `;
+              
+              suggestionItem.addEventListener('click', function() {
+                window.location.href = `/event?id=${item.id}`;
               });
-          }, 300); // Đợi 300ms sau khi người dùng ngừng gõ
-        });
-        
-        // Đóng suggestions khi click bên ngoài
-        document.addEventListener('click', function(e) {
-          if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+              
+              suggestionsContainer.appendChild(suggestionItem);
+            });
+          } else {
             suggestionsContainer.classList.remove('show');
           }
+        })
+        .catch(error => {
+          console.error('Lỗi tìm kiếm giải đấu:', error);
+          suggestionsContainer.classList.remove('show');
         });
-        
-        // Đóng suggestions khi nhấn Escape
-        searchInput.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') {
-            suggestionsContainer.classList.remove('show');
-          }
-        });
-      });
+    }, 300); // Đợi 300ms sau khi người dùng ngừng gõ
+  });
+  
+  // Đóng suggestions khi click bên ngoài
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+      suggestionsContainer.classList.remove('show');
+    }
+  });
+  
+  // Đóng suggestions khi nhấn Escape
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      suggestionsContainer.classList.remove('show');
+    }
+  });
+});
     </script>
   </body>
 </html>

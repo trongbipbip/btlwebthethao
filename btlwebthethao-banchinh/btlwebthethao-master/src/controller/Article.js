@@ -1093,7 +1093,7 @@ exports.getUserSuggestions = async (req, res) => {
     }
 };
 
-// Tìm kiếm bài báo
+
 exports.searchNews = async (req, res) => {
     try {
         const searchQuery = req.query.q || '';
@@ -1144,6 +1144,49 @@ exports.searchNews = async (req, res) => {
         return res.status(500).send('Lỗi server');
     }
 };
+
+exports.searchEvents = async (req, res) => {
+    try {
+        const searchQuery = req.query.q || '';
+
+        if (!searchQuery.trim()) {
+            return res.redirect('/categorytournament');
+        }
+
+        console.log('Search Query:', searchQuery);
+
+        const searchSql = `
+            SELECT * 
+            FROM tournaments
+            WHERE name LIKE ? OR more LIKE ? OR total LIKE ? OR website LIKE ?
+            ORDER BY id
+        `;
+
+        const searchParam = `%${searchQuery}%`;
+
+        connection.query(searchSql, [searchParam, searchParam, searchParam, searchParam], (searchError, searchResults) => {
+            if (searchError) {
+                console.error("Lỗi tìm kiếm giải đấu:", searchError);
+                return res.status(500).send('Lỗi khi tìm kiếm');
+            }
+
+            console.log(`Tìm thấy ${searchResults.length} giải đấu cho "${searchQuery}"`);
+
+            return res.render('', {
+                query: searchQuery,
+                events: searchResults,
+                user: req.session.user || null,
+                count: searchResults.length
+            });
+        });
+
+    } catch (err) {
+        console.error('Lỗi trong searchEvents:', err);
+        return res.status(500).send('Lỗi server');
+    }
+};
+
+
 
 // API gợi ý tìm kiếm
 exports.getSearchSuggestions = async (req, res) => {
@@ -1198,10 +1241,11 @@ exports.getTournamentSuggestions = async (req, res) => {
         
         // Tìm kiếm giải đấu theo tên, địa điểm
         const searchSql = `
-            SELECT id, name, location, image, start_date, end_date 
+            SELECT id, name, more, image
             FROM tournaments
             WHERE name LIKE ? OR location LIKE ?
-            ORDER BY start_date DESC
+
+            ORDER BY id
             LIMIT 5
         `;
         

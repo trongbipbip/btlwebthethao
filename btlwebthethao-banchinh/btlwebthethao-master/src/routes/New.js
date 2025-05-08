@@ -7,7 +7,13 @@ router.get('/categorytournament', newController.showcategorytournament);
 router.get('/news-detail', newController.showNewdetail);
 router.get('/event', newController.showevent);
 router.get('/search', newController.searchNews);
+
+
+router.get('/searchevents', newController.searchEvents);
+
+
 router.get('/api/search-suggestions', newController.getSearchSuggestions);
 router.get('/api/tournament-suggestions', newController.getTournamentSuggestions);
+
 
 module.exports = router;
